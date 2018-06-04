@@ -2,7 +2,6 @@ import Promise from 'promise';
 import {
   Users
 } from '../models';
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from './../config/environment';
 import {

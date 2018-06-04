@@ -1,5 +1,5 @@
  import Promise from 'promise';
- import bcrypt from 'bcrypt';
+ import bcrypt from 'bcryptjs';
 
 
  exports.verifyToken = function(token, user) {
