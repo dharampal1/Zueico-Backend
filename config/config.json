@@ -1,0 +1,21 @@
+{
+  "development": {
+    "username": "root",
+    "password": "root",
+    "database": "shamla6_ico",
+    "host": "localhost",
+    "dialect": "mysql",
+    "operatorsAliases": false ,
+    "logging":false
+  },
+  "production": {
+    "username": "root",
+    "password": "root",
+    "database": "shamla6_ico",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
+ 
+}
+
+
