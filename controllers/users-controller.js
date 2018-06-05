@@ -360,7 +360,7 @@ module.exports = {
           if (data) {
             res.status(200).json({
               status:true,
-              message: "Updated Successfully"
+              message: "Profile Updated Successfully"
             });
           } else {
             res.status(404).json({
@@ -609,9 +609,9 @@ module.exports = {
                                  message: error.message
                               });
                            }
-                           res.json({
+                           res.status(200).json({
                               status: true,
-                              message: "Confirmation Email is sent"
+                              message: "Password is reset Successfully."
                            });
                          });
                      })
