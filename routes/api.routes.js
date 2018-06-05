@@ -1,7 +1,8 @@
 import express from 'express';
 import { authenticate } from '../helpers/ensure-authenticated';
-import usersController from '../controllers/users.controller';
+import usersController from '../controllers/users-controller';
 import userRoutes from './apiv1/users-routes';
+import adminRoutes from './apiv1/admin-routes';
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.post('/users/reset_password', usersController.resetPassword);
 
 // Authentication all next routes
 router.use(authenticate, userRoutes) ;
+router.use(authenticate, adminRoutes) ;
 
 
 // API Error routes
