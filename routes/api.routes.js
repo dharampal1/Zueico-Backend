@@ -1,5 +1,6 @@
 import express from 'express';
 import { authenticate } from '../helpers/ensure-authenticated';
+import adminController from '../controllers/admin-controller';
 import usersController from '../controllers/users-controller';
 import userRoutes from './apiv1/users-routes';
 import adminRoutes from './apiv1/admin-routes';
@@ -18,9 +19,14 @@ router.post('/users/forgot_password', usersController.forgotPassword);
 //  Authentication to obtain a token
 router.post('/users/reset_password', usersController.resetPassword);
 
+//  Authentication to obtain a token
+router.post('/admin/login', adminController.adminLogin);
+
 // Authentication all next routes
 router.use(authenticate, userRoutes) ;
+
 router.use(authenticate, adminRoutes) ;
+
 
 
 // API Error routes

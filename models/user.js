@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     mobileNumber:  DataTypes.STRING,
     participationAmount: DataTypes.INTEGER,
 	image: DataTypes.STRING,
-	status: DataTypes.CHAR,
+	status: DataTypes.ENUM('0','1'),
 	gender: DataTypes.INTEGER,
 	dob: DataTypes.DATE,
 	country: DataTypes.STRING,
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
 	vewtingToken: DataTypes.STRING,
 	vewtingRemainingToken: DataTypes.STRING,
 	vewtingStartDate: DataTypes.DATE,
-	previledge: DataTypes.ENUM('Y','N')
+	previledge: DataTypes.ENUM('0','1')
   }, {});
   Users.associate = function(models) {
     // associations can be defined here

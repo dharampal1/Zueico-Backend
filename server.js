@@ -17,6 +17,7 @@ app.use(session({
 }));
 
 
+
 // Start listening
 app.listen(config.PORT, () => {
   console.log(colors.white(`Listening with ${process.env.NODE_ENV} config on port ${config.PORT}`));

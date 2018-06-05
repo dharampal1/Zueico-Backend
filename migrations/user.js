@@ -33,7 +33,7 @@ module.exports = {
          type: Sequelize.STRING
       },
       status: { 
-         type: Sequelize.CHAR
+         type: Sequelize.ENUM('0','1')
       },
       gender: { 
          type: Sequelize.INTEGER
@@ -94,7 +94,7 @@ module.exports = {
          type: Sequelize.DATE
       },
       previledge: { 
-         type: Sequelize.ENUM('Y','N')
+         type: Sequelize.ENUM('0','1')
       },
       updatedAt: { 
          type: Sequelize.DATE,

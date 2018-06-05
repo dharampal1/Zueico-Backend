@@ -177,7 +177,7 @@ module.exports = {
             }
           })
           .then(data => {
-            if (data.emailVerifyToken === '') {
+            if (data.emailVerifyToken) {
               verifyPassword(password, data)
                 .then(result => {
                   if (result.isValid === true) {
@@ -623,7 +623,6 @@ module.exports = {
                       message: err.message
                     });
                 });    
-                 
                } else {
                   return res.status(422).send({
                      status: false,
@@ -642,7 +641,6 @@ module.exports = {
                   message: 'No user Found'
                });
           }
-
          })
          .catch(err => {
          res.status(500).json({

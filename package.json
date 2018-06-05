@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node server.js",
-    "migrate": "node node_modules/.bin/sequelize db:migrate"
+    "migrate": "node node_modules/.bin/sequelize db:migrate",
+    "seed": "node node_modules/.bin/sequelize db:seed"
   },
   "author": "",
   "license": "ISC",

@@ -12,8 +12,6 @@ const initApp = function () {
   // Init
   const app = express();
 
-  // serving static files to the client    
-   app.use('/public/uploads', express.static(path.join(__dirname + '/public/uploads')));
 
 
   // Config
@@ -25,10 +23,13 @@ const initApp = function () {
 
   app.use(bodyParser.json());
   app.use(logger('dev'));
-
+   
+  // serving static files to the client    
+  app.use('/public/uploads', express.static('public/uploads'));
   
   // Setup routes
   routes(app);
+   
 
   return app;
 };

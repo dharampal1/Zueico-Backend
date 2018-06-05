@@ -7,10 +7,10 @@ const router = express.Router();
 // Get all users  
 router.get('/admin/users',adminController.allUsers);
 
-// update user privilege 
-router.post('/admin/previledge',adminController.addPreviledge);
+// get all users with privilege 
+router.get('/admin/previledge',adminController.getUserPreviledge);
 
-// et all kyc for approvals 
+// get all kyc for approvals 
 router.get('/admin/kyc',adminController.allKyc);
 
 // approve Kyc 
