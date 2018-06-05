@@ -5,25 +5,25 @@ const router = express.Router();
 
 
 // get user profile 
-router.get('/users/me',usersController.getSingleUser);
+router.post('/me',usersController.getSingleUser);
 
 // update user profile 
-router.post('/users',usersController.updateUser);
+router.post('/',usersController.updateUser);
 
 // update user password 
-router.post('/users/password',usersController.changePassword);
+router.post('/password',usersController.changePassword);
 
 // upload user passport  
-router.post('/users/upload/passport',usersController.uploadImage);
+router.post('/upload/passport',usersController.uploadImage);
 
 // upload user Driving License
-router.post('/users/upload/drivingLicenceFront',usersController.uploadImage);
+router.post('/upload/drivingLicenceFront',usersController.uploadImage);
 
 // upload user Driving License
-router.post('/users/upload/drivingLicenceBack',usersController.uploadImage);
+router.post('/upload/drivingLicenceBack',usersController.uploadImage);
 
 // upload user address Proof 
-router.post('/users/upload/addressProof',usersController.uploadImage);
+router.post('/upload/addressProof',usersController.uploadImage);
 
 
 

@@ -5,19 +5,19 @@ const router = express.Router();
 
 
 // Get all users  
-router.get('/admin/users',adminController.allUsers);
+router.post('/users',adminController.allUsers);
 
 // get all users with privilege 
-router.get('/admin/previledge',adminController.getUserPreviledge);
+router.post('/previledge',adminController.getUserPreviledge);
 
 // get all kyc for approvals 
-router.get('/admin/kyc',adminController.allKyc);
+router.post('/kyc',adminController.allKyc);
 
 // approve Kyc 
-router.put('/admin/kyc/approve',adminController.approveKyc);
+router.post('/kyc/approve',adminController.approveKyc);
 
 // reject KYC 
-router.post('/admin/kyc/reject',adminController.rejectKyc);
+router.post('/kyc/reject',adminController.rejectKyc);
 
 
 

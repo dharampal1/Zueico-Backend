@@ -13,7 +13,13 @@ const app = express();
 app.use(session({
   secret: config.SECRET,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  proxy: true,
+  cookie:{
+    secure: false,
+    domain: 'localhost',
+    maxAge: 1000 * 60 * 24 // 24 hours
+    },
 }));
 
 

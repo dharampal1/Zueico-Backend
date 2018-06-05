@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize';
-import { Users, Admin } from '../models';
+import { User, Admin } from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
 import config from './../config/environment';
@@ -64,11 +64,11 @@ module.exports = {
 	},
 
 	allUsers(req, res, next) {
-		Users.findAll({
+		User.findAll({
 			where: { previledge : '0' }
 		 })
 		  .then(data => {
-		  	  if(data){
+		  	  if(data.length){
 		  	  	res.status(200).json({
 		  	  		status:true,
 		  	  		message:"All Users",
@@ -90,7 +90,7 @@ module.exports = {
 	 },
 
 	getUserPreviledge(req, res, next) {
-		Users.findAll({
+		User.findAll({
 			where: { previledge : '1' }
 		 })
 		  .then(data => {
@@ -117,14 +117,13 @@ module.exports = {
 
 	allKyc(req, res, next) {
 
-		var user_id  = req.userId ;
+		var user_id  = req.id ;
 
-		Users.findAll({
+		User.findAll({
 			 attributes: ["id","username","passport","drivingLicenceFront","drivingLicenceBack","addressProof"], 
 		  })
 		  .then(data => {
 		  	  if(data){
-		  	  	console.log(data);
 		  	  	res.status(200).json({
 		  	  		status:true,
 		  	  		message:"All KYC",
@@ -146,12 +145,12 @@ module.exports = {
 	 },
 
 	approveKyc(req, res, next) {
-		var user_id  = req.userId,
+		var user_id  = req.id,
 		    status = req.body.status;
 
 		if(status){
 
-		 Users.update({
+		 User.update({
 			status
 		 },{
 			where : { id : user_id }
@@ -190,12 +189,12 @@ module.exports = {
 	 },
 
 	rejectKyc(req, res, next) {
-		var user_id  = req.userId,
+		var user_id  = req.id,
 		    status = req.body.status;
 
 		if(status){
 
-		 Users.update({
+		 User.update({
 			status
 		 },{
 			where : { id : user_id }

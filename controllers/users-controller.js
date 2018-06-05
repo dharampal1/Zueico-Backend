@@ -1,6 +1,6 @@
 import Promise from 'promise';
 import {
-  Users
+  User
 } from '../models';
 import jwt from 'jsonwebtoken';
 import config from './../config/environment';
@@ -46,7 +46,7 @@ module.exports = {
       ];
 
     if (checkBlank(mainValues) === 0) {
-      Users.findOne({
+      User.findOne({
           where: {
             email
           }
@@ -118,7 +118,7 @@ module.exports = {
                       message: error.message
                     });
                   } else {
-                    Users.create(newUser)
+                    User.create(newUser)
                       .then(result => {
                         res.status(201).json({
                           status: true,
@@ -171,7 +171,7 @@ module.exports = {
 
     if (checkBlank(mainValues) === 0) {
       if (email_token) {
-        Users.findOne({
+        User.findOne({
             where: {
               email
             }
@@ -184,7 +184,7 @@ module.exports = {
                     verifyToken(email_token, data)
                       .then(token1 => {
                         if (token1.isValid === true) {
-                          Users.update({
+                          User.update({
                               emailVerifyToken: null,
                               emailVerified: 1
                             }, {
@@ -256,7 +256,7 @@ module.exports = {
           });
 
       } else {
-        Users.findOne({
+        User.findOne({
             where: {
               [Op.and]: [{
                 email
@@ -317,7 +317,7 @@ module.exports = {
 
     var id = req.userId;
 
-    Users.findOne({
+    User.findOne({
         where: {
           id: id
         }
@@ -349,7 +349,7 @@ module.exports = {
     var userId = req.userId;
 
     if (Object.keys(req.body).length > 0) {
-      Users.update(
+      User.update(
           req.body, //set attribute 
           {
             where: {
@@ -393,7 +393,7 @@ module.exports = {
       mainValues = [oldPassword, newPassword, confirmPassword];
 
     if (checkBlank(mainValues) === 0) {
-      Users.findOne({
+      User.findOne({
           where: {
             id: user_id
           }
@@ -406,7 +406,7 @@ module.exports = {
                   if (newPassword === confirmPassword) {
                     hashPassword(newPassword)
                       .then(hash => {
-                        Users.update({
+                        User.update({
                             password: hash
                           }, {
                             where: {
@@ -469,7 +469,7 @@ module.exports = {
   },
   forgotPassword(req, res, next) {
       var email = req.body.email;
-      Users.findOne({
+      User.findOne({
          where: { [Op.and]: [{ email:email }, { emailVerified : 1}] }
         }).then(user => {
         if (!user) {
@@ -479,7 +479,7 @@ module.exports = {
             });
          } else {
             var token = randtoken.generate(16);
-            Users.update({
+            User.update({
                resetPasswordToken: token,
                resetPasswordExpires: Date.now() + 10800000
             },{
@@ -548,7 +548,7 @@ module.exports = {
 
     if (checkBlank(mainValues) === 0) {
 
-    Users.findOne({
+    User.findOne({
              where: {
               [Op.and]: [{
                 email:email
@@ -569,7 +569,7 @@ module.exports = {
                   var  password = hash,
                     resetPasswordToken = null,
                     resetPasswordExpires = null;
-                  Users.update({
+                  User.update({
                       password,
                       resetPasswordToken,
                       resetPasswordExpires
@@ -675,14 +675,13 @@ module.exports = {
           message: err
         });
       }
-      console.log(req.file);
       if (req.file) {
-        Users.findOne({
+        User.findOne({
            where:{ id: user_id }
           })
           .then(data => {
             if (data) {
-              Users.update({
+              User.update({
                   [fieldname]: req.file.path
                 },{
                   where: {id : user_id}

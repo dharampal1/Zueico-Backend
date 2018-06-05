@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { Users } from '../models';
+import { User, Admin } from '../models';
 import config from '../config/environment';
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
      */
   authenticate: function(req, res, next) {
 
-  const token = req.headers.authorization ;
+  const token = req.body.authorization ;
 
     if (token) {
         jwt.verify(token, config.SECRET, (err, decoded) => {
@@ -18,10 +18,50 @@ module.exports = {
                 message: err
               });
           }
-          Users.findOne({ where: { id: decoded.id } })
+          User.findOne({ where: { id: decoded.id } })
             .then(user => {           
               if (user) {
                  req.userId = decoded.id;
+                  next()    
+                 return null;
+               } else {
+                return res.status(401).json({
+                  message: 'Authentication Failed'
+                });
+              }
+            })
+            .catch(err => {
+              return res.status(500).json({
+                message: err
+              });
+
+            });
+
+        });
+      } else {
+         return res.status(401).json({
+          message: 'failed authentication: No Token Provided.'
+        });
+      }
+  },
+  /*
+       // Any route past this point requires a valid auth token
+     */
+  adminAuthenticate: function(req, res, next) {
+
+  const token = req.body.authorization ;
+
+    if (token) {
+        jwt.verify(token, config.SECRET, (err, decoded) => {
+          if (err) {
+            return res.status(500).json({
+                message: err
+              });
+          }
+          Admin.findOne({ where: { id: decoded.id } })
+            .then(admin => {           
+              if (admin) {
+                 req.id = decoded.id;
                   next()    
                  return null;
                } else {

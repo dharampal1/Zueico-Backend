@@ -1,0 +1,27 @@
+import express from 'express';
+import { authenticate } from '../helpers/ensure-authenticated';
+import usersController from '../controllers/users-controller';
+import userRoutes from './apiv1/users-routes';
+
+
+const router = express.Router();
+
+
+//  Authentication to obtain a token
+router.post('/forgot_password', usersController.forgotPassword);
+
+//  Authentication to obtain a token
+router.post('/reset_password', usersController.resetPassword);
+
+// Authentication all next routes
+router.use(authenticate, userRoutes) ;
+
+
+// API Error routes
+router.use((req, res) => {
+  return res.status(404).json({
+    message: 'No Route found.'
+  });
+});
+
+module.exports = router;

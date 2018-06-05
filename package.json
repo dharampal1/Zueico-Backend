@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --exec babel-node server.js",
     "migrate": "node node_modules/.bin/sequelize db:migrate",
-    "seed": "node node_modules/.bin/sequelize db:seed"
+    "seed": "node node_modules/.bin/sequelize db:seed:all"
   },
   "author": "",
   "license": "ISC",

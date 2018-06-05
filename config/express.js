@@ -12,8 +12,6 @@ const initApp = function () {
   // Init
   const app = express();
 
-
-
   // Config
   app.set('port', config.PORT);
 
