@@ -115,7 +115,7 @@ module.exports = {
                   if (error) {
                     return res.status(500).json({
                       status: false,
-                      error: error
+                      message: error.message
                     });
                   } else {
                     Users.create(newUser)
@@ -127,35 +127,38 @@ module.exports = {
                       })
                       .catch(err => {
                         res.status(500).json({
-                          message: err
+                          status: false,
+                          message: err.message
                         });
                       });
                   }
                 });
               })
               .catch(err => {
-                 console.log(err);
                 res.status(500).json({
-                  message: err
+                  status: false,
+                  message: err.message
                 });
               });
 
           } else {
             res.status(422).json({
+              status: false,
               message: "Passwords are not matched"
             });
           }
         })
         .catch(err => {
-          console.log(err);
           res.status(500).json({
-            message: err
+            status: false,
+            message: err.message
           });
         });
     } else {
       res.status(422).json({
-        message: "You are not sending valid Request Params",
-        'Required-fields': "firstName, lastName, email, mobileNumber, participationAmount ,country, password, confirmPassword"
+         status: false,
+         message: "You are not sending valid Request Params",
+         required: "firstName, lastName, email, mobileNumber, participationAmount ,country, password, confirmPassword"
       });
     }
   },
@@ -199,48 +202,56 @@ module.exports = {
                               });
 
                               res.status(200).json({
-                                message: 'authenticated, Token Attached',
+                                status:true,
+                                message: 'Authenticated, Token Attached',
                                 userId: data.id,
                                 token
                               });
                             })
                             .catch(err => {
                               res.status(500).json({
-                                message: err
+                                status: false,
+                                message: err.message
                               });
                             });
 
                         } else {
                           res.status(422).json({
+                            status: false,
                             message: 'Invalid Token'
                           });
                         }
                       })
                       .catch(err => {
                         res.status(500).json({
+                          status:false,
                           message: err.message
                         });
                       });
                   } else {
                     res.status(422).json({
+                      status:false,
                       message: 'Authentication failed'
                     });
                   }
                 })
                 .catch(err => {
                   res.status(500).json({
-                    message: err
+                    status:false,
+                    message: err.message
                   });
                 });
             } else {
-              res.status(404).json({
+              res.status(422).json({
+                status:false,
                 message: 'Email is Already verifyed'
               });
             }
           })
           .catch(err => {
             res.status(500).json({
-              message: err
+              status:false,
+              message: err.message
             });
           });
 
@@ -267,38 +278,44 @@ module.exports = {
                     });
 
                     return res.status(200).json({
-                      message: 'authenticated, Token Attached',
+                      status:true,
+                      message: 'Authenticated, Token Attached',
                       userId: result.id,
                       token
                     });
                   } else {
                     res.status(422).json({
+                      status:false,
                       message: 'Authentication failed'
                     });
                   }
                 })
             } else {
               res.status(404).json({
+                status:false,
                 message: 'Email is not varified'
               });
             }
           })
           .catch(err => {
             res.status(500).json({
-              message: err
+              status:false,
+              message: err.message
             });
           });
       }
     } else {
       res.status(422).json({
+        status:false,
         message: "You are not sending valid Request Params",
-        'Required-fields': "email, password"
+        required: "email, password"
       });
     }
   },
-  getSingleUser(req, res, next) {
-    var id = req.userId;
 
+  getSingleUser(req, res, next) {
+
+    var id = req.userId;
 
     Users.findOne({
         where: {
@@ -308,23 +325,27 @@ module.exports = {
       .then(data => {
         if (data) {
           res.status(200).json({
+            status:true,
             message: "Your Profile Data",
             data
           });
         } else {
           res.status(404).json({
+            status:false,
             message: "No user Found"
           });
         }
       })
       .catch(err => {
         res.status(500).json({
-          message: err
+          status:false,
+          message: err.message
         });
       });
   },
 
   updateUser(req, res, next) {
+
     var userId = req.userId;
 
     if (Object.keys(req.body).length > 0) {
@@ -338,22 +359,25 @@ module.exports = {
         ).then((data) => {
           if (data) {
             res.status(200).json({
-              message: "Updated Successfully",
-              data
+              status:true,
+              message: "Updated Successfully"
             });
           } else {
             res.status(404).json({
+              status:false,
               message: "No Data Found"
             });
           }
         })
         .catch(err => {
           res.status(500).json({
-            message: err
+            status:false,
+            message: err.message
           });
         });
     } else {
       res.status(400).json({
+        status:false,
         message: "You not not sending any value"
       });
     }
@@ -391,47 +415,55 @@ module.exports = {
                           })
                           .then(data => {
                             res.status(200).json({
+                              status:true,
                               message: "Password Updated Successfully",
                             });
                           })
                       })
                       .catch(err => {
                         res.status(500).json({
-                          message: err
+                          status:false,
+                          message: err.message
                         });
                       });
                   } else {
                     res.status(200).json({
+                      status:false,
                       message: "newPassword is Not Matched",
                     });
                   }
 
                 } else {
                   res.status(400).json({
+                    status:false,
                     message: "oldPassword is not matched"
                   });
                 }
               })
               .catch(err => {
                 res.status(500).json({
-                  message: err
+                  status:false,
+                  message: err.message
                 });
               });
           } else {
             return res.status(404).json({
+              status:false,
               message: 'No User found'
             });
           }
         })
         .catch(err => {
           res.status(500).json({
-            message: err
+            status:false,
+            message: err.message
           });
         });
     } else {
       res.status(422).json({
-        message: "You are not sending valid Request Params",
-        'Required-fields': "newPassword,oldPassword,confirmPassword"
+         status:false,
+         message: "You are not sending valid Request Params",
+         required: "newPassword, oldPassword, confirmPassword"
       });
     }
   },
@@ -483,8 +515,7 @@ module.exports = {
                      if (error) {
                         return res.status(500).josn({
                            status: false,
-                           message: "Unable to send the email",
-                           error: error
+                           message: "Unable to send the email : " + error.message,
                         });
                      }
                      res.status(200).json({
@@ -495,14 +526,16 @@ module.exports = {
             })
             .catch(err => {
                 res.status(500).json({
-                  message: err
+                  status: false,
+                  message: err.message
                 });
              });
           }
       })
       .catch(err => {
          res.status(500).json({
-            message: err
+           status: false,
+            message: err.message
           });
       });    
   },
@@ -572,12 +605,13 @@ module.exports = {
                         transporter.sendMail(data, (error, info) => {
                            if (error) {
                               return res.status(500).send({
-                                 error: error
+                                 status: false,
+                                 message: error.message
                               });
                            }
                            res.json({
                               status: true,
-                              message: "Confirmation email is sent"
+                              message: "Confirmation Email is sent"
                            });
                          });
                      })
@@ -585,22 +619,26 @@ module.exports = {
                   })
                   .catch(err => {
                    res.status(500).json({
-                      message: err
+                     status: false,
+                      message: err.message
                     });
                 });    
                  
                } else {
                   return res.status(422).send({
+                     status: false,
                      message: 'Passwords do not match'
                   });
                }
             } else {
                return res.status(400).send({
+                  status: false,
                   message: 'Password reset token is invalid or has expired.'
                });
             }
           } else {
-             return res.status(400).send({
+              return res.status(404).send({
+                  status: false,
                   message: 'No user Found'
                });
           }
@@ -608,13 +646,15 @@ module.exports = {
          })
          .catch(err => {
          res.status(500).json({
-            message: err
+            status: false,
+            message: err.message
           });
       });    
   } else {
     return res.status(422).send({
-         message: 'You Are not sending valid params',
-         required:"email, newPassword, confirmPassword,token"
+        status: false,
+        message: 'You Are not sending valid params',
+        required:"email, newPassword, confirmPassword, token"
       });
   }
  },
@@ -656,7 +696,6 @@ module.exports = {
                   res.status(200).json({
                     status: true,
                     message: `${fieldname} Uploaded`,
-                    [fieldname]:result[fieldname]
                   });
                 });
             } else {
@@ -669,7 +708,7 @@ module.exports = {
           .catch(err => {
             res.status(500).json({
               status: false,
-              error: err
+              error: err.message
             });
           });
       } else {
