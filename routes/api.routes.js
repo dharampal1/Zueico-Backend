@@ -1,7 +1,7 @@
 import express from 'express';
 import { authenticate } from '../helpers/ensure-authenticated';
 import usersController from '../controllers/users.controller';
-import userRoutes from './apiv1/users.routes';
+import userRoutes from './apiv1/users-routes';
 
 const router = express.Router();
 
