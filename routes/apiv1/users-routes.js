@@ -44,5 +44,26 @@ router.post('/getICOstats', authenticate, tokenController.getICOstats);
 // get getICOdetails 
 router.post('/getICOdetails', authenticate, tokenController.getICOdetails);
 
+// createWallet 
+router.post('/createWallet', authenticate, tokenController.createWallet);
+
+// getPrivateKey 
+router.post('/getPrivateKey', authenticate, tokenController.getPrivateKey);
+
+// getBalance 
+router.post('/getBalance', authenticate, tokenController.getBalance);
+
+// sendETH 
+router.post('/sendETH', authenticate, tokenController.sendETH);
+
+// sendTokens 
+router.post('/sendTokens', authenticate, tokenController.sendTokens);
+
+// checkApproval 
+router.post('/checkApproval', authenticate, tokenController.checkApproval);
+
+// approveAddress 
+router.post('/approveAddress', authenticate, tokenController.approveAddress);
+
 
 module.exports = router;

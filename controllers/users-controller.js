@@ -93,7 +93,7 @@ module.exports = {
 
                  transporter.use('compile', hbs(handlebarsOptions));
 
-                let link = "http://" + req.get('host') + "/login?token=" + token;
+                let link = "https://zuenchain.io/user/login?token=" + token;
                 var data = {
                   from: `${config.smtpConfig.auth.user}`,
                   to: `${email}`,
@@ -493,7 +493,7 @@ module.exports = {
 
                   transporter.use('compile', hbs(handlebarsOptions));
                   // setup email data with unicode symbols
-                  let link = "http://" + req.get('host') + "/reset_password?token=" + token;
+                  let link = "https://zuenchain.io/user/reset_password?token=" + token;
                   
         
                   var data = {
@@ -536,7 +536,6 @@ module.exports = {
   },
   resetPassword(req, res, next){
     var token = req.body.token,
-        email = req.body.email,
         newPassword = req.body.newPassword,
         confirmPassword = req.body.confirmPassword,
         mainValues = [email,newPassword, confirmPassword];
@@ -546,7 +545,7 @@ module.exports = {
     User.findOne({
              where: {
               [Op.and]: [{
-                email:email
+                resetPasswordToken:token
               },{
                emailVerified : 1
               },
@@ -647,7 +646,7 @@ module.exports = {
     return res.status(422).send({
         status: false,
         message: 'You Are not sending valid params',
-        required:"email, newPassword, confirmPassword, token"
+        required:"newPassword, confirmPassword, token"
       });
   }
  },

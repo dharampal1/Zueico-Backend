@@ -30,7 +30,8 @@ module.exports = {
       },
       email: {
         allowNull: false,
-         defaultValue:'',
+        defaultValue:'',
+        unique:true,
         type: Sequelize.STRING
       },
       mobileNumber: { 
