@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
     var User = sequelize.define('User', {
-        username: DataTypes.STRING,
+    username: DataTypes.STRING,
     password:  DataTypes.STRING,
     resetPasswordToken:DataTypes.STRING,
     resetPasswordExpires:DataTypes.STRING,
@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     participationAmount: DataTypes.INTEGER,
     image: DataTypes.STRING,
     status: DataTypes.ENUM('0','1'),
-    gender: DataTypes.INTEGER,
-    dob: DataTypes.DATE,
+    gender: DataTypes.STRING,
+    dob: DataTypes.STRING,
     country: DataTypes.STRING,
     address: DataTypes.STRING,
     ethWalletAddress: DataTypes.STRING,
@@ -27,11 +27,11 @@ module.exports = (sequelize, DataTypes) => {
     drivingLicenceFront: DataTypes.STRING,
     drivingLicenceBack: DataTypes.STRING,
     addressProof: DataTypes.STRING,
-    comments: DataTypes.TEXT,
+    comments: DataTypes.STRING,
     emailVerifyToken:DataTypes.STRING,
     vewtingToken: DataTypes.STRING,
     vewtingRemainingToken: DataTypes.STRING,
-    vewtingStartDate: DataTypes.DATE,
+    vewtingStartDate: DataTypes.STRING,
     previledge: DataTypes.ENUM('0','1')
    }, {});
    User.associate = function(models) {

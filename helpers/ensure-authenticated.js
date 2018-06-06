@@ -8,7 +8,6 @@ module.exports = {
        // Any route past this point requires a valid auth token
      */
   authenticate: function(req, res, next) {
-        console.log(req.body);
 
   const token = req.body.authorization ;
 

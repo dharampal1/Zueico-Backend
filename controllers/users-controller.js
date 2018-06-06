@@ -180,7 +180,7 @@ module.exports = {
                       .then(token1 => {
                         if (token1.isValid === true) {
                           User.update({
-                              emailVerifyToken: null,
+                              emailVerifyToken: '',
                               emailVerified: 1
                             }, {
                               where: {
@@ -562,8 +562,8 @@ module.exports = {
                   hashPassword(newPassword)
                   .then(hash => {
                   var  password = hash,
-                    resetPasswordToken = null,
-                    resetPasswordExpires = null;
+                    resetPasswordToken = '',
+                    resetPasswordExpires = '';
                   User.update({
                       password,
                       resetPasswordToken,
@@ -658,14 +658,14 @@ module.exports = {
       
       if (fieldname) {
         User.findOne({
-           where:{ id: 1 }
+           where:{ id: user_id }
           })
           .then(data => {
             if (data) {
               User.update({
                   [fieldname]: req.file.path
                 },{
-                  where: {id : 1}
+                  where: {id : user_id}
                 },{
                   returning: true,
                   plain:true

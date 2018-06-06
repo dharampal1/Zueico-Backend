@@ -2,105 +2,164 @@
 module.exports = {
     up: (queryInterface, Sequelize) => {
       return queryInterface.createTable('Users', {
-            id: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
       username: {
+        allowNull: false,
+         defaultValue:'',
         type: Sequelize.STRING
       },
       password: {
+        allowNull: false,
+         defaultValue:'',
         type: Sequelize.STRING
       },
       resetPasswordToken:{
+        allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       resetPasswordExpires:{
+        allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       email: {
+        allowNull: false,
+         defaultValue:'',
         type: Sequelize.STRING
       },
       mobileNumber: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       participationAmount: { 
+         allowNull: false,
+         defaultValue:0,
          type: Sequelize.INTEGER
       },
       image: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       status: { 
+         allowNull: false,
+         defaultValue:'0',
          type: Sequelize.ENUM('0','1')
       },
       gender: { 
-         type: Sequelize.INTEGER
+         allowNull: false,
+         defaultValue:'',
+         type: Sequelize.STRING
       },
       dob: { 
-         type: Sequelize.DATE
+         allowNull: false,
+         defaultValue:'',
+         type: Sequelize.STRING
       },
       country: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       address: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       ethWalletAddress: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       btcWalletAddress: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       walletMethod: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       currency: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       purchaseToken: { 
+         allowNull: false,
+         defaultValue:0,
          type: Sequelize.INTEGER
       },
       passport: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       drivingLicenceFront: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       drivingLicenceBack:{
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       addressProof: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       comments: { 
-         type: Sequelize.TEXT
+         allowNull: false,
+         defaultValue:"",
+         type: Sequelize.STRING
       },
       emailVerified:{ 
+         allowNull: false,
          type: Sequelize.BOOLEAN,
          defaultValue:false
       },
       emailVerifyToken:{ 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       vewtingToken: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       vewtingRemainingToken: { 
+         allowNull: false,
+         defaultValue:'',
          type: Sequelize.STRING
       },
       vewtingStartDate: { 
-         type: Sequelize.DATE
+         allowNull: false,
+         defaultValue:'',
+         type: Sequelize.STRING
       },
       previledge: { 
+         allowNull: false,
+         defaultValue:'0',
          type: Sequelize.ENUM('0','1')
       },
       updatedAt: { 
+         allowNull: false,
          type: Sequelize.DATE,
          default: Date.now()
       },
       createdAt: { 
+         allowNull: false,
          type: Sequelize.DATE,
          default: Date.now()
       }

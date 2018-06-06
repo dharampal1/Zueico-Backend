@@ -6,11 +6,13 @@ import express  from 'express';
 import bodyParser  from 'body-parser';
 import logger  from 'morgan';
 import path   from 'path';
-
+import cors from 'cors';
 
 const initApp = function () {
   // Init
   const app = express();
+
+  app.use(cors());
 
   // Config
   app.set('port', config.PORT);
