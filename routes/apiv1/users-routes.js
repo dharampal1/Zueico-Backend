@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import usersController from './../../controllers/users-controller';
+import tokenController from './../../controllers/token-controller';
 import { authenticate } from './../../helpers/ensure-authenticated';
 import { storage, imageFileFilter } from './../../helpers/fileUpload';
 
@@ -33,6 +34,15 @@ router.post('/upload/drivingLicenceBack', authenticate,upload.single('drivingLic
 // upload user address Proof 
 router.post('/upload/addressProof', authenticate,upload.single('addressProof'), usersController.uploadImage);
 
+
+// get getTokenDetails
+router.post('/getTokenDetails', authenticate, tokenController.getTokenDetails);
+
+// get getICOstats
+router.post('/getICOstats', authenticate, tokenController.getICOstats);
+
+// get getICOdetails 
+router.post('/getICOdetails', authenticate, tokenController.getICOdetails);
 
 
 module.exports = router;

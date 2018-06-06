@@ -40,8 +40,8 @@ module.exports = {
       },
       participationAmount: { 
          allowNull: false,
-         defaultValue:0,
-         type: Sequelize.INTEGER
+         defaultValue:'',
+         type: Sequelize.STRING
       },
       image: { 
          allowNull: false,
@@ -95,8 +95,8 @@ module.exports = {
       },
       purchaseToken: { 
          allowNull: false,
-         defaultValue:0,
-         type: Sequelize.INTEGER
+         defaultValue:'',
+         type: Sequelize.STRING
       },
       passport: { 
          allowNull: false,
@@ -156,12 +156,12 @@ module.exports = {
       updatedAt: { 
          allowNull: false,
          type: Sequelize.DATE,
-         default: Date.now()
+         defaultValue: Sequelize.NOW
       },
       createdAt: { 
          allowNull: false,
          type: Sequelize.DATE,
-         default: Date.now()
+         defaultValue: Sequelize.NOW
       }
     });
         },

@@ -9,22 +9,34 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       username: {
+        allowNull: false,
+        defaultValue:'',
         type: Sequelize.STRING
       },
       email: {
+        allowNull: false,
+        defaultValue:'',
         type: Sequelize.STRING
       },
       password: {
+        allowNull: false,
+        defaultValue:'',
         type: Sequelize.STRING
       },
       phone: {
+        allowNull: false,
+        defaultValue:'',
         type: Sequelize.STRING
       },
       totalToken: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        defaultValue:'',
+        type: Sequelize.STRING
       },
       soldToken: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        defaultValue:'',
+        type: Sequelize.STRING
       },
       createdAt: {
         type: Sequelize.DATE,
