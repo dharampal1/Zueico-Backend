@@ -9,7 +9,7 @@ module.exports = {
      */
   authenticate: function(req, res, next) {
 
-  const token = req.body.authorization ;
+  const token = req.headers.authorization ;
 
     if (token) {
         jwt.verify(token, config.SECRET, (err, decoded) => {
@@ -49,7 +49,7 @@ module.exports = {
      */
   adminAuthenticate: function(req, res, next) {
 
-  const token = req.body.authorization ;
+  const token = req.headers.authorization ;
 
     if (token) {
         jwt.verify(token, config.SECRET, (err, decoded) => {
