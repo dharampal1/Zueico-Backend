@@ -64,9 +64,7 @@ module.exports = {
 	},
 
 	allUsers(req, res, next) {
-		User.findAll({
-			where: { previledge : '0' }
-		 })
+		User.findAll({})
 		  .then(data => {
 		  	  if(data.length){
 		  	  	res.status(200).json({
@@ -121,6 +119,11 @@ module.exports = {
 
 		User.findAll({
 			 attributes: ["id","username","passport","drivingLicenceFront","drivingLicenceBack","addressProof"], 
+		  },{
+		  where : { 
+		  	 [Op.or]: [{drivingLicenceFront: { [Op.ne] : null}}, {drivingLicenceBack:{ [Op.ne]  : null}}, 
+		  	 {addressProof:{[Op.ne]  : null}}, {passport:{[Op.ne] :null}}]
+		  	 }
 		  })
 		  .then(data => {
 		  	  if(data){
@@ -162,8 +165,7 @@ module.exports = {
 		  	  if(data){
 		  	  	res.status(200).json({
 		  	  		status:true,
-		  	  		message:"Kyc Approved",
-		  	  		data
+		  	  		message:"Kyc Approved"
 		  	  	});
 		  	  } else {
 		  	  	res.status(404).json({
@@ -206,8 +208,7 @@ module.exports = {
 		  	  if(data){
 		  	  	res.status(200).json({
 		  	  		status:true,
-		  	  		message:"Kyc Rejected",
-		  	  		data
+		  	  		message:"Kyc Rejected"
 		  	  	});
 		  	  } else {
 		  	  	res.status(404).json({

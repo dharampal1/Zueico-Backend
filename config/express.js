@@ -16,7 +16,7 @@ const initApp = function () {
   app.set('port', config.PORT);
 
   app.use(bodyParser.urlencoded({
-    extended: true
+    extended: false
   }));
 
   app.use(bodyParser.json());

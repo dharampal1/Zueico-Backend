@@ -1,5 +1,4 @@
 import express from 'express';
-import { authenticate } from '../helpers/ensure-authenticated';
 import usersController from '../controllers/users-controller';
 import userRoutes from './apiv1/users-routes';
 
@@ -14,13 +13,13 @@ router.post('/forgot_password', usersController.forgotPassword);
 router.post('/reset_password', usersController.resetPassword);
 
 // Authentication all next routes
-router.use(authenticate, userRoutes) ;
+router.use(userRoutes) ;
 
 
 // API Error routes
 router.use((req, res) => {
   return res.status(404).json({
-    message: 'No Route found.'
+    message: 'No Route found'
   });
 });
 

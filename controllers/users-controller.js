@@ -15,11 +15,6 @@ import {
   hashPassword,
   verifyPassword
 } from '../helpers/userHelper';
-import {
-  storage,
-  imageFileFilter
-} from '../helpers/fileUpload';
-import multer from 'multer';
 import nodemailer from 'nodemailer';
 import randtoken from 'rand-token';
 import Sequelize from 'sequelize';
@@ -657,34 +652,20 @@ module.exports = {
   }
  },
  uploadImage(req, res, next){
-   
+
     var user_id = req.userId,
-       fieldname = req.headers.fieldname;
-
-    if(fieldname) {
-
-    var upload = multer({   
-      fileFilter: imageFileFilter,
-      storage: storage
-    }).single(fieldname);
-
-    upload(req, res, function(err) {
-      if (err) {
-        return res.status(500).json({
-          status: false,
-          message: err
-        });
-      }
-      if (req.file) {
+        fieldname = req.file.fieldname;
+      
+      if (fieldname) {
         User.findOne({
-           where:{ id: user_id }
+           where:{ id: 1 }
           })
           .then(data => {
             if (data) {
               User.update({
                   [fieldname]: req.file.path
                 },{
-                  where: {id : user_id}
+                  where: {id : 1}
                 },{
                   returning: true,
                   plain:true
@@ -711,16 +692,11 @@ module.exports = {
       } else {
         res.status(422).json({
           status: false,
-          message: "No file is sent in Request"
+          message: "fieldname is required"
         });
       }
-    });
-  } else {
-     res.status(422).json({
-          status: false,
-          message: "fieldname is required"
-     });
-  }
- }
+
+}
+ 
 }
 
