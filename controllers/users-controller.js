@@ -40,13 +40,15 @@ module.exports = {
         email, mobileNumber, participationAmount, country,
         password, confirmPassword
       ];
+
+
   
      if (checkBlank(mainValues) === 0) {
 
-      emailCheck(email)
-      .then(function (res1) {
-         if(res1 === true){
-             User.findOne({
+      // emailCheck(email)
+      // .then(function (res1) {
+         // if(res1 === true){
+       User.findOne({
           where: {
             email
           }
@@ -154,19 +156,19 @@ module.exports = {
             message: err.message
           });
         });
-         } else {
-          res.status(422).json({
-            status: false,
-            message: `Please send the valid Email, ${email} does not exist.`
-          });
-         }
-      })
-      .catch(function (err) {
-        res.status(500).json({
-            status: false,
-            message: err.message
-          });
-      });
+         // } else {
+         //  res.status(422).json({
+         //    status: false,
+         //    message: `Please send the valid Email, ${email} does not exist.`
+         //  });
+         // }
+      // })
+      // .catch(function (err) {
+      //   res.status(500).json({
+      //       status: false,
+      //       message: err.message
+      //     });
+      // });
        } else {
         res.status(422).json({
            status: false,
@@ -334,11 +336,20 @@ module.exports = {
       })
       .then(data => {
         if (data) {
+          var kycStatus = '';
+
+          if(data.status === '0'){
+              kycStatus = 'Pending';
+          } else if(data.status === '1'){
+              kycStatus = 'Approved';
+          } else {
+              kycStatus = 'Rejected';
+          }
           res.status(200).json({
             status:true,
             message: "Your Kyc Status",
             data:{
-              kycStatus:data.status
+              kycStatus
             }
           });
         } else {
@@ -698,11 +709,26 @@ module.exports = {
       });
   }
  },
- uploadImage(req, res, next){
+ uploadImage(err,req, res, next){
 
-    var user_id = req.userId,
-        fieldname = req.file.fieldname;
-      
+    if (err.code == 'LIMIT_FILE_SIZE'){
+      return res.json({
+            status: false,
+            error:err.message,
+            message:"Send file size less than 10 MB's."
+          });
+        
+    } 
+    if (err.message == 'INVALID_TYPE'){
+        return res.json({
+            status: false,
+            message: "Send valid file type"
+          });
+    }
+
+   var user_id = req.userId,
+       fieldname = req.file.fieldname;
+
       if (fieldname) {
         User.findOne({
            where:{ id: user_id }

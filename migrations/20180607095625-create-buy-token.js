@@ -14,7 +14,7 @@ module.exports = {
       walletMethod: {
         type: Sequelize.STRING
       },
-      currency: {
+      amount: {
         type: Sequelize.STRING
       },
       purchaseToken: {

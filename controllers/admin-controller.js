@@ -118,7 +118,7 @@ module.exports = {
 		var user_id  = req.id ;
 
 		User.findAll({
-			 attributes: ["id","username","passport","drivingLicenceFront","drivingLicenceBack","addressProof"], 
+			 attributes: ["id","username","status","createdAt","passport","drivingLicenceFront","drivingLicenceBack","addressProof"], 
 		  },{
 		  where : { 
 		  	 [Op.or]: [{drivingLicenceFront: { [Op.ne] : null}}, {drivingLicenceBack:{ [Op.ne]  : null}}, 
@@ -129,7 +129,7 @@ module.exports = {
 		  	  if(data){
 		  	  	res.status(200).json({
 		  	  		status:true,
-		  	  		message:"All KYC",
+		  	  		message:"All KYC's",
 		  	  		data
 		  	  	});
 		  	  } else {

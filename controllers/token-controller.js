@@ -3,6 +3,10 @@ import request from 'request';
 import {
   checkBlank
 } from '../helpers/requestHelper';
+import {
+  BuyToken,
+  TransferToken
+} from '../models';
 
 const  url = 'http://13.126.28.220:5000';
 
@@ -59,6 +63,91 @@ module.exports = {
 	},
 
 	// post Requests 
+
+
+	buyToken(req, res, next) {
+	 
+	  var  walletMethod = req.body.walletMethod,
+		   amount = req.body.amount,
+		   purchaseToken = req.body.purchaseToken,
+	       user_id = req.userId,
+	       mainValues = [walletMethod, amount, purchaseToken];
+
+	   if(checkBlank(mainValues) === 0 ){
+	   	    var new_token = {
+	   	    	walletMethod,
+				amount,
+				purchaseToken,
+				user_id
+	   	    };
+
+	   		new_token.save()
+	   		 .then(data => {
+	   		 	if(data) {
+	   		 	  res.status(201).json({
+		    		status:true,
+		    		message:"order Placed",
+		    		data
+		    	});	
+	   		 	}
+	   		 })
+	   		 .catch(err => {
+	   		 	res.status(500).json({
+		    		status:false,
+		    		message:err.message
+		    	});
+	   		 })
+        } else {
+        	res.status(422).json({
+    		status:false,
+    		message:"walletMethod, amount, purchaseToken, are required"
+    	});
+
+       }
+	
+	},
+
+	tokenTranfer(req, res, next) {
+
+	  var  fromAddress = req.body.fromAddress,
+		   toAddress = req.body.toAddress,
+		   token = req.body.purchaseToken,
+	       user_id = req.userId,
+	       mainValues = [fromAddress, toAddress, token];
+
+	   if(checkBlank(mainValues) === 0 ){
+	   	var new_token = {
+	   	    	fromAddress,
+				toAddress,
+				token,
+				user_id
+	   	    };
+
+	   		new_token.save()
+	   		 .then(data => {
+	   		 	if(data) {
+	   		 	  res.status(201).json({
+		    		status:true,
+		    		message:"order Placed",
+		    		data
+		    	});	
+	   		 	}
+	   		 })
+	   		 .catch(err => {
+	   		 	res.status(500).json({
+		    		status:false,
+		    		message:err.message
+		    	});
+	   		 })
+
+        } else {
+        	res.status(422).json({
+    		status:false,
+    		message:"fromAddress, toAddress, token are required"
+    	});
+       }
+	 
+	},
 
 	createWallet(req, res, next){
  
@@ -179,7 +268,7 @@ module.exports = {
         } else {
      	res.status(422).json({
     		status:false,
-    		message:"keystore, fromAddress, toAddress, password and value is required"
+    		message:"keystore, fromAddress, toAddress, password and value are required"
     	});
      }
 	},
@@ -215,7 +304,7 @@ module.exports = {
         } else {
      	res.status(422).json({
     		status:false,
-    		message:"keystore, fromAddress, toAddress, password and value is required"
+    		message:"keystore, fromAddress, toAddress, password and value are required"
     	});
      }
 	},

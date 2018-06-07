@@ -5,8 +5,11 @@ import tokenController from './../../controllers/token-controller';
 import { authenticate } from './../../helpers/ensure-authenticated';
 import { storage, imageFileFilter } from './../../helpers/fileUpload';
 
+const maxSize = 4000 ;
+
 var upload = multer({   
       fileFilter: imageFileFilter,
+      limits: { fileSize: maxSize },
       storage: storage
     });
 
@@ -38,7 +41,13 @@ router.post('/upload/drivingLicenceBack', authenticate,upload.single('drivingLic
 router.post('/upload/addressProof', authenticate,upload.single('addressProof'), usersController.uploadImage);
 
 
-// get getTokenDetails
+// buyToken
+router.post('/buyToken', authenticate, tokenController.buyToken);
+
+// 
+router.post('/tokenTranfer', authenticate, tokenController.tokenTranfer);
+
+//  tokenTranfer
 router.post('/getTokenDetails', authenticate, tokenController.getTokenDetails);
 
 // get getICOstats
