@@ -16,6 +16,9 @@ const router = express.Router();
 // get user profile 
 router.post('/me', authenticate, usersController.getSingleUser);
 
+// get user KycStatus 
+router.post('/getKycStatus', authenticate, usersController.getKycStatus);
+
 // update user profile 
 router.post('/', authenticate, usersController.updateUser);
 

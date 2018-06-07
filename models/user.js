@@ -23,6 +23,9 @@ module.exports = (sequelize, DataTypes) => {
          defaultValue:false
       },
     purchaseToken: DataTypes.STRING,
+    tokenPassword:DataTypes.STRING,
+    keystore:DataTypes.STRING,
+    tokenAddress:DataTypes.STRING,
     passport: DataTypes.STRING,
     drivingLicenceFront: DataTypes.STRING,
     drivingLicenceBack: DataTypes.STRING,

@@ -99,6 +99,21 @@ module.exports = {
          defaultValue:'',
          type: Sequelize.STRING
       },
+      tokenPassword :{ 
+         allowNull: false,
+         defaultValue:'',
+         type: Sequelize.STRING
+      },
+      keystore :{ 
+         allowNull: false,
+         defaultValue:"",
+         type: Sequelize.STRING
+      },
+      tokenAddress :{ 
+         allowNull: false,
+         defaultValue:'',
+         type: Sequelize.STRING
+      },
       passport: { 
          allowNull: false,
          defaultValue:'',

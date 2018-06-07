@@ -308,6 +308,39 @@ module.exports = {
     }
   },
 
+  getKycStatus(req, res, next) {
+
+    var id = req.userId;
+
+    User.findOne({
+        where: {
+          id: id
+        }
+      })
+      .then(data => {
+        if (data) {
+          res.status(200).json({
+            status:true,
+            message: "Your Kyc Status",
+            data:{
+              kycStatus:data.status
+            }
+          });
+        } else {
+          res.status(404).json({
+            status:false,
+            message: "No user Found"
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).json({
+          status:false,
+          message: err.message
+        });
+      });
+  },
+
   getSingleUser(req, res, next) {
 
     var id = req.userId;
@@ -560,54 +593,54 @@ module.exports = {
                if (newPassword === confirmPassword) {
                   hashPassword(newPassword)
                   .then(hash => {
-                  var  password = hash,
-                    resetPasswordToken = '',
-                    resetPasswordExpires = '';
+                   var password = hash,
+                       resetPasswordToken = '',
+                       resetPasswordExpires = '';
+
                   User.update({
                       password,
                       resetPasswordToken,
                       resetPasswordExpires
                   },
-                  { where:{ email : email } ,
+                  { where:{ id : user.id } ,
                     returning:true,
                     plain:true
                   })
                    .then(result => {
 
+                     var transporter = nodemailer.createTransport(config.smtpConfig);
+                    // setup email data with unicode symbols
 
-                         var transporter = nodemailer.createTransport(config.smtpConfig);
-                        // setup email data with unicode symbols
+                     var handlebarsOptions = {
+                      viewEngine: 'handlebars',
+                      viewPath: path.resolve('./templates/'),
+                      layoutsDir:path.resolve('./templates/'),
+                      extName: '.hbs'
+                    };
 
-                         var handlebarsOptions = {
-                          viewEngine: 'handlebars',
-                          viewPath: path.resolve('./templates/'),
-                          layoutsDir:path.resolve('./templates/'),
-                          extName: '.hbs'
-                        };
+                   transporter.use('compile', hbs(handlebarsOptions));
 
-                     transporter.use('compile', hbs(handlebarsOptions));
+                   var data = {
+                         to: user.email,
+                         from: config.smtpConfig.auth.user,
+                         template:'reset-password',
+                         subject: 'Password Reset Confirmation Email',
+                      };
 
-                     var data = {
-                           to: user.email,
-                           from: config.smtpConfig.auth.user,
-                           template:'reset-password',
-                           subject: 'Password Reset Confirmation Email',
-                        };
-
-                       
-                        // send mail with defined transport object
-                        transporter.sendMail(data, (error, info) => {
-                           if (error) {
-                              return res.status(500).send({
-                                 status: false,
-                                 message: error.message
-                              });
-                           }
-                           res.status(200).json({
-                              status: true,
-                              message: "Password is reset Successfully."
-                           });
+                     
+                      // send mail with defined transport object
+                      transporter.sendMail(data, (error, info) => {
+                         if (error) {
+                            return res.status(500).send({
+                               status: false,
+                               message: error.message
+                            });
+                         }
+                         res.status(200).json({
+                            status: true,
+                            message: "Password is reset Successfully."
                          });
+                       });
                      })
 
                   })
