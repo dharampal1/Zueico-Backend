@@ -20,6 +20,7 @@ import randtoken from 'rand-token';
 import Sequelize from 'sequelize';
 import path from 'path';
 import  hbs from 'nodemailer-express-handlebars';
+import emailCheck from 'email-check';
 
 const Op = Sequelize.Op;
 
@@ -28,20 +29,24 @@ module.exports = {
   createUser(req, res, next) {
     let mob = /^[1-9]{1}[0-9]{9}$/;
     var firstName = req.body.firstName,
-      lastName = req.body.lastName,
-      mobileNumber = req.body.mobileNumber,
-      participationAmount = req.body.participationAmount,
-      country = req.body.country,
-      email = req.body.email,
-      password = req.body.password,
-      confirmPassword = req.body.confirmPassword,
-      mainValues = [firstName, lastName,
+        lastName = req.body.lastName,
+        mobileNumber = req.body.mobileNumber,
+        participationAmount = req.body.participationAmount,
+        country = req.body.country,
+        email = req.body.email,
+        password = req.body.password,
+        confirmPassword = req.body.confirmPassword,
+        mainValues = [firstName, lastName,
         email, mobileNumber, participationAmount, country,
         password, confirmPassword
       ];
+  
+     if (checkBlank(mainValues) === 0) {
 
-    if (checkBlank(mainValues) === 0) {
-      User.findOne({
+      emailCheck(email)
+      .then(function (res1) {
+         if(res1 === true){
+             User.findOne({
           where: {
             email
           }
@@ -149,13 +154,26 @@ module.exports = {
             message: err.message
           });
         });
-    } else {
-      res.status(422).json({
-         status: false,
-         message: "You are not sending valid Request Params",
-         required: "firstName, lastName, email, mobileNumber, participationAmount ,country, password, confirmPassword"
+         } else {
+          res.status(422).json({
+            status: false,
+            message: `Please send the valid Email, ${email} does not exist.`
+          });
+         }
+      })
+      .catch(function (err) {
+        res.status(500).json({
+            status: false,
+            message: err.message
+          });
       });
-    }
+       } else {
+        res.status(422).json({
+           status: false,
+           message: "You are not sending valid Request Params",
+           required: "firstName, lastName, email, mobileNumber, participationAmount ,country, password, confirmPassword"
+        });
+      }
   },
 
   authenticate(req, res, next) {
@@ -172,7 +190,6 @@ module.exports = {
             }
           })
           .then(data => {
-            if (data.emailVerifyToken) {
               verifyPassword(password, data)
                 .then(result => {
                   if (result.isValid === true) {
@@ -200,6 +217,8 @@ module.exports = {
                                 status:true,
                                 message: 'Authenticated, Token Attached',
                                 userId: data.id,
+                                username:data.username,
+                                email:data.email,
                                 token
                               });
                             })
@@ -236,12 +255,6 @@ module.exports = {
                     message: err.message
                   });
                 });
-            } else {
-              res.status(422).json({
-                status:false,
-                message: 'Email is Already verifyed'
-              });
-            }
           })
           .catch(err => {
             res.status(500).json({
@@ -276,6 +289,8 @@ module.exports = {
                       status:true,
                       message: 'Authenticated, Token Attached',
                       userId: result.id,
+                      username:data.username,
+                      email:data.email,
                       token
                     });
                   } else {
@@ -571,7 +586,7 @@ module.exports = {
     var token = req.body.token,
         newPassword = req.body.newPassword,
         confirmPassword = req.body.confirmPassword,
-        mainValues = [email,newPassword, confirmPassword];
+        mainValues = [newPassword, confirmPassword];
 
     if (checkBlank(mainValues) === 0) {
 
