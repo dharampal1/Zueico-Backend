@@ -33,6 +33,16 @@ router.post('/upload/drivingLicenceBack', authenticate, kycController.uploadDriv
 router.post('/upload/addressProof', authenticate, kycController.uploadAddressProof);
 
 
+
+// total buy token
+router.post('/totalRemainingToken', authenticate, tokenController.totalRemainingToken);
+
+// total buy token
+router.post('/totalUserbuytoken', authenticate, tokenController.totalUserbuytoken);
+
+// total orders
+router.post('/totalOrders', authenticate, tokenController.totalOrders);
+
 // buyToken
 router.post('/buyToken', authenticate, tokenController.buyToken);
 
@@ -48,9 +58,6 @@ router.post('/getICOstats', authenticate, tokenController.getICOstats);
 // get getICOdetails 
 router.post('/getICOdetails', authenticate, tokenController.getICOdetails);
 
-// createWallet 
-router.post('/createWallet', authenticate, tokenController.createWallet);
-
 // getPrivateKey 
 router.post('/getPrivateKey', authenticate, tokenController.getPrivateKey);
 
@@ -60,8 +67,6 @@ router.post('/getBalance', authenticate, tokenController.getBalance);
 // sendETH 
 router.post('/sendETH', authenticate, tokenController.sendETH);
 
-// sendTokens 
-router.post('/sendTokens', authenticate, tokenController.sendTokens);
 
 // checkApproval 
 router.post('/checkApproval', authenticate, tokenController.checkApproval);

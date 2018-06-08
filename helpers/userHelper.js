@@ -1,5 +1,11 @@
  import Promise from 'promise';
  import bcrypt from 'bcryptjs';
+ import { User } from '../models';
+ import request from 'request';
+
+import mdEncrypt from 'md5';
+
+const  url = 'http://13.126.28.220:5000';
 
 
  exports.verifyToken = function(token, user) {
@@ -46,6 +52,69 @@ exports.verifyPassword = function(password, user) {
           id: user.id
         });
       }
+    });
+  }));
+}
+
+exports.createWallet = function(email, user) {
+  return new Promise(((resolve, reject) => {
+
+      var password = mdEncrypt(email);
+       
+     const body = { password };
+  
+    request.post({url:`${url}/createWallet`,form:body },function(err,httpResponse,body){
+
+        if(err){
+           reject(err);
+        } else {
+
+        var body = JSON.parse(body),
+            ethWalletAddress = body.addr[0],
+            keystore = JSON.parse(body.keystore)
+
+        User.update({
+          ethWalletAddress,
+          keystore:JSON.parse(keystore),
+          tokenPassword:password
+        },{
+          where: { id:user.id},
+          returing:true,
+          plain:true
+        })
+        .then(data => {
+          if(data){
+            resolve({
+              isValid: true,
+              ethWalletAddress
+            });
+          } else {
+           reject(new Error("No user Found"));
+          }
+        })
+        .catch(err => {
+          reject(err)
+        })
+      }
+    });
+  }));
+}
+
+exports.approveAddress = function(address, user) {
+  return new Promise(((resolve, reject) => {
+       
+     const body = { address };
+  
+     request.post({url:`${url}/approveAddress`,form:body },function(err,httpResponse,body){
+
+        if(err){
+           reject(err);
+        } else {
+            resolve({
+              isValid: true,
+              body
+            });
+        }
     });
   }));
 }

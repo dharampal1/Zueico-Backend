@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   	user_id:  DataTypes.INTEGER,
     fromAddress: DataTypes.STRING,
     toAddress: DataTypes.STRING,
-    token: DataTypes.STRING
+    token: DataTypes.INTEGER
   }, {});
   TokenTransfer.associate = function(models) {
     // associations can be defined here

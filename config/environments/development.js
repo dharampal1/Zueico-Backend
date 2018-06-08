@@ -11,5 +11,6 @@ module.exports = {
           user: 'test@shamlatech.com',
           pass: 'technical@123'
        }
-    }
+    },
+    api_url:'http://13.126.36.117:4000/'
 };

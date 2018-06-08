@@ -13,7 +13,8 @@ import {
 import {
   verifyToken,
   hashPassword,
-  verifyPassword
+  verifyPassword,
+  createWallet
 } from '../helpers/userHelper';
 import nodemailer from 'nodemailer';
 import randtoken from 'rand-token';
@@ -185,6 +186,7 @@ module.exports = {
                           User.update({
                               emailVerifyToken: '',
                               emailVerified: 1
+
                             }, {
                               where: {
                                 id: data.id
@@ -193,6 +195,10 @@ module.exports = {
                               plain: true
                             })
                             .then(data1 => {
+
+                            createWallet(email,data)
+                              .then(add => {
+                            if(add.isValid === true){
                               var token = jwt.sign({
                                 id: data.id
                               }, config.SECRET, {
@@ -207,6 +213,8 @@ module.exports = {
                                 email:data.email,
                                 token
                               });
+                               }
+                              })
                             })
                             .catch(err => {
                               res.status(500).json({
@@ -264,7 +272,6 @@ module.exports = {
               verifyPassword(password, data)
                 .then(result => {
                   if (result.isValid === true) {
-
                     var token = jwt.sign({
                       id: result.id
                     }, config.SECRET, {
@@ -310,7 +317,6 @@ module.exports = {
   },
 
   getKycStatus(req, res, next) {
-
     var id = req.userId;
 
     User.findOne({
@@ -545,7 +551,7 @@ module.exports = {
                      template: 'forgot-password',
                      subject: 'Reset your Password',
                      context: {
-                      url: link,
+                     url: link,
                     }
                   };
                   // send mail with defined transport object

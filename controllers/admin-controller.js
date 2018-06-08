@@ -8,6 +8,25 @@ const Op = Sequelize.Op;
 
 module.exports = { 
 
+
+  allUsersCount(req, res, next){
+  	User.findAll({})
+  	  .then(data => {
+  	  	 if(data.length){
+  	  	  res.status(200).json({
+            status:true,
+            message: 'Total Users Count',
+            data:data.length
+          });
+  	  	 } else {
+  	  	 	 res.status(404).json({
+                status:false,
+                message: 'No data Found',
+              });
+  	  	 }
+  	  })
+  },
+
   adminLogin(req, res, next) {
 
     var email = req.body.email,

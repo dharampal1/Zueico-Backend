@@ -4,7 +4,7 @@ import { User } from '../models';
 import { checkBlank } from '../helpers/requestHelper';
 import {
   BuyToken,
-  TransferToken
+  TokenTransfer
 } from '../models';
 
 import mdEncrypt from 'md5';
@@ -64,7 +64,55 @@ module.exports = {
 	},
 
 	// post Requests 
+    
 
+    totalOrders(req, res, next){
+    	var user_id = req.userId ;
+
+    	BuyToken.findAll({
+    		where: { user_id }
+    	})
+    	.then( data => {
+    		if(data.length) {
+    			
+
+    			User.findOne({
+    				where: { id: user_id }
+    			})
+    			.then(data1 => {
+
+    				var tokens = data.map(token => {
+		    		var data = {
+		    			tokens  : token.purchaseToken,
+		    			method  : token.walletMethod,
+		    			date  :  token.createdAt,
+		    			price :  token.amount,
+		    			status: data1.status,
+		    			comment:data1.comments,
+		    		 };
+		    			return data;
+		    		});
+    				
+    				res.status(200).json({
+		    		status:true,
+		    		message:"All Orders",
+		    		data:tokens
+		    	 });
+    		  })
+    		} else {
+    		 res.status(404).json({
+	    		status:false,
+	    		message:'no data found'
+	    	 });
+    		}
+    	})
+    	.catch(err => {
+    	  res.status(500).json({
+    		status:false,
+    		message:err.meesage
+    	 });
+      })
+    },
 
 	buyToken(req, res, next) {
 	 
@@ -75,12 +123,12 @@ module.exports = {
 	       mainValues = [walletMethod, amount, purchaseToken];
 
 	   if(checkBlank(mainValues) === 0 ){
-	   	    var new_token = {
+	   	    var new_token = new BuyToken({
 	   	    	walletMethod,
 				amount,
 				purchaseToken,
 				user_id
-	   	    };
+	   	    });
 
 	   		new_token.save()
 	   		 .then(data => {
@@ -103,7 +151,6 @@ module.exports = {
     		status:false,
     		message:"walletMethod, amount, purchaseToken, are required"
     	});
-
        }
 	
 	},
@@ -112,25 +159,42 @@ module.exports = {
 
 	  var  fromAddress = req.body.fromAddress,
 		   toAddress = req.body.toAddress,
-		   token = req.body.purchaseToken,
+		   token = req.body.token,
 	       user_id = req.userId,
 	       mainValues = [fromAddress, toAddress, token];
 
 	   if(checkBlank(mainValues) === 0 ){
-	   	var new_token = {
+	   
+	   	User.findOne({
+	   		where:{id:user_id}
+	   	})
+	   	.then(data => {
+	   		if(data){
+
+	   	   const body = {
+		   	   	keystore:JSON.stringify(data.keystore),
+		   	   	password:data.tokenPassword,
+		   	   	fromAddress,
+		   	   	toAddress,
+		   	   	value:parseInt(token)
+	   	   	};
+
+	   	   sendTokens(body)
+	   	   	.then(token => {
+	   	   if(token.isValid === true ){
+	   	   	var new_token = new TokenTransfer({
 	   	    	fromAddress,
 				toAddress,
 				token,
 				user_id
-	   	    };
-
-	   		new_token.save()
+	   	    });
+	   	   	  new_token.save()
 	   		 .then(data => {
 	   		 	if(data) {
-	   		 	  res.status(201).json({
+	   		 	  res.status(200).json({
 		    		status:true,
-		    		message:"order Placed",
-		    		data
+		    		message:"Token Transfer",
+		    		data:token.body
 		    	});	
 	   		 	}
 	   		 })
@@ -140,7 +204,27 @@ module.exports = {
 		    		message:err.message
 		    	});
 	   		 })
-
+	   	   		} else {
+	   	   		res.status(500).json({
+		    		status:false,
+		    		message:"Token Tranfer Failed"
+		    	});
+	   	   		}
+	   	   	})
+	   	   	.catch(err => {
+	   	   		res.status(500).json({
+		    		status:false,
+		    		message:err.message
+		    	});
+	   	   	})
+	   		} else {
+	   			res.status(404).json({
+		    		status:false,
+		    		message:"No user found"
+		    	});
+	   		}
+	   	})
+	   	
         } else {
         	res.status(422).json({
     		status:false,
@@ -150,75 +234,21 @@ module.exports = {
 	 
 	},
 
-	createWallet(req, res, next){
- 
-	   var email = req.body.email,
-	       user_id = req.userId;
-
-	   if(email){
-
-       var password = mdEncrypt(email);
-       console.log(password);
-
-	   const body = { password };
-  
-	  request.post({url:`${url}/createWallet`,form:body },function(err,httpResponse,body){
-
-	  	 	if(err){
-	  	 	   res.status(500).json({
-	  	 	   	  status:false,
-	  	 	   	  message:err.message
-	  	 	   });
-	  	 	} else {
-  	 		var body = JSON.parse(body),
-  	 		    tokenAddress = body.addr[0],
-  	 		    keystore = body.keystore;
-  			User.update({
-  				tokenAddress,
-				keystore:JSON.parse(keystore),
-				tokenPassword:password
-  			},{
-  				where: { id:user_id},
-  				returing:true,
-  				plain:true
-  			})
-  			.then(data => {
-  				if(data){
-  					res.status(200).json({
-		    		status:true,
-		    		message:"Address and Keystore saved successfully",
-		    		address:tokenAddress
-		    	});
-  				} else {
-  					res.status(404).json({
-		    		status:false,
-		    		message:'No User Found'
-		    	});
-  				}
-  			})
-  			.catch(err => {
-  				res.status(500).json({
-		    		status:false,
-		    		message:err.message
-		    	});
-  			})
-         }
-	  });
-	   } else {
-	   	res.status(422).json({
-    		status:false,
-    		message:"email is required"
-    	});
-	   }
-	 },
-
 	getPrivateKey(req, res, next){
 
-		 var password = req.body.password,
-		     keystore = req.body.keystore;
+		var user_id = req.userId;
 
+		User.findOne({
+	   		where : { id : user_id }
+	   	})
+	   	.then(data => {
+	   		if(data){
 
-	   const body = {keystore,password};
+	   	 const body = {
+	   	     keystore:JSON.stringify(data.keystore),
+	   	     password:data.tokenPassword,
+	   	     address:data.ethWalletAddress
+	   	 };
 
        
 	  request.post({url:`${url}/getPrivateKey`, form:body },function(err,httpResponse,body){
@@ -236,18 +266,36 @@ module.exports = {
 	  	 		});
 	  	 	}
 	  	 });
+	  } else {
+	   		  res.status(404).json({
+	  	 	   	  status:false,
+	  	 	   	  message:"no user found"
+	  	 	   });
+	   		}
+	   	})
+	   	.catch(err => {
+	   		res.status(500).json({
+    		status:false,
+    		message:err.message
+    	});
+	   	});
 	},
 
 	getBalance(req, res, next){
 
-	 var password = req.body.password,
-	     keystore = req.body.keystore,
-	     address  = req.body.address,
-	     mainValues = [password, keystore, address];
+	    var user_id = req.userId;
 
-	   if(checkBlank(mainValues) === 0 ){
+	   	User.findOne({
+	   		where : { id : user_id }
+	   	})
+	   	.then(data => {
+	   		if(data){
 
-	   const body = {keystore,password,address};
+	   	 const body = {
+	   	     keystore:JSON.stringify(data.keystore),
+	   	     password:data.tokenPassword,
+	   	     address:data.ethWalletAddress
+	   	 };
 
 	   request.post({url:`${url}/getBalance`,form:body },function(err,httpResponse,body){
 
@@ -264,86 +312,99 @@ module.exports = {
 	  	 		});
 	  	 	}
 	  	 });
-      } else {
-     	res.status(422).json({
+	   	} else {
+	   		  res.status(404).json({
+	  	 	   	  status:false,
+	  	 	   	  message:"no user found"
+	  	 	   });
+	   		}
+	   	})
+	   	.catch(err => {
+	   		res.status(500).json({
     		status:false,
-    		message:"keystore, address, password is required"
+    		message:err.message
     	});
-     }
+	   	});
+ 
 
 	},
 
 	sendETH(req, res, next){
 
-	 var password = req.body.password,
-	     keystore = req.body.keystore,
-	     fromAddress  = req.body.fromAddress,
+    var  fromAddress  = req.body.fromAddress,
 		 toAddress = req.body.toAddress,
 		 value = req.body.value,
-         mainValues = [password, keystore, fromAddress,toAddress, value];
+		 user_id = req.userId,
+         mainValues = [fromAddress,toAddress, value];
 
-	  if(checkBlank(mainValues) === 0 ){		 
+	  if(checkBlank(mainValues) === 0 ){		
 
-	 const body = {keystore,password,fromAddress, toAddress, value};
+	   	User.findOne({
+	   		where:{id:user_id}
+	   	})
+	   	.then(data => {
+	   		if(data){ 
 
-       request.post({url:`${url}/sendETH`, form:body },function(err,httpResponse,body){
-	  	 	if(err){
-	  	 	   res.status(500).json({
-	  	 	   	  status:false,
-	  	 	   	  message:err.message
-	  	 	   });
-	  	 	} else {
-	  	 		res.status(200).json({
-	  	 			status:true,
-	  	 			message:"ETH sent",
-	  	 			data:body
-	  	 		});
-	  	 	}
-	  	 });
+   			const body = {
+   				keystore:JSON.stringify(data.keystore),
+   				password:data.tokenPassword,
+   				fromAddress,
+   				toAddress,
+   				value
+   			};
+
+	   		request.post({url:`${url}/sendETH`, form:body },function(err,httpResponse,body){
+		  	 	if(err){
+		  	 	   res.status(500).json({
+		  	 	   	  status:false,
+		  	 	   	  message:err.message
+		  	 	   });
+		  	 	} else {
+		  	 		var new_token = new TokenTransfer({
+			   	    	fromAddress,
+						toAddress,
+						token:value,
+						user_id
+			   	    });
+			   	   	  new_token.save()
+			   		 .then(data => {
+			   		 	if(data) {
+			   		 	  res.status(200).json({
+				    		status:true,
+				    		message:"ETH Transfer",
+				    		data:body
+				    	});	
+			   		 	}
+			   		 })
+			   		 .catch(err => {
+			   		 	res.status(500).json({
+				    		status:false,
+				    		message:err.message
+				    	});
+			   		 })
+		  	 	}
+		  	    });
+
+	   		} else {
+	   			res.status(404).json({
+		    		status:false,
+		    		message:"No user found"
+		    	});
+	   		}
+	     })
+	   	.catch(err => {
+	   		res.status(500).json({
+	    		status:false,
+	    		message:err.message
+		    });
+	   	})
         } else {
      	res.status(422).json({
     		status:false,
-    		message:"keystore, fromAddress, toAddress, password and value are required"
+    		message:"fromAddress, toAddress, and value are required"
     	});
      }
 	},
-
-	sendTokens(req, res, next){
-
-		var password = req.body.password,
-		    keystore = req.body.keystore,
-		    fromAddress  = req.body.fromAddress,
-			toAddress = req.body.toAddress,
-			value = req.body.value,
-			mainValues = [password, keystore, fromAddress,toAddress,value];
-
-	  if(checkBlank(mainValues) === 0 ){	
-
-		const body = {keystore,password,fromAddress, toAddress, value};
-
-       request.post({url:`${url}/sendTokens`,form:body },function(err,httpResponse,body){
-
-	  	 	if(err){
-	  	 	   res.status(500).json({
-	  	 	   	  status:false,
-	  	 	   	  message:err.message
-	  	 	   });
-	  	 	} else {
-	  	 		res.status(200).json({
-	  	 			status:true,
-	  	 			message:"Tokens sent",
-	  	 			data:body
-	  	 		});
-	  	 	}
-	  	 });
-        } else {
-     	res.status(422).json({
-    		status:false,
-    		message:"keystore, fromAddress, toAddress, password and value are required"
-    	});
-     }
-	},
-
     checkApproval(req, res, next){
 
     	var address  = req.body.address;
@@ -405,9 +466,122 @@ module.exports = {
     		message:"address is required"
     	});
       }
+    },
+
+    totalRemainingToken(req, res, next) {
+
+    	var user_id = req.userId ;
+
+    	BuyToken.findAll({
+    		where: { user_id }
+    	})
+    	.then( data => {
+    		if(data.length){
+    			TokenTransfer.findAll({
+    				where: { user_id }
+    			})
+    			.then(data1 => {
+    				if(data1.length){
+
+					  var total = data.map(total => {
+					  		return total.purchaseToken;
+					  })
+
+					 var transfer =  data1.map(transfer => {
+					  		return transfer.token;
+					  })
+
+    				  var remain = total[0] - transfer[0] ;
+
+    				  if(remain < 0 ){
+    				  	return res.status(200).json({
+					    		status:true,
+					    		message:"All Remaining tokens",
+					    		data:0
+					    });
+    				  }
+    					
+			    	   res.status(200).json({
+					    		status:true,
+					    		message:"All Remaining tokens",
+					    		data:remain
+					    });
+
+    				} else {
+    					 res.status(404).json({
+				    		status:false,
+				    		message:'no data found'
+				    	 });
+    				}
+    			})
+    			.catch(err => {
+		    	  res.status(500).json({
+		    		status:false,
+		    		message:err.meesage
+		    	 });
+		      });
+    			
+    		} else {
+    		 res.status(404).json({
+	    		status:false,
+	    		message:'no data found'
+	    	 });
+    		}
+    	})
+    	.catch(err => {
+    	  res.status(500).json({
+    		status:false,
+    		message:err.meesage
+    	 });
+      });
+    },
+
+   totalUserbuytoken(req, res, next){
+    	var user_id = req.userId ;
+
+    	BuyToken.findAll({
+    		where: { user_id }
+    	})
+    	.then( data => {
+    		if(data.length){
+    			res.status(200).json({
+		    		status:true,
+		    		message:"all buy tokens",
+		    		data:data.map(token => {
+		    			return token.purchaseToken;
+		    		})
+		    	 });
+    		} else {
+    		 res.status(404).json({
+	    		status:false,
+	    		message:'no data found'
+	    	 });
+    		}
+    	})
+    	.catch(err => {
+    	  res.status(500).json({
+    		status:false,
+    		message:err.meesage
+    	 });
+      })
     }
 }
 
 
+function sendTokens(body) {
+  return new Promise(((resolve, reject) => {
+  
+     request.post({url:`${url}/sendTokens`,form:body },function(err,httpResponse,body){
+   
+	  	 	if(err){
+	  	 	  reject(err)
+	  	 	} else {
 
-
+	  	 		resolve({
+	  	 			isValid:true,
+	  	 			body
+	  	 		})
+	  	 	}
+	  	 });
+  }));
+}

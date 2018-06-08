@@ -107,11 +107,6 @@ module.exports = {
       keystore :{ 
          type: Sequelize.JSON
       },
-      tokenAddress :{ 
-         allowNull: false,
-         defaultValue:'',
-         type: Sequelize.STRING
-      },
       passport: { 
          allowNull: false,
          defaultValue:'',

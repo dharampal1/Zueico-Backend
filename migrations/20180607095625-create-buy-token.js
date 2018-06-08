@@ -15,10 +15,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       amount: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       purchaseToken: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

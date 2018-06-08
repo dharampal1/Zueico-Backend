@@ -1,13 +1,15 @@
 import { storage, imageFileFilter } from '../helpers/fileUpload';
-import {
-  User
-} from '../models';
+import { User } from '../models';
 import Sequelize from 'sequelize';
 import multer from 'multer';
+
+import config from './../config/environment';
 
 const maxSize = 10000000 ;
 
 const Op = Sequelize.Op;
+
+const  url = config.api_url;
 
 module.exports = {
 
@@ -24,10 +26,10 @@ module.exports = {
 
     upload(req, res, function(err) {
       if (err) {
-        if(err.code ==='LIMIT_FILE_SIZE'){
+        if(err.code === 'LIMIT_FILE_SIZE'){
           return res.status(500).json({
           status: false,
-          message: "FIle size should be less than 10 mb"
+          message: "File size should be less than 10 mb"
         });
         } else {
            return res.status(500).json({
@@ -43,7 +45,7 @@ module.exports = {
           .then(data => {
             if (data) {
               User.update({
-                  passport: req.file.path
+                  passport: `${url}${req.file.path}`
                 },{
                   where: {id : user_id}
                 },{
@@ -110,7 +112,7 @@ module.exports = {
           .then(data => {
             if (data) {
               User.update({
-                  drivingLicenceFront: req.file.path
+                  drivingLicenceFront: `${url}${req.file.path}`
                 },{
                   where: {id : user_id}
                 },{
@@ -143,8 +145,8 @@ module.exports = {
         });
       }
     });
-
  },
+
  uploadDrivingBack(req, res, next){
   var user_id = req.userId;
 
@@ -175,7 +177,7 @@ module.exports = {
           .then(data => {
             if (data) {
               User.update({
-                  drivingLicenceBack: req.file.path
+                  drivingLicenceBack: `${url}${req.file.path}`
                 },{
                   where: {id : user_id}
                 },{
@@ -241,7 +243,7 @@ module.exports = {
           .then(data => {
             if (data) {
               User.update({
-                  addressProof: req.file.path
+                  addressProof: `${url}${req.file.path}`
                 },{
                   where: {id : user_id}
                 },{
