@@ -59,7 +59,7 @@ exports.verifyPassword = function(password, user) {
 exports.createWallet = function(email, user) {
   return new Promise(((resolve, reject) => {
 
-      var password = mdEncrypt(email);
+     var password = mdEncrypt(email);
        
      const body = { password };
   
@@ -75,7 +75,7 @@ exports.createWallet = function(email, user) {
 
         User.update({
           ethWalletAddress,
-          keystore:JSON.parse(keystore),
+          keystore:keystore,
           tokenPassword:password
         },{
           where: { id:user.id},
@@ -85,8 +85,7 @@ exports.createWallet = function(email, user) {
         .then(data => {
           if(data){
             resolve({
-              isValid: true,
-              ethWalletAddress
+              isValid: true
             });
           } else {
            reject(new Error("No user Found"));
