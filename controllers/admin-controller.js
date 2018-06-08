@@ -115,8 +115,6 @@ module.exports = {
 
 	allKyc(req, res, next) {
 
-		var user_id  = req.id ;
-
 		User.findAll({
 			 attributes: ["id","username","status","createdAt","passport","drivingLicenceFront","drivingLicenceBack","addressProof"], 
 		  },{

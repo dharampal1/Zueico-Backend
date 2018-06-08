@@ -105,9 +105,7 @@ module.exports = {
          type: Sequelize.STRING
       },
       keystore :{ 
-         allowNull: false,
-         defaultValue:"",
-         type: Sequelize.STRING
+         type: Sequelize.JSON
       },
       tokenAddress :{ 
          allowNull: false,

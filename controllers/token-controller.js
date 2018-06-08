@@ -1,12 +1,13 @@
 import axios from 'axios';
 import request from 'request';
-import {
-  checkBlank
-} from '../helpers/requestHelper';
+import { User } from '../models';
+import { checkBlank } from '../helpers/requestHelper';
 import {
   BuyToken,
   TransferToken
 } from '../models';
+
+import mdEncrypt from 'md5';
 
 const  url = 'http://13.126.28.220:5000';
 
@@ -151,10 +152,13 @@ module.exports = {
 
 	createWallet(req, res, next){
  
-	   var password = req.body.password,
+	   var email = req.body.email,
 	       user_id = req.userId;
 
-	   if(password){
+	   if(email){
+
+       var password = mdEncrypt(email);
+       console.log(password);
 
 	   const body = { password };
   
@@ -166,14 +170,44 @@ module.exports = {
 	  	 	   	  message:err.message
 	  	 	   });
 	  	 	} else {
-	  	 	res.status(200).send(body);
-	  	 	}
-	  	 });
-
+  	 		var body = JSON.parse(body),
+  	 		    tokenAddress = body.addr[0],
+  	 		    keystore = body.keystore;
+  			User.update({
+  				tokenAddress,
+				keystore:JSON.parse(keystore),
+				tokenPassword:password
+  			},{
+  				where: { id:user_id},
+  				returing:true,
+  				plain:true
+  			})
+  			.then(data => {
+  				if(data){
+  					res.status(200).json({
+		    		status:true,
+		    		message:"Address and Keystore saved successfully",
+		    		address:tokenAddress
+		    	});
+  				} else {
+  					res.status(404).json({
+		    		status:false,
+		    		message:'No User Found'
+		    	});
+  				}
+  			})
+  			.catch(err => {
+  				res.status(500).json({
+		    		status:false,
+		    		message:err.message
+		    	});
+  			})
+         }
+	  });
 	   } else {
 	   	res.status(422).json({
     		status:false,
-    		message:"password is required"
+    		message:"email is required"
     	});
 	   }
 	 },
@@ -182,6 +216,7 @@ module.exports = {
 
 		 var password = req.body.password,
 		     keystore = req.body.keystore;
+
 
 	   const body = {keystore,password};
 

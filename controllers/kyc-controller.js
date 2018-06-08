@@ -24,10 +24,17 @@ module.exports = {
 
     upload(req, res, function(err) {
       if (err) {
-        return res.status(500).json({
+        if(err.code ==='LIMIT_FILE_SIZE'){
+          return res.status(500).json({
+          status: false,
+          message: "FIle size should be less than 10 mb"
+        });
+        } else {
+           return res.status(500).json({
           status: false,
           message: err.message
         });
+        }
       }
       if (req.file) {
         User.findOne({
@@ -92,7 +99,7 @@ module.exports = {
         } else {
            return res.status(500).json({
           status: false,
-          message: err
+          message: err.message
         });
         }
       }
@@ -148,11 +155,18 @@ module.exports = {
     }).single('drivingLicenceBack');
 
     upload(req, res, function(err) {
-      if (err) {
-        return res.status(500).json({
+     if (err) {
+        if(err.code ==='LIMIT_FILE_SIZE'){
+          return res.status(500).json({
           status: false,
-          message: err
+          message: "FIle size should be less than 10 mb"
         });
+        } else {
+           return res.status(500).json({
+          status: false,
+          message: err.message
+        });
+        }
       }
       if (req.file) {
         User.findOne({
@@ -208,10 +222,17 @@ module.exports = {
 
     upload(req, res, function(err) {
       if (err) {
-        return res.status(500).json({
+        if(err.code ==='LIMIT_FILE_SIZE'){
+          return res.status(500).json({
           status: false,
-          message: err
+          message: "FIle size should be less than 10 mb"
         });
+        } else {
+           return res.status(500).json({
+          status: false,
+          message: err.message
+        });
+        }
       }
       if (req.file) {
         User.findOne({
