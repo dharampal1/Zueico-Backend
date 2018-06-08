@@ -22,6 +22,7 @@ import path from 'path';
 import  hbs from 'nodemailer-express-handlebars';
 import emailCheck from 'email-check';
 
+
 const Op = Sequelize.Op;
 
 module.exports = {
@@ -44,10 +45,6 @@ module.exports = {
 
   
      if (checkBlank(mainValues) === 0) {
-
-      // emailCheck(email)
-      // .then(function (res1) {
-         // if(res1 === true){
        User.findOne({
           where: {
             email
@@ -156,19 +153,6 @@ module.exports = {
             message: err.message
           });
         });
-         // } else {
-         //  res.status(422).json({
-         //    status: false,
-         //    message: `Please send the valid Email, ${email} does not exist.`
-         //  });
-         // }
-      // })
-      // .catch(function (err) {
-      //   res.status(500).json({
-      //       status: false,
-      //       message: err.message
-      //     });
-      // });
        } else {
         res.status(422).json({
            status: false,
@@ -708,68 +692,9 @@ module.exports = {
         required:"newPassword, confirmPassword, token"
       });
   }
- },
- uploadImage(err,req, res, next){
+ }
 
-    if (err.code == 'LIMIT_FILE_SIZE'){
-      return res.json({
-            status: false,
-            error:err.message,
-            message:"Send file size less than 10 MB's."
-          });
-        
-    } 
-    if (err.message == 'INVALID_TYPE'){
-        return res.json({
-            status: false,
-            message: "Send valid file type"
-          });
-    }
 
-   var user_id = req.userId,
-       fieldname = req.file.fieldname;
-
-      if (fieldname) {
-        User.findOne({
-           where:{ id: user_id }
-          })
-          .then(data => {
-            if (data) {
-              User.update({
-                  [fieldname]: req.file.path
-                },{
-                  where: {id : user_id}
-                },{
-                  returning: true,
-                  plain:true
-                })
-                .then(result => {
-                  res.status(200).json({
-                    status: true,
-                    message: `${fieldname} Uploaded`,
-                  });
-                });
-            } else {
-              res.status(404).json({
-                status: false,
-                message: "No User Found"
-              });
-            }
-          })
-          .catch(err => {
-            res.status(500).json({
-              status: false,
-              error: err.message
-            });
-          });
-      } else {
-        res.status(422).json({
-          status: false,
-          message: "fieldname is required"
-        });
-      }
-
-}
  
 }
 

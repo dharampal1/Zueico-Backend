@@ -1,17 +1,9 @@
 import express from 'express';
-import multer from 'multer';
 import usersController from './../../controllers/users-controller';
+import kycController from './../../controllers/kyc-controller';
 import tokenController from './../../controllers/token-controller';
 import { authenticate } from './../../helpers/ensure-authenticated';
-import { storage, imageFileFilter } from './../../helpers/fileUpload';
 
-const maxSize = 4000 ;
-
-var upload = multer({   
-      fileFilter: imageFileFilter,
-      limits: { fileSize: maxSize },
-      storage: storage
-    });
 
 const router = express.Router();
 
@@ -29,16 +21,16 @@ router.post('/', authenticate, usersController.updateUser);
 router.post('/password', authenticate, usersController.changePassword);
 
 // upload user passport  
-router.post('/upload/passport', authenticate, upload.single('passport'), usersController.uploadImage);
+router.post('/upload/passport', authenticate, kycController.uploadPassport);
 
 // upload user Driving License
-router.post('/upload/drivingLicenceFront', authenticate, upload.single('drivingLicenceFront'), usersController.uploadImage);
+router.post('/upload/drivingLicenceFront', authenticate, kycController.uploadDrivingFront);
 
 // upload user Driving License
-router.post('/upload/drivingLicenceBack', authenticate,upload.single('drivingLicenceBack'), usersController.uploadImage);
+router.post('/upload/drivingLicenceBack', authenticate, kycController.uploadDrivingBack);
 
 // upload user address Proof 
-router.post('/upload/addressProof', authenticate,upload.single('addressProof'), usersController.uploadImage);
+router.post('/upload/addressProof', authenticate, kycController.uploadAddressProof);
 
 
 // buyToken

@@ -7,14 +7,14 @@ export const storage =  multer.diskStorage({
     filename: (req, file, cb) => {
       cb(null, Date.now().toString() + '-' + file.originalname.replace(/\s+/g, ''));
     }
-  })
+  });
 
 
 export const imageFileFilter = (req, file, cb) => {
   // reject a file
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+  if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
 
-    cb(new Error('INVALID_TYPE'));
+    cb(new Error('Please send the valid File Type'));
   } else {
 
     cb(null, true);
