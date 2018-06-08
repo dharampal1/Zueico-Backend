@@ -12,7 +12,7 @@ export const storage =  multer.diskStorage({
 
 export const imageFileFilter = (req, file, cb) => {
   // reject a file
-  if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+  if (!file.originalname.match(/\.(jpg|jpeg|png|JPG|JPEG|PNG)$/)) {
 
     cb(new Error('Please send the valid File Type'));
   } else {
@@ -23,3 +23,4 @@ export const imageFileFilter = (req, file, cb) => {
 
 
 
+ 

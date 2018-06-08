@@ -148,7 +148,7 @@ module.exports = {
 	 },
 
 	approveKyc(req, res, next) {
-		var user_id  = req.id,
+		var user_id  = req.body.user_id,
 		    status = req.body.status;
 
 		if(status){
@@ -191,7 +191,7 @@ module.exports = {
 	 },
 
 	rejectKyc(req, res, next) {
-		var user_id  = req.id,
+		var user_id  = req.body.user_id,
 		    status = req.body.status;
 
 		if(status){
