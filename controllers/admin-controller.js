@@ -151,7 +151,7 @@ module.exports = {
 		var user_id  = req.body.user_id,
 		    status = req.body.status;
 
-		if(status){
+		if(status && user_id){
 
 		 User.update({
 			status
@@ -185,7 +185,7 @@ module.exports = {
 			res.status(422).json({
 	  	  		status:false,
 	  	  		message:"Send Valid Params",
-	  	  		required:'status'
+	  	  		required:'status user_id'
 		  	 });
 		} 
 	 },
@@ -194,7 +194,7 @@ module.exports = {
 		var user_id  = req.body.user_id,
 		    status = req.body.status;
 
-		if(status){
+		if(user_id && status){
 
 		 User.update({
 			status
@@ -228,7 +228,7 @@ module.exports = {
 			res.status(422).json({
 	  	  		status:false,
 	  	  		message:"Send Valid Params",
-	  	  		required:'status'
+	  	  		required:'status, user_id'
 		  	 });
 		} 
 	}
