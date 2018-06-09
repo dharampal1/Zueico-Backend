@@ -43,6 +43,10 @@ router.post('/totalRemainingToken', authenticate, tokenController.totalRemaining
 // total buy token
 router.post('/totalUserbuytoken', authenticate, tokenController.totalUserbuytoken);
 
+// total tansfer token
+
+router.post('/getTransferdTokens', authenticate, tokenController.getTransferdTokens);
+
 // total orders
 router.post('/totalOrders', authenticate, tokenController.totalOrders);
 

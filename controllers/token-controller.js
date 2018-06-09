@@ -114,6 +114,34 @@ module.exports = {
       })
     },
 
+    //Total Token Transfer
+    getTransferdTokens(req, res, next){
+    	var user_id = req.userId ;
+    	BuyToken.findAll({
+    		where: { user_id }
+    	})
+    	.then( data => {
+    		if(data.length) {
+				res.status(200).json({
+	    			status:true,
+	    			message:"All Transfered Tokens",
+	    			data:data,
+	    		});
+    		} else {
+    		 res.status(404).json({
+	    		status:false,
+	    		message:'no data found'
+	    	 });
+    		}
+    	})
+    	.catch(err => {
+    	  res.status(500).json({
+    		status:false,
+    		message:err.meesage
+    	 });
+      })
+    },
+
 	buyToken(req, res, next) {
 	 
 	  var  walletMethod = req.body.walletMethod,
