@@ -1,10 +1,12 @@
 import Sequelize from 'sequelize';
+import request from 'request';
 import { User, Admin } from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
 import config from './../config/environment';
 
 const Op = Sequelize.Op;
+const  url = 'http://13.126.28.220:5000';
 
 module.exports = { 
 
@@ -167,44 +169,67 @@ module.exports = {
 	approveKyc(req, res, next) {
 		var user_id  = req.body.user_id,
 		    status = req.body.status;
+		
+		User.findOne({
+            where: {
+              id:user_id
+            }
+        })
+        .then(data => {
+        	var address = data.ethWalletAddress;
+        	console.log(address);
+        	if(address){
+        		const body = { address };
+        		approveAddress(body).then(address=>{
+        			console.log(address);
+        			if(address.isValid===true){
+        				if(status && user_id){
+						 User.update({
+							status
+						 },{
+							where : { id : user_id }
+						 },{
+						 	returning:true, 
+						 	plain:true
+						 })
+						  .then(data => {
+						  	  if(data){
+						  	  	res.status(200).json({
+						  	  		status:true,
+						  	  		message:"Kyc Approved",
+						  	  		data: address.body
+						  	  	});
+						  	  } else {
+						  	  	res.status(404).json({
+						  	  		status:false,
+						  	  		message:"No user Found"
+						  	  	});
+						  	  }
+						  })
+						  .catch(err => {
+						  	res.status(500).json({
+						  	  		status:false,
+						  	  		message:err.message
+						  	  	})
+						  });
 
-		if(status && user_id){
-
-		 User.update({
-			status
-		 },{
-			where : { id : user_id }
-		 },{
-		 	returning:true, 
-		 	plain:true
-		 })
-		  .then(data => {
-		  	  if(data){
-		  	  	res.status(200).json({
-		  	  		status:true,
-		  	  		message:"Kyc Approved"
-		  	  	});
-		  	  } else {
-		  	  	res.status(404).json({
-		  	  		status:false,
-		  	  		message:"No user Found"
-		  	  	});
-		  	  }
-		  })
-		  .catch(err => {
-		  	res.status(500).json({
-		  	  		status:false,
-		  	  		message:err.message
-		  	  	})
-		  });
-
-		} else {
-			res.status(422).json({
-	  	  		status:false,
-	  	  		message:"Send Valid Params",
-	  	  		required:'status user_id'
-		  	 });
-		} 
+						} else {
+							res.status(422).json({
+					  	  		status:false,
+					  	  		message:"Send Valid Params",
+					  	  		required:'status user_id'
+						  	 });
+						} 
+        			}
+        		})
+        	}
+        })
+        .catch(err => {
+            res.status(500).json({
+              status:false,
+              message: err.message
+            });
+        });
 	 },
 
 	rejectKyc(req, res, next) {
@@ -249,4 +274,20 @@ module.exports = {
 		  	 });
 		} 
 	}
+}
+
+function approveAddress(body){
+  return new Promise(((resolve, reject) => {
+    request.post({url:`${url}/approveAddress`,form:body },function(err,httpResponse,body){
+    	console.log(body);
+	  	 	if(err){
+	  	 	  reject(err)
+	  	 	} else {
+	  	 		resolve({
+  	 				isValid:true,
+  		 			body
+  	 			})
+	  	 	}
+	});
+  }));
 }
