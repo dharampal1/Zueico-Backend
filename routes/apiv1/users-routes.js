@@ -14,6 +14,9 @@ router.post('/me', authenticate, usersController.getSingleUser);
 // get user KycStatus 
 router.post('/getKycStatus', authenticate, usersController.getKycStatus);
 
+// get user WalletAddress
+router.post('/getWalletAddress', authenticate, usersController.getWalletAddress);
+
 // update user profile 
 router.post('/', authenticate, usersController.updateUser);
 

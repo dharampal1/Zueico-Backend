@@ -357,6 +357,39 @@ module.exports = {
       });
   },
 
+  //get Wallet Address : 
+  getWalletAddress(req, res, next) {
+    var id = req.userId;
+
+    User.findOne({
+        where: {
+          id: id
+        }
+      })
+      .then(data => {
+        if (data) {
+          var walletAddress = data.ethWalletAddress;
+          res.status(200).json({
+            status:true,
+            message: "Your Wallet Address",
+            addr:{
+              walletAddress
+            }
+          });
+        } else {
+          res.status(404).json({
+            status:false,
+            message: "No user Found"
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).json({
+          status:false,
+          message: err.message
+        });
+      });
+  },
   getSingleUser(req, res, next) {
 
     var id = req.userId;
