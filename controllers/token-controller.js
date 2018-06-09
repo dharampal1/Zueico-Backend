@@ -117,7 +117,7 @@ module.exports = {
     //Total Token Transfer
     getTransferdTokens(req, res, next){
     	var user_id = req.userId ;
-    	BuyToken.findAll({
+    	TokenTransfer.findAll({
     		where: { user_id }
     	})
     	.then( data => {
