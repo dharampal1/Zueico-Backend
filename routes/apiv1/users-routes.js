@@ -17,6 +17,9 @@ router.post('/getKycStatus', authenticate, usersController.getKycStatus);
 // get user WalletAddress
 router.post('/getWalletAddress', authenticate, usersController.getWalletAddress);
 
+// get user WalletAddress
+router.post('/chargeCard', authenticate, usersController.chargeCard);
+
 // update user profile 
 router.post('/', authenticate, usersController.updateUser);
 

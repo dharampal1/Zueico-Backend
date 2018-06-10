@@ -1,6 +1,8 @@
 import Promise from 'promise';
 import {
-  User
+  User,
+  mastercard,
+  BuyToken
 } from '../models';
 import jwt from 'jsonwebtoken';
 import config from './../config/environment';
@@ -23,6 +25,8 @@ import path from 'path';
 import  hbs from 'nodemailer-express-handlebars';
 import emailCheck from 'email-check';
 
+import stripePackage from 'stripe';
+const stripe = stripePackage('sk_test_lwuoPgxDNCtdTYyG7YoDfyAw');
 
 const Op = Sequelize.Op;
 
@@ -731,9 +735,124 @@ module.exports = {
         required:"newPassword, confirmPassword, token"
       });
   }
- }
+ },
 
+ chargeCard(req, res, next){
+  
+  let user_id = req.userId;
+  let name =  req.body.name;
+  let email =  req.body.email;
+  let address =  req.body.address;
+  let dob =  req.body.dob;
+  let country =  req.body.country;
+  let state =  req.body.state;
+  let city =  req.body.city;
+  let zipcode =  req.body.zipcode;
+  let purchasedtokens =  req.body.purchasedtokens;
+  let amount =  req.body.amount;
+  let newMasterCard = {
+    user_id,
+    name,
+    email,
+    address,
+    dob,
+    country,
+    state,
+    city,
+    zipcode,
+    purchasedtokens,
+    amount
+  };
 
- 
+  //var currency = req.body.currency
+  //var token = req.body.stripeToken;
+  let description = "Charge for " + req.body.email; 
+  let credit_card = req.body.credit_card;//'4242424242424242';
+  let exp_month = req.body.exp_month;//12;
+  let exp_year = req.body.exp_year;//2019;
+  let cvc = req.body.cvc;//'123';
+  let card_holder_name = req.body.card_holder_name;  
+  stripe.tokens.create({
+    card: {
+      "number": credit_card,
+      "exp_month": exp_month,
+      "exp_year": exp_year,
+      "cvc": cvc,
+      "name": card_holder_name
+    }
+  }, function(err, token) {
+    console.log("token");
+    if (err) {
+      return res.status(500).send({
+         status: false,
+         message: err.message
+      });
+    }
+    stripe.customers.create({
+      email: email,
+      source: token.id
+    }, function(err, customer) {
+      console.log("In Customer");
+      if (err) {
+        return res.status(500).send({
+           status: false,
+           message: err.message
+        });
+      }
+      console.log("customer");
+      stripe.charges.create({
+           amount:amount,
+           description: description,
+           currency: "usd",
+           customer: customer.id
+      }, function(err, charge) {
+        if (err) {
+          return res.status(500).send({
+             status: false,
+             message: err.message
+          });
+        }else{  
+        mastercard.create(newMasterCard)
+        .then(result => {          
+           var new_token = new BuyToken({
+                walletMethod:'USD',
+                amount,
+                purchasedtokens,
+                user_id
+            });
+            new_token.save()
+            .then(data => {
+                console.log("Hello"); 
+              if(data) {
+                  res.status(201).json({
+                    status:true,
+                    message:"Charged Successfully",
+                    data:data,
+                    charge:charge,
+                    mastercard:result        
+                  });	
+                }
+            })
+            .catch(err => {
+                res.status(500).json({
+                status:false,
+                message:err.message
+            });
+          })
+          return null;
+        })
+        .catch(err => {
+          res.status(500).json({
+            status: false,
+            message: err.message
+          });
+        });
+        console.log("Charge");
+      }
+    });    
+  })      
+});
+}
+
 }
 
