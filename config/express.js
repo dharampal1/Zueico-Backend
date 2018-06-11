@@ -7,6 +7,7 @@ import bodyParser  from 'body-parser';
 import logger  from 'morgan';
 import path   from 'path';
 import cors from 'cors';
+import request from 'request'
 
 const initApp = function () {
   // Init
@@ -26,6 +27,7 @@ const initApp = function () {
    
   // serving static files to the client    
   app.use('/public/uploads', express.static('public/uploads'));
+      
   
   // Setup routes
   routes(app);

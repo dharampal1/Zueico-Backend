@@ -41,6 +41,9 @@ module.exports = {
       amount: {
         type: Sequelize.INTEGER
       },
+      cardType:{
+        type: Sequelize.STRING
+      },
       tokenbuydate: {
         type: Sequelize.DATE, 
         defaultValue: Sequelize.NOW

@@ -24,6 +24,19 @@ router.post('/kyc/approve', adminAuthenticate, adminController.approveKyc);
 // reject KYC 
 router.post('/kyc/reject', adminAuthenticate, adminController.rejectKyc);
 
+// get BTC contribution 
+router.post('/contribution/BTC', adminAuthenticate, adminController.btcContribution);
+
+// get ETH contribution 
+router.post('/contribution/ETH', adminAuthenticate, adminController.ethContribution);
+
+
+// get stripe API key  
+router.post('/getstripeKey', adminAuthenticate, adminController.getstripeKey);
+
+// add stripe API key  
+router.post('/stripeKey', adminAuthenticate, adminController.stripeKey);
+
 
 // get getTokenDetails
 router.post('/getTokenDetails', adminAuthenticate, tokenController.getTokenDetails);

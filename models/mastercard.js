@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     zipcode: DataTypes.INTEGER,
     purchasedtokens: DataTypes.INTEGER,
     amount: DataTypes.INTEGER,
+    cardType:DataTypes.STRING,
     tokenbuydate: DataTypes.DATE
   }, {});
   mastercard.associate = function(models) {

@@ -3,7 +3,7 @@ import usersController from './../../controllers/users-controller';
 import kycController from './../../controllers/kyc-controller';
 import tokenController from './../../controllers/token-controller';
 import { authenticate } from './../../helpers/ensure-authenticated';
-
+import btcController from './../../controllers/btc-controller';
 
 const router = express.Router();
 
@@ -39,6 +39,8 @@ router.post('/upload/drivingLicenceBack', authenticate, kycController.uploadDriv
 router.post('/upload/addressProof', authenticate, kycController.uploadAddressProof);
 
 
+// get current price for btc and usd
+router.post('/getCurrentPrice', authenticate, btcController.getCurrentPrice);
 
 // total buy token
 router.post('/totalRemainingToken', authenticate, tokenController.totalRemainingToken);

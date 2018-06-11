@@ -6,10 +6,13 @@ import {
   BuyToken,
   TokenTransfer
 } from '../models';
+import Sequelize from 'sequelize';
 
 import mdEncrypt from 'md5';
 
 const  url = 'http://13.126.28.220:5000';
+
+const obj = {sum:0};
 
 module.exports = {
 
@@ -146,15 +149,15 @@ module.exports = {
 	 
 	  var  walletMethod = req.body.walletMethod,
 		   amount = req.body.amount,
-		   purchaseToken = req.body.purchaseToken,
+		   tokens = req.body.purchaseToken,
 	       user_id = req.userId,
-	       mainValues = [walletMethod, amount, purchaseToken];
+	       mainValues = [walletMethod, amount, tokens];
 
 	   if(checkBlank(mainValues) === 0 ){
 	   	    var new_token = new BuyToken({
 	   	    	walletMethod,
 				amount,
-				purchaseToken,
+				tokens,
 				user_id
 	   	    });
 
@@ -177,7 +180,7 @@ module.exports = {
         } else {
         	res.status(422).json({
     		status:false,
-    		message:"walletMethod, amount, purchaseToken, are required"
+    		message:"walletMethod, amount, tokens, are required"
     	});
        }
 	
@@ -189,6 +192,9 @@ module.exports = {
 		   toAddress = req.body.toAddress,
 		   token = req.body.token,
 	       user_id = req.userId,
+	       totalTokens= 0,
+	       toToken = 0,
+		   fromToken = 0,
 	       mainValues = [fromAddress, toAddress, token];
 
 	   if(checkBlank(mainValues) === 0 ){
@@ -210,29 +216,41 @@ module.exports = {
 	   	   sendTokens(body)
 	   	   	.then(token => {
 	   	   if(token.isValid === true ){
+
+	   	   	sumOfBoughtTokens(user_id)
+	   	   	  .then(total => {
+
+   	   	      toToken = token;
+   	   	  	  totalTokens = total.sum;
+   	   	  	  fromToken = totalTokens - toToken ;
+
+
 	   	   	var new_token = new TokenTransfer({
 	   	    	fromAddress,
 				toAddress,
-				token,
+				toToken,
+				fromToken,
+				totalTokens,
 				user_id
 	   	    });
-	   	   	  new_token.save()
+	   	   	 new_token.save()
 	   		 .then(data => {
 	   		 	if(data) {
-	   		 	  res.status(200).json({
+	   		 	 return  res.status(200).json({
 		    		status:true,
 		    		message:"Token Transfer",
 		    		data:token.body
 		    	});	
 	   		 	}
 	   		 })
-	   		 .catch(err => {
+	   	   	})
+	   	   	.catch(err => {
 	   		 	res.status(500).json({
 		    		status:false,
 		    		message:err.message
 		    	});
 	   		 })
-	   	   		} else {
+	   	  } else {
 	   	   		res.status(500).json({
 		    		status:false,
 		    		message:"Token Tranfer Failed"
@@ -497,92 +515,55 @@ module.exports = {
     },
 
     totalRemainingToken(req, res, next) {
+    	var user_id = req.userId,
+    	    total_tokens = 0,
+    	    trans_token = 0;
 
-    	var user_id = req.userId ;
+    	sumOfBoughtTokens(user_id)
+    	.then(buy => {
+	    	sumOfTransferedTokens(user_id)
+	    	 .then(trans => {
+	    	 	trans_token = trans.sum;
+	    	 	total_tokens = buy.sum ;
 
-    	BuyToken.findAll({
-    		where: { user_id }
-    	})
-    	.then( data => {
-    		if(data.length){
-    			TokenTransfer.findAll({
-    				where: { user_id }
-    			})
-    			.then(data1 => {
-    				if(data1.length){
+	    	let remain = total_tokens - trans_token;
 
-					  var total = data.map(total => {
-					  		return total.purchaseToken;
-					  })
-
-					 var transfer =  data1.map(transfer => {
-					  		return transfer.token;
-					  })
-
-    				  var remain = total[0] - transfer[0] ;
-
-    				  if(remain < 0 ){
-    				  	return res.status(200).json({
-					    		status:true,
-					    		message:"All Remaining tokens",
-					    		data:0
-					    });
-    				  }
-    					
-			    	   res.status(200).json({
-					    		status:true,
-					    		message:"All Remaining tokens",
-					    		data:remain
-					    });
-
-    				} else {
-    					 res.status(404).json({
-				    		status:false,
-				    		message:'no data found'
-				    	 });
-    				}
-    			})
-    			.catch(err => {
-		    	  res.status(500).json({
+	    	 res.status(200).json({
+			    		status:true,
+			    		message:"All Remaining tokens",
+			    		data:remain
+			    });
+	    	 })
+	    	 .catch(err => {
+	    	 	res.status(500).json({
 		    		status:false,
 		    		message:err.meesage
 		    	 });
-		      });
-    			
-    		} else {
-    		 res.status(404).json({
-	    		status:false,
-	    		message:'no data found'
 	    	 });
-    		}
     	})
-    	.catch(err => {
-    	  res.status(500).json({
-    		status:false,
-    		message:err.meesage
-    	 });
-      });
+    	.catch(err =>{
+    		 res.status(500).json({
+	    		status:false,
+	    		message:err.meesage
+	    	 });
+    	});
     },
 
    totalUserbuytoken(req, res, next){
     	var user_id = req.userId ;
 
-    	BuyToken.findAll({
-    		where: { user_id }
-    	})
+    	sumOfBoughtTokens(user_id)
     	.then( data => {
-    		if(data.length){
+    		if(data.sum){
     			res.status(200).json({
 		    		status:true,
-		    		message:"all buy tokens",
-		    		data:data.map(token => {
-		    			return token.purchaseToken;
-		    		})
+		    		message:"All bought tokens",
+		    		data:data.sum
 		    	 });
     		} else {
     		 res.status(404).json({
 	    		status:false,
-	    		message:'no data found'
+	    		message:'No data found'
 	    	 });
     		}
     	})
@@ -612,4 +593,33 @@ function sendTokens(body) {
 	  	 	}
 	  	 });
   }));
+}
+
+function sumOfBoughtTokens(user_id) {
+	 return new Promise(((resolve, reject) => {
+	BuyToken.sum('tokens', {
+		where: {
+			user_id
+		},
+	}).then(sum => {
+		resolve({sum});
+	}).catch(err => {
+		reject(err)
+	});
+}));
+}
+
+function sumOfTransferedTokens(user_id) {
+	//token
+	 return new Promise(((resolve, reject) => {
+	TokenTransfer.sum('fromToken', {
+		where: {
+			user_id
+		},
+	}).then( sum =>  {
+		resolve({sum});
+	}).catch(err => {
+		reject(err)
+	});
+	}));
 }

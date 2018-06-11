@@ -1,30 +1,18 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('BuyTokens', {
+    return queryInterface.createTable('Settings', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user_id: {
-        type: Sequelize.INTEGER
-      },
-      walletMethod: {
-         allowNull: false,
-         defaultValue:'',
+      key: {
         type: Sequelize.STRING
       },
-      amount: {
-         allowNull: false,
-         defaultValue:0,
-        type: Sequelize.INTEGER
-      },
-      tokens: {
-         allowNull: false,
-         defaultValue:0,
-        type: Sequelize.INTEGER
+      type:{
+        type:Sequelize.ENUM('live','test')
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +25,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('BuyTokens');
+    return queryInterface.dropTable('Settings');
   }
 };

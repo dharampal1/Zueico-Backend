@@ -1,30 +1,36 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('BuyTokens', {
+    return queryInterface.createTable('btc_transactions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user_id: {
-        type: Sequelize.INTEGER
+      hash: {
+        type: Sequelize.STRING
       },
-      walletMethod: {
-         allowNull: false,
-         defaultValue:'',
+      transaction_date: {
+        type: Sequelize.DATE
+      },
+      from_address: {
+        type: Sequelize.STRING
+      },
+      to_address: {
         type: Sequelize.STRING
       },
       amount: {
-         allowNull: false,
-         defaultValue:0,
         type: Sequelize.INTEGER
       },
-      tokens: {
-         allowNull: false,
-         defaultValue:0,
-        type: Sequelize.INTEGER
+      block_hight: {
+        type: Sequelize.STRING
+      },
+      user_id: {
+        type: Sequelize.STRING
+      },
+      email: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +43,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('BuyTokens');
+    return queryInterface.dropTable('btc_transactions');
   }
 };

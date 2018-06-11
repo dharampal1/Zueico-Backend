@@ -46,8 +46,6 @@ module.exports = {
         email, mobileNumber, participationAmount, country,
         password, confirmPassword
       ];
-
-
   
      if (checkBlank(mainValues) === 0) {
        User.findOne({
@@ -750,6 +748,8 @@ module.exports = {
   let zipcode =  req.body.zipcode;
   let purchasedtokens =  req.body.purchasedtokens;
   let amount =  req.body.amount;
+  let cardType = req.body.cardType;
+
   let newMasterCard = {
     user_id,
     name,
@@ -761,7 +761,8 @@ module.exports = {
     city,
     zipcode,
     purchasedtokens,
-    amount
+    amount,
+    cardType
   };
 
   //var currency = req.body.currency
@@ -781,7 +782,6 @@ module.exports = {
       "name": card_holder_name
     }
   }, function(err, token) {
-    console.log("token");
     if (err) {
       return res.status(500).send({
          status: false,
@@ -792,14 +792,13 @@ module.exports = {
       email: email,
       source: token.id
     }, function(err, customer) {
-      console.log("In Customer");
       if (err) {
         return res.status(500).send({
            status: false,
            message: err.message
         });
       }
-      console.log("customer");
+
       stripe.charges.create({
            amount:amount,
            description: description,
@@ -817,19 +816,15 @@ module.exports = {
            var new_token = new BuyToken({
                 walletMethod:'USD',
                 amount,
-                purchasedtokens,
+                tokens:purchasedtokens,
                 user_id
             });
             new_token.save()
             .then(data => {
-                console.log("Hello"); 
               if(data) {
                   res.status(201).json({
                     status:true,
-                    message:"Charged Successfully",
-                    data:data,
-                    charge:charge,
-                    mastercard:result        
+                    message:"Payment sent successful"   
                   });	
                 }
             })
@@ -847,7 +842,6 @@ module.exports = {
             message: err.message
           });
         });
-        console.log("Charge");
       }
     });    
   })      

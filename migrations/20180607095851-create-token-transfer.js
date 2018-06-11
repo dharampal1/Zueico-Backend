@@ -12,13 +12,29 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       fromAddress: {
+         allowNull: false,
+         defaultValue:'',
         type: Sequelize.STRING
       },
       toAddress: {
+         allowNull: false,
+         defaultValue:'',
         type: Sequelize.STRING
       },
-      token: {
-        type: Sequelize.INTEGER
+      totalTokens:{
+         allowNull: false,
+         defaultValue:0,
+         type: Sequelize.INTEGER
+      },
+      fromToken:{
+         allowNull: false,
+         defaultValue:0,
+         type: Sequelize.INTEGER
+      },
+      toToken:{
+         allowNull: false,
+         defaultValue:0,
+         type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

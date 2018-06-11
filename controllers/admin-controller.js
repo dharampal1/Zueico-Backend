@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import request from 'request';
-import { User, Admin } from '../models';
+import { User, Admin, Setting } from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
 import config from './../config/environment';
@@ -169,7 +169,7 @@ module.exports = {
 	approveKyc(req, res, next) {
 		var user_id  = req.body.user_id,
 		    status = req.body.status;
-		
+
 		User.findOne({
             where: {
               id:user_id
@@ -177,13 +177,10 @@ module.exports = {
         })
         .then(data => {
         	var address = data.ethWalletAddress;
-        	console.log(address);
         	if(address){
         		const body = { address };
         		approveAddress(body).then(address=>{
-        			console.log(address);
-        			if(address.isValid===true){
-        				if(status && user_id){
+        			if(address.isValid === true ){
 						 User.update({
 							status
 						 },{
@@ -212,16 +209,14 @@ module.exports = {
 						  	  		message:err.message
 						  	  	})
 						  });
-
-						} else {
-							res.status(422).json({
-					  	  		status:false,
-					  	  		message:"Send Valid Params",
-					  	  		required:'status user_id'
-						  	 });
-						} 
-        			}
+        			} 
         		})
+        		 .catch(err => {
+				  	res.status(500).json({
+				  	  		status:false,
+				  	  		message:err.message
+				  	  	})
+				  });
         	}
         })
         .catch(err => {
@@ -273,13 +268,76 @@ module.exports = {
 	  	  		required:'status, user_id'
 		  	 });
 		} 
-	}
+	},
+
+	stripeKey(req,res,next){
+	  let id = 0;
+	  var key = req.body.key,
+	  	  type = req.body.type;
+
+	  	  if(type==='live'){
+	  	  	id = 2
+	  	  }else{
+	  	  	id = 1
+	  	  }
+		if( key&& type){
+
+			var newSetting = {
+				id,
+				key,
+				type
+			};
+
+			Setting.upsert(newSetting)
+			 .then(data => {
+			 	res.status(200).json({
+		  	  		status:true,
+		  	  		message:"Stripe key added"
+		  	  	})
+			 })
+			 .catch(err => {
+			 	res.status(500).json({
+		  	  		status:false,
+		  	  		message:err.message
+		  	  	})
+			 })
+		}
+	},
+
+	getstripeKey(req,res,next){
+
+	 Setting.findAll({})
+	 .then(data => {
+	 	res.status(200).json({
+	  		status:true,
+	  		message:"Stripe keys"
+	  	});
+	 })
+	 .catch(err => {
+	 	res.status(500).json({
+  	  		status:false,
+  	  		message:err.message
+  	  	})
+	 })
+		
+	},
+
+
+	btcContribution(req, res, next){
+   
+		
+	},
+
+    ethContribution(req, res, next){
+
+    }
+	
+
 }
 
 function approveAddress(body){
   return new Promise(((resolve, reject) => {
     request.post({url:`${url}/approveAddress`,form:body },function(err,httpResponse,body){
-    	console.log(body);
 	  	 	if(err){
 	  	 	  reject(err)
 	  	 	} else {
