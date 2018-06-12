@@ -750,8 +750,7 @@ module.exports = {
   let amount =  req.body.amount;
   let cardType = req.body.cardType;
 
-  let newMasterCard = {
-    user_id,
+  let userData = {
     name,
     email,
     address,
@@ -759,10 +758,7 @@ module.exports = {
     country,
     state,
     city,
-    zipcode,
-    purchasedtokens,
-    amount,
-    cardType
+    zipcode
   };
 
   //var currency = req.body.currency
@@ -811,7 +807,7 @@ module.exports = {
              message: err.message
           });
         }else{  
-        mastercard.create(newMasterCard)
+        User.update(userData,{where:{id:user_id}})
         .then(result => {          
            var new_token = new BuyToken({
                 walletMethod:'USD',

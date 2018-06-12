@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     emailVerified:{ 
          type: DataTypes.BOOLEAN,
          defaultValue:false
-      },
+    },
     purchaseToken: DataTypes.STRING,
     tokenPassword:DataTypes.STRING,
     keystore:DataTypes.JSON,
@@ -46,4 +46,4 @@ module.exports = (sequelize, DataTypes) => {
         });
       };
       return User;
-    };
+ };

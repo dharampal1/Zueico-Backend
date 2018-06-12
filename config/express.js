@@ -7,7 +7,8 @@ import bodyParser  from 'body-parser';
 import logger  from 'morgan';
 import path   from 'path';
 import cors from 'cors';
-import request from 'request'
+
+import { BTC_Tranctions } from '../helpers/cron-job'
 
 const initApp = function () {
   // Init
@@ -28,6 +29,8 @@ const initApp = function () {
   // serving static files to the client    
   app.use('/public/uploads', express.static('public/uploads'));
       
+
+ BTC_Tranctions();
   
   // Setup routes
   routes(app);

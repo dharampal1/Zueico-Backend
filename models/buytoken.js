@@ -4,11 +4,12 @@ module.exports = (sequelize, DataTypes) => {
   	user_id:  DataTypes.INTEGER,
     walletMethod: DataTypes.STRING,
     amount: DataTypes.INTEGER,
-    tokens: DataTypes.INTEGER
+    tokens: DataTypes.INTEGER,
+    txhash: DataTypes.STRING  
   }, {});
   BuyToken.associate = function(models) {
-    // associations can be defined here
-     BuyToken.belongsTo(models.User, {
+    //associations can be defined here
+    BuyToken.belongsTo(models.User, {
       foreignKey: 'user_id',
     });
   };

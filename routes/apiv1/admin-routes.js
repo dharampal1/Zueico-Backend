@@ -1,6 +1,7 @@
 import express from 'express';
 import adminController from './../../controllers/admin-controller';
 import tokenController from './../../controllers/token-controller';
+import btcController from './../../controllers/btc-controller';
 import { adminAuthenticate } from './../../helpers/ensure-authenticated';
 
 const router = express.Router();
@@ -30,13 +31,15 @@ router.post('/contribution/BTC', adminAuthenticate, adminController.btcContribut
 // get ETH contribution 
 router.post('/contribution/ETH', adminAuthenticate, adminController.ethContribution);
 
+// get ETH contribution 
+router.post('/vesting', adminAuthenticate, btcController.vestingInit);
+
 
 // get stripe API key  
 router.post('/getstripeKey', adminAuthenticate, adminController.getstripeKey);
 
 // add stripe API key  
 router.post('/stripeKey', adminAuthenticate, adminController.stripeKey);
-
 
 // get getTokenDetails
 router.post('/getTokenDetails', adminAuthenticate, tokenController.getTokenDetails);

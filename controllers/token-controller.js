@@ -78,7 +78,6 @@ module.exports = {
     	.then( data => {
     		if(data.length) {
     			
-
     			User.findOne({
     				where: { id: user_id }
     			})
@@ -86,7 +85,7 @@ module.exports = {
 
     				var tokens = data.map(token => {
 		    		var data = {
-		    			tokens  : token.purchaseToken,
+		    			tokens  : token.tokens,
 		    			method  : token.walletMethod,
 		    			date  :  token.createdAt,
 		    			price :  token.amount,

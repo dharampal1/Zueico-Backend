@@ -40,7 +40,11 @@ router.post('/upload/addressProof', authenticate, kycController.uploadAddressPro
 
 
 // get current price for btc and usd
-router.post('/getCurrentPrice', authenticate, btcController.getCurrentPrice);
+router.post('/contribuationStatistics', authenticate, btcController.contribuationStatistics);
+
+// set current price for btc and usd
+router.post('/setCurrentPrice', authenticate, btcController.setCurrentPrice);
+
 
 // total buy token
 router.post('/totalRemainingToken', authenticate, tokenController.totalRemainingToken);
