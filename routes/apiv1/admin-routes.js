@@ -19,6 +19,12 @@ router.post('/privilageuser', adminAuthenticate, adminController.getUserPreviled
 // get all kyc for approvals 
 router.post('/kyc', adminAuthenticate, adminController.allKyc);
 
+// get total purchased coins
+router.post('/totalCoins', adminAuthenticate, adminController.totalCoins);
+
+// get total remaining coins
+router.post('/remainingCoins', adminAuthenticate, adminController.remainingCoins);
+
 // approve Kyc 
 router.post('/kyc/approve', adminAuthenticate, adminController.approveKyc);
 

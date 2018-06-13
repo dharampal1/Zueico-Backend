@@ -24,6 +24,41 @@ var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
 
 module.exports = {
 
+
+  getCurrentPrice(req,res, next) {
+     const url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
+
+      request.get({url},function(err,httpResponse,body ){
+        if(err){
+          return res.status(500).json({
+            status:false,
+            message:err.message
+          });
+        } else {
+
+            var pasedCoin=JSON.parse(body);
+
+            var btc = pasedCoin.ETH.BTC,
+                usd = pasedCoin.ETH.USD,
+
+                ethervalue = (1 / usd) * 0.60,
+                btcvalue = ethervalue * btc,
+                usdvalue = usd,
+                data = {
+                  ethervalue,
+                  btcvalue,
+                  usdvalue
+                };
+
+           res.status(200).json({
+            status:true,
+            message:"current BTC and USD and ETH",
+            data
+          }); 
+        }   
+      });
+  },
+
    contribuationStatistics(req, res, next) {
 
      const url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';

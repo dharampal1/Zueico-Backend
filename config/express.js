@@ -30,7 +30,7 @@ const initApp = function () {
   app.use('/public/uploads', express.static('public/uploads'));
       
 
- BTC_Tranctions();
+ // BTC_Tranctions();
   
   // Setup routes
   routes(app);

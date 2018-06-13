@@ -39,8 +39,13 @@ router.post('/upload/drivingLicenceBack', authenticate, kycController.uploadDriv
 router.post('/upload/addressProof', authenticate, kycController.uploadAddressProof);
 
 
-// get current price for btc and usd
+// get stats for eth , usd and btc raised
 router.post('/contribuationStatistics', authenticate, btcController.contribuationStatistics);
+
+// get current price for btc and usd and eth 
+router.post('/getCurrentPrice', authenticate, btcController.getCurrentPrice);
+
+
 
 // set current price for btc and usd
 router.post('/setCurrentPrice', authenticate, btcController.setCurrentPrice);
@@ -50,16 +55,15 @@ router.post('/setCurrentPrice', authenticate, btcController.setCurrentPrice);
 router.post('/totalRemainingToken', authenticate, tokenController.totalRemainingToken);
 
 // total buy token
-router.post('/totalUserbuytoken', authenticate, tokenController.totalUserbuytoken);
+router.post('/totalPurchasedToken', authenticate, tokenController.totalUserbuytoken);
 
 // total tansfer token
-
 router.post('/getTransferdTokens', authenticate, tokenController.getTransferdTokens);
 
 // total orders
 router.post('/totalOrders', authenticate, tokenController.totalOrders);
 
-// buyToken
+// place order BTC
 router.post('/buyToken', authenticate, tokenController.buyToken);
 
 // 
@@ -86,9 +90,6 @@ router.post('/sendETH', authenticate, tokenController.sendETH);
 
 // checkApproval 
 router.post('/checkApproval', authenticate, tokenController.checkApproval);
-
-// approveAddress 
-router.post('/approveAddress', authenticate, tokenController.approveAddress);
 
 
 module.exports = router;

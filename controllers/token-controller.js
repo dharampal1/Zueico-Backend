@@ -12,7 +12,6 @@ import mdEncrypt from 'md5';
 
 const  url = 'http://13.126.28.220:5000';
 
-const obj = {sum:0};
 
 module.exports = {
 
@@ -25,7 +24,7 @@ module.exports = {
 		    	res.status(200).json({
 		    		status:true,
 		    		message:"Token Details",
-		    		data:response.data
+		    		data:response.data.data
 		    	});
 		    } 
 		  })
@@ -41,7 +40,7 @@ module.exports = {
 		    	res.status(200).json({
 		    		status:true,
 		    		message:"ico stats",
-		    		data:response.data
+		    		data:response.data.data
 		    	});
 		    } 
 		  })
@@ -57,7 +56,7 @@ module.exports = {
 		    	res.status(200).json({
 		    		status:true,
 		    		message:"ico Details",
-		    		data:response.data
+		    		data:response.data.data
 		    	});
 		    } 
 		  })
@@ -150,22 +149,35 @@ module.exports = {
 		   amount = req.body.amount,
 		   tokens = req.body.purchaseToken,
 	       user_id = req.userId,
+	       txhash = '',
+           status = '',
+           userAddress = '',
 	       mainValues = [walletMethod, amount, tokens];
 
 	   if(checkBlank(mainValues) === 0 ){
-	   	    var new_token = new BuyToken({
+
+	   	User.findOne({
+	   		where:{id:user_id}
+	   	})
+	   	.then(user =>{
+	   		if(user){
+	   		    userAddress = user.ethWalletAddress;
+	   		var new_token = new BuyToken({
 	   	    	walletMethod,
 				amount,
 				tokens,
-				user_id
+				user_id,
+				txhash,
+				status,
+				userAddress
 	   	    });
 
 	   		new_token.save()
 	   		 .then(data => {
 	   		 	if(data) {
-	   		 	  res.status(201).json({
+	   		 	  res.status(200).json({
 		    		status:true,
-		    		message:"order Placed",
+		    		message:"order Placed successfully",
 		    		data
 		    	});	
 	   		 	}
@@ -176,6 +188,20 @@ module.exports = {
 		    		message:err.message
 		    	});
 	   		 })
+	   		} else {
+	   			 res.status(404).json({
+		    		status:false,
+		    		message:"No user Found",
+		    	});	
+	   		}
+	   	})
+	   	.catch(err =>{
+	   		 res.status(500).json({
+		    		status:false,
+		    		message:err.message,
+		    	});	
+	   	});
+	   	   
         } else {
         	res.status(422).json({
     		status:false,
@@ -194,6 +220,8 @@ module.exports = {
 	       totalTokens= 0,
 	       toToken = 0,
 		   fromToken = 0,
+		   txhash,
+           status,
 	       mainValues = [fromAddress, toAddress, token];
 
 	   if(checkBlank(mainValues) === 0 ){
@@ -206,7 +234,7 @@ module.exports = {
 
 	   	   const body = {
 		   	   	keystore:JSON.stringify(data.keystore),
-		   	   	password:data.tokenPassword,
+		   	   	Password:data.tokenPassword,
 		   	   	fromAddress,
 		   	   	toAddress,
 		   	   	value:parseInt(token)
@@ -215,13 +243,15 @@ module.exports = {
 	   	   sendTokens(body)
 	   	   	.then(token => {
 	   	   if(token.isValid === true ){
-
+	   	   	var result  = token.body; 
 	   	   	sumOfBoughtTokens(user_id)
 	   	   	  .then(total => {
 
    	   	      toToken = token;
    	   	  	  totalTokens = total.sum;
-   	   	  	  fromToken = totalTokens - toToken ;
+   	   	  	  fromToken = totalTokens - toToken;
+   	   	  	  txhash = result.txhash;
+   	   	  	  status =result.status;
 
 
 	   	   	var new_token = new TokenTransfer({
@@ -230,7 +260,9 @@ module.exports = {
 				toToken,
 				fromToken,
 				totalTokens,
-				user_id
+				user_id,
+				txhash,
+				status
 	   	    });
 	   	   	 new_token.save()
 	   		 .then(data => {
@@ -304,11 +336,22 @@ module.exports = {
 	  	 	   	  message:err.message
 	  	 	   });
 	  	 	} else {
-	  	 		res.status(200).json({
-	  	 			status:true,
-	  	 			message:"Your PrivateKey",
-	  	 			data:body
+
+	  	 		var result = JSON.parse(body);
+
+	  	 		if(result.status === true){
+	  	 		  res.status(200).json({
+	  	 			status:result.status,
+	  	 			message:result.message,
+	  	 			data:result.data
 	  	 		});
+	  	 	  } else {
+	  	 	  	 res.status(422).json({
+	  	 			status:result.status,
+	  	 			message:result.message,
+	  	 			data:result.data
+	  	 		});
+	  	 	  }
 	  	 	}
 	  	 });
 	  } else {
@@ -350,17 +393,27 @@ module.exports = {
 	  	 	   	  message:err.message
 	  	 	   });
 	  	 	} else {
-	  	 		res.status(200).json({
-	  	 			status:true,
-	  	 			message:"Your token Balance",
-	  	 			data:JSON.parse(body)
+	  	 		var result = JSON.parse(body);
+
+	  	 		if(result.status === true){
+	  	 		  res.status(200).json({
+	  	 			status:result.status,
+	  	 			message:result.message,
+	  	 			data:result.data
 	  	 		});
+	  	 	  } else {
+	  	 	  	 res.status(422).json({
+	  	 			status:result.status,
+	  	 			message:result.message,
+	  	 			data:result.data
+	  	 		});
+	  	 	  }
 	  	 	}
 	  	 });
 	   	} else {
 	   		  res.status(404).json({
 	  	 	   	  status:false,
-	  	 	   	  message:"no user found"
+	  	 	   	  message:"No user Found"
 	  	 	   });
 	   		}
 	   	})
@@ -369,17 +422,20 @@ module.exports = {
     		status:false,
     		message:err.message
     	});
-	   	});
- 
-
+	  });
 	},
 
-	sendETH(req, res, next){
+  sendETH(req, res, next){
 
     var  fromAddress  = req.body.fromAddress,
 		 toAddress = req.body.toAddress,
 		 value = req.body.value,
 		 user_id = req.userId,
+		 hash = '',
+         txstatus = '',
+         totalTokens= 0,
+	     toToken = 0,
+		 fromToken = 0,
          mainValues = [fromAddress,toAddress, value];
 
 	  if(checkBlank(mainValues) === 0 ){		
@@ -405,28 +461,54 @@ module.exports = {
 		  	 	   	  message:err.message
 		  	 	   });
 		  	 	} else {
+
+	  	 		var result = JSON.parse(body);
+
+	  	 		if(result.status === true){ 
+						
+
+				sumOfBoughtTokens(user_id)
+		   	   	  .then(total => {
+
+	   	   	      fromToken = value;
+	   	   	  	  totalTokens = total;
+	   	   	  	  toToken = totalTokens - fromToken;
+	   	   	  	  hash = result.txhash;
+	   	   	  	  txstatus = result.status;
+						
 		  	 		var new_token = new TokenTransfer({
 			   	    	fromAddress,
 						toAddress,
-						token:value,
-						user_id
+						totalTokens,
+						toToken,
+						fromToken:value,
+						user_id,
+						hash,
+						txstatus
 			   	    });
 			   	   	  new_token.save()
 			   		 .then(data => {
 			   		 	if(data) {
 			   		 	  res.status(200).json({
 				    		status:true,
-				    		message:"ETH Transfer",
-				    		data:body
+				    		message:result.message,
+				    		data:result.data
 				    	});	
-			   		 	}
+			   		   }
 			   		 })
+			   		})
 			   		 .catch(err => {
 			   		 	res.status(500).json({
 				    		status:false,
 				    		message:err.message
 				    	});
 			   		 })
+			   		} else {
+			   			res.status(200).json({
+				    		status:false,
+				    		message:result.message
+				    	});
+			   		}
 		  	 	}
 		  	    });
 
@@ -466,11 +548,22 @@ module.exports = {
 	  	 	   	  message:err.message
 	  	 	   });
 	  	 	} else {
-	  	 		res.status(200).json({
-	  	 			status:true,
-	  	 			message:"Approval status",
-	  	 			data:body
+
+	  	 		var result = JSON.parse(body);
+
+	  	 		if(result.status === true){
+	  	 		  res.status(200).json({
+	  	 			status:result.status,
+	  	 			message:result.message,
+	  	 			data:result.data
 	  	 		});
+	  	 	  } else {
+	  	 	  	 res.status(422).json({
+	  	 			status:result.status,
+	  	 			message:result.message,
+	  	 			data:result.data
+	  	 		});
+	  	 	  }
 	  	 	}
 	  	 });
 	  } else {
@@ -482,37 +575,6 @@ module.exports = {
 
 	},
 
-	approveAddress(req, res, next){
-
-	 var address  = req.body.address;
-
-	 if(address) {	
-
-	 const body = {address};
-
-	  request.post({url:`${url}/approveAddress`,form:body },function(err,httpResponse,body){
-
-	  	 	if(err){
-	  	 	   res.status(500).json({
-	  	 	   	  status:false,
-	  	 	   	  message:err.message
-	  	 	   });
-	  	 	} else {
-		  	 	res.status(200).json({
-		  	 			status:true,
-		  	 			message:"Address approved",
-		  	 			data:body
-		  	 	});
-		  	  }
-		  });
-	   } else {
-     	res.status(422).json({
-    		status:false,
-    		message:"address is required"
-    	});
-      }
-    },
-
     totalRemainingToken(req, res, next) {
     	var user_id = req.userId,
     	    total_tokens = 0,
@@ -522,8 +584,8 @@ module.exports = {
     	.then(buy => {
 	    	sumOfTransferedTokens(user_id)
 	    	 .then(trans => {
-	    	 	trans_token = trans.sum;
-	    	 	total_tokens = buy.sum ;
+	    	 	trans_token = trans;
+	    	 	total_tokens = buy ;
 
 	    	let remain = total_tokens - trans_token;
 
@@ -536,40 +598,43 @@ module.exports = {
 	    	 .catch(err => {
 	    	 	res.status(500).json({
 		    		status:false,
-		    		message:err.meesage
+		    		message:err.message
 		    	 });
 	    	 });
     	})
     	.catch(err =>{
     		 res.status(500).json({
 	    		status:false,
-	    		message:err.meesage
+	    		message:err.message
 	    	 });
     	});
     },
 
    totalUserbuytoken(req, res, next){
+
     	var user_id = req.userId ;
 
     	sumOfBoughtTokens(user_id)
     	.then( data => {
-    		if(data.sum){
+
+    		if(data){
+
     			res.status(200).json({
 		    		status:true,
-		    		message:"All bought tokens",
-		    		data:data.sum
+		    		message:"Total Tokens Purchased By You.",
+		    		data
 		    	 });
     		} else {
     		 res.status(404).json({
 	    		status:false,
-	    		message:'No data found'
+	    		message:'No User Found'
 	    	 });
     		}
     	})
     	.catch(err => {
     	  res.status(500).json({
     		status:false,
-    		message:err.meesage
+    		message:err.message
     	 });
       })
     }
@@ -584,11 +649,21 @@ function sendTokens(body) {
 	  	 	if(err){
 	  	 	  reject(err)
 	  	 	} else {
+	  	 		
+	  	 		var result = JSON.parse(body);
 
-	  	 		resolve({
+	  	 		console.log(result);
+
+	  	 		if(result.status === true){
+	  	 		  resolve({
 	  	 			isValid:true,
-	  	 			body
+	  	 			body:result.data
 	  	 		})
+	  	 	  } else {
+	  	 	  	  reject(
+	  	 	  	  	new Error(result.message)
+	  	 	  	  )
+	  	 	  }
 	  	 	}
 	  	 });
   }));
@@ -601,7 +676,8 @@ function sumOfBoughtTokens(user_id) {
 			user_id
 		},
 	}).then(sum => {
-		resolve({sum});
+		console.log(typeof sum, sum);
+		resolve(sum);
 	}).catch(err => {
 		reject(err)
 	});
@@ -616,7 +692,7 @@ function sumOfTransferedTokens(user_id) {
 			user_id
 		},
 	}).then( sum =>  {
-		resolve({sum});
+		resolve(sum);
 	}).catch(err => {
 		reject(err)
 	});

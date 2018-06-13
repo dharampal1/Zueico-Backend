@@ -31,6 +31,16 @@ module.exports = {
          defaultValue:0,
          type: Sequelize.INTEGER
       },
+      hash:{
+         allowNull: false,
+         defaultValue:'',
+        type: Sequelize.STRING
+      },
+      txstatus:{
+         allowNull: false,
+         defaultValue:'',
+        type: Sequelize.STRING
+      },
       toToken:{
          allowNull: false,
          defaultValue:0,

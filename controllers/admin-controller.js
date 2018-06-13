@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import request from 'request';
-import { User, Admin, Setting } from '../models';
+import { User, Admin, Setting, BuyToken, TokenTransfer } from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
 import config from './../config/environment';
@@ -331,9 +331,45 @@ module.exports = {
 
     ethContribution(req, res, next){
 
-    }
-	
+    },
 
+    totalCoins(req, res, next) {
+    	sumOfBoughtTokens()
+    	 .then(data => {
+    	 	res.status(200).json({
+	  	  		status:true,
+	  	  		message:"All Purchased Tokens",
+	  	  		data:data.sum
+  	     	})
+    	 })
+    	 .catch(err => {
+    	 	res.status(500).json({
+  	  		status:false,
+  	  		message:err.message
+  	  	 })	
+      });
+    },
+
+    remainingCoins(req, res, next) {
+
+    	sumOfBoughtTokens()
+    	 .then(data => {
+    	  return sumOfTransferedTokens()
+	         .then(data1 => {
+	         	res.status(200).json({
+	  	  		status:true,
+	  	  		message:"All Remaining Tokens",
+	  	  		data1
+  	     	  })
+	        })
+    	 })
+    	 .catch(err => {
+    	 	res.status(500).json({
+  	  		status:false,
+  	  		message:err.message
+  	  	})
+     });   
+    }
 }
 
 function approveAddress(body){
@@ -349,4 +385,25 @@ function approveAddress(body){
 	  	 	}
 	});
   }));
+}
+
+function sumOfBoughtTokens() {
+	 return new Promise(((resolve, reject) => {
+	BuyToken.sum('tokens').then(sum => {
+		resolve({sum});
+	}).catch(err => {
+		reject(err)
+	});
+}));
+}
+
+function sumOfTransferedTokens() {
+	//token
+	 return new Promise(((resolve, reject) => {
+	TokenTransfer.sum('fromToken').then( sum =>  {
+		resolve({sum});
+	}).catch(err => {
+		reject(err)
+	});
+	}));
 }

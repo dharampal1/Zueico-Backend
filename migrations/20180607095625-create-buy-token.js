@@ -22,9 +22,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       tokens: {
-         allowNull: false,
-         defaultValue:0,
+        allowNull: false,
+        defaultValue:0,
         type: Sequelize.INTEGER
+      },
+      userAddress:{
+        allowNull: false,
+         defaultValue:'',
+        type: Sequelize.STRING
+      },
+      txhash: {
+        type:Sequelize.STRING
+      },
+      status: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

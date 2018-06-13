@@ -5,7 +5,9 @@ module.exports = (sequelize, DataTypes) => {
     walletMethod: DataTypes.STRING,
     amount: DataTypes.INTEGER,
     tokens: DataTypes.INTEGER,
-    txhash: DataTypes.STRING  
+    txhash: DataTypes.STRING,
+    status: DataTypes.STRING,
+    userAddress:DataTypes.STRING
   }, {});
   BuyToken.associate = function(models) {
     //associations can be defined here
