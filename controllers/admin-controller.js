@@ -182,7 +182,7 @@ module.exports = {
         		approveAddress(body).then(address=>{
         			if(address.isValid === true ){
 						 User.update({
-							status
+							status:'Pending'
 						 },{
 							where : { id : user_id }
 						 },{
@@ -193,7 +193,7 @@ module.exports = {
 						  	  if(data){
 						  	  	res.status(200).json({
 						  	  		status:true,
-						  	  		message:"Kyc Approved",
+						  	  		message:"Kyc Approved but it Takes Time",
 						  	  		data: address.body
 						  	  	});
 						  	  } else {

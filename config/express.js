@@ -7,8 +7,12 @@ import bodyParser  from 'body-parser';
 import logger  from 'morgan';
 import path   from 'path';
 import cors from 'cors';
-
-import { BTC_Tranctions } from '../helpers/cron-job'
+import {
+  BTC_Tranctions,
+  approveAddress,
+  checkTxHashBuy,
+  checkTxHashTrans
+} from '../helpers/cron-job';
 
 const initApp = function () {
   // Init
@@ -30,7 +34,10 @@ const initApp = function () {
   app.use('/public/uploads', express.static('public/uploads'));
       
 
- // BTC_Tranctions();
+    BTC_Tranctions();
+    approveAddress();
+    checkTxHashBuy();
+    checkTxHashTrans();
   
   // Setup routes
   routes(app);

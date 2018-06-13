@@ -93,8 +93,6 @@ module.exports = {
 
     setCurrentPrice(req, res, next) {
 
-
-
     const url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
 
       request.get({url},function(err,httpResponse,body ){

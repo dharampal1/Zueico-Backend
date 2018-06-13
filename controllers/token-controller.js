@@ -220,8 +220,8 @@ module.exports = {
 	       totalTokens= 0,
 	       toToken = 0,
 		   fromToken = 0,
-		   txhash,
-           status,
+		   transHash,
+           transStatus,
 	       mainValues = [fromAddress, toAddress, token];
 
 	   if(checkBlank(mainValues) === 0 ){
@@ -234,24 +234,23 @@ module.exports = {
 
 	   	   const body = {
 		   	   	keystore:JSON.stringify(data.keystore),
-		   	   	Password:data.tokenPassword,
+		   	   	password:data.tokenPassword,
 		   	   	fromAddress,
 		   	   	toAddress,
 		   	   	value:parseInt(token)
 	   	   	};
 
 	   	   sendTokens(body)
-	   	   	.then(token => {
-	   	   if(token.isValid === true ){
-	   	   	var result  = token.body; 
+	   	   	.then(tokens => {
+	   	   if(tokens.isValid === true ){
+	   	   	var result  = tokens.body; 
 	   	   	sumOfBoughtTokens(user_id)
 	   	   	  .then(total => {
 
    	   	      toToken = token;
    	   	  	  totalTokens = total.sum;
    	   	  	  fromToken = totalTokens - toToken;
-   	   	  	  txhash = result.txhash;
-   	   	  	  status =result.status;
+   	   	  	  transHash = result.txhash;
 
 
 	   	   	var new_token = new TokenTransfer({
@@ -261,15 +260,15 @@ module.exports = {
 				fromToken,
 				totalTokens,
 				user_id,
-				txhash,
-				status
+				transHash
 	   	    });
+	   	    
 	   	   	 new_token.save()
 	   		 .then(data => {
 	   		 	if(data) {
 	   		 	 return  res.status(200).json({
 		    		status:true,
-		    		message:"Token Transfer",
+		    		message:"Token Transfered successfully",
 		    		data:token.body
 		    	});	
 	   		 	}
@@ -431,11 +430,8 @@ module.exports = {
 		 toAddress = req.body.toAddress,
 		 value = req.body.value,
 		 user_id = req.userId,
-		 hash = '',
-         txstatus = '',
-         totalTokens= 0,
-	     toToken = 0,
-		 fromToken = 0,
+		 buyHash = '',
+         buyStatus = '',
          mainValues = [fromAddress,toAddress, value];
 
 	  if(checkBlank(mainValues) === 0 ){		
@@ -466,25 +462,13 @@ module.exports = {
 
 	  	 		if(result.status === true){ 
 						
+	   	   	  	  buyHash = result.txhash;
 
-				sumOfBoughtTokens(user_id)
-		   	   	  .then(total => {
-
-	   	   	      fromToken = value;
-	   	   	  	  totalTokens = total;
-	   	   	  	  toToken = totalTokens - fromToken;
-	   	   	  	  hash = result.txhash;
-	   	   	  	  txstatus = result.status;
-						
-		  	 		var new_token = new TokenTransfer({
-			   	    	fromAddress,
-						toAddress,
-						totalTokens,
-						toToken,
-						fromToken:value,
+		  	 		var new_token = new BuyToken({
+						amount:value,
+						walletMethod:'ETH',
 						user_id,
-						hash,
-						txstatus
+						buyHash
 			   	    });
 			   	   	  new_token.save()
 			   		 .then(data => {
@@ -495,7 +479,6 @@ module.exports = {
 				    		data:result.data
 				    	});	
 			   		   }
-			   		 })
 			   		})
 			   		 .catch(err => {
 			   		 	res.status(500).json({
@@ -588,8 +571,6 @@ module.exports = {
 
 	    	let remain = total_tokens - trans_token;
 
-	    	console.log(trans_token,total_tokens);
-
 	    	 res.status(200).json({
 			    		status:true,
 			    		message:"All Remaining tokens",
@@ -651,8 +632,6 @@ function sendTokens(body) {
 	  	 	} else {
 	  	 		
 	  	 		var result = JSON.parse(body);
-
-	  	 		console.log(result);
 
 	  	 		if(result.status === true){
 	  	 		  resolve({

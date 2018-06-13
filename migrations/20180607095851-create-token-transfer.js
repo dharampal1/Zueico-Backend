@@ -31,15 +31,15 @@ module.exports = {
          defaultValue:0,
          type: Sequelize.INTEGER
       },
-      hash:{
+      transHash:{
          allowNull: false,
          defaultValue:'',
         type: Sequelize.STRING
       },
-      txstatus:{
+      transStatus:{
          allowNull: false,
-         defaultValue:'',
-        type: Sequelize.STRING
+        defaultValue:'Pending',
+        type: Sequelize.ENUM('Pending','Success','Failed')
       },
       toToken:{
          allowNull: false,

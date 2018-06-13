@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     phone: DataTypes.STRING,
     totalToken: DataTypes.INTEGER,
+    contract:DataTypes.STRING,
     soldToken: DataTypes.INTEGER
   }, {});
   Admin.associate = function(models) {

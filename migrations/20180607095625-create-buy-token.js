@@ -31,11 +31,13 @@ module.exports = {
          defaultValue:'',
         type: Sequelize.STRING
       },
-      txhash: {
+      buyHash: {
         type:Sequelize.STRING
       },
-      status: {
-        type: Sequelize.STRING
+      buyStatus: {
+        allowNull: false,
+        defaultValue:'Pending',
+        type: Sequelize.ENUM('Pending','Success','Failed')
       },
       createdAt: {
         allowNull: false,

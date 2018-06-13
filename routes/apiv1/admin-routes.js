@@ -31,6 +31,10 @@ router.post('/kyc/approve', adminAuthenticate, adminController.approveKyc);
 // reject KYC 
 router.post('/kyc/reject', adminAuthenticate, adminController.rejectKyc);
 
+
+// get stats for eth , usd and btc raised
+router.post('/contribuationStatistics', adminAuthenticate, btcController.contribuationStatistics);
+
 // get BTC contribution 
 router.post('/contribution/BTC', adminAuthenticate, adminController.btcContribution);
 

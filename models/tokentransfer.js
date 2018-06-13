@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     totalTokens: DataTypes.INTEGER,
     fromToken: DataTypes.INTEGER,
     toToken: DataTypes.INTEGER,
-    hash:DataTypes.STRING,
-    txstatus:DataTypes.STRING,
+    transHash:DataTypes.STRING,
+    transStatus:DataTypes.ENUM('Pending','Success','Failed'),
   }, {});
   TokenTransfer.associate = function(models) {
     // associations can be defined here

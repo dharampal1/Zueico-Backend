@@ -328,20 +328,11 @@ module.exports = {
       })
       .then(data => {
         if (data) {
-          var kycStatus = '';
-
-          if(data.status === '0'){
-              kycStatus = 'Pending';
-          } else if(data.status === '1'){
-              kycStatus = 'Approved';
-          } else {
-              kycStatus = 'Rejected';
-          }
           res.status(200).json({
             status:true,
             message: "Your Kyc Status",
             data:{
-              kycStatus
+              kycStatus:data.status
             }
           });
         } else {

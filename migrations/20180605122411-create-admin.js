@@ -34,6 +34,11 @@ module.exports = {
         defaultValue:'',
         type: Sequelize.STRING
       },
+      contract:{
+        allowNull: false,
+        defaultValue:'',
+        type: Sequelize.STRING
+      },
       soldToken: {
         allowNull: false,
         defaultValue:'',

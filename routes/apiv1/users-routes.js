@@ -46,7 +46,6 @@ router.post('/contribuationStatistics', authenticate, btcController.contribuatio
 router.post('/getCurrentPrice', authenticate, btcController.getCurrentPrice);
 
 
-
 // set current price for btc and usd
 router.post('/setCurrentPrice', authenticate, btcController.setCurrentPrice);
 

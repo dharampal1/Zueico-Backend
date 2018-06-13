@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     walletMethod: DataTypes.STRING,
     amount: DataTypes.INTEGER,
     tokens: DataTypes.INTEGER,
-    txhash: DataTypes.STRING,
-    status: DataTypes.STRING,
+    buyHash: DataTypes.STRING,
+    buyStatus: DataTypes.ENUM('Pending','Success','Failed'),
     userAddress:DataTypes.STRING
   }, {});
   BuyToken.associate = function(models) {
