@@ -147,7 +147,7 @@ module.exports = {
 	 
 	  var  walletMethod = req.body.walletMethod,
 		   amount = req.body.amount,
-		   tokens = req.body.purchaseToken,
+		   tokens = req.body.tokens,
 	       user_id = req.userId,
 	       txhash = '',
            status = '',
@@ -576,18 +576,19 @@ module.exports = {
 	},
 
     totalRemainingToken(req, res, next) {
-    	var user_id = req.userId,
-    	    total_tokens = 0,
-    	    trans_token = 0;
-
+    	var user_id = req.userId;
+    	   
     	sumOfBoughtTokens(user_id)
     	.then(buy => {
 	    	sumOfTransferedTokens(user_id)
 	    	 .then(trans => {
-	    	 	trans_token = trans;
-	    	 	total_tokens = buy ;
+
+	    	 	var trans_token = trans,
+	    	 	    total_tokens = buy ;
 
 	    	let remain = total_tokens - trans_token;
+
+	    	console.log(trans_token,total_tokens);
 
 	    	 res.status(200).json({
 			    		status:true,
@@ -616,9 +617,7 @@ module.exports = {
 
     	sumOfBoughtTokens(user_id)
     	.then( data => {
-
     		if(data){
-
     			res.status(200).json({
 		    		status:true,
 		    		message:"Total Tokens Purchased By You.",
@@ -627,7 +626,8 @@ module.exports = {
     		} else {
     		 res.status(404).json({
 	    		status:false,
-	    		message:'No User Found'
+	    		message:'No Token is Purchased Yet',
+	    		data
 	    	 });
     		}
     	})
@@ -670,31 +670,29 @@ function sendTokens(body) {
 }
 
 function sumOfBoughtTokens(user_id) {
-	 return new Promise(((resolve, reject) => {
+	return new Promise(((resolve, reject) => {
 	BuyToken.sum('tokens', {
 		where: {
 			user_id
 		},
 	}).then(sum => {
-		console.log(typeof sum, sum);
 		resolve(sum);
 	}).catch(err => {
 		reject(err)
 	});
-}));
+  }));
 }
 
 function sumOfTransferedTokens(user_id) {
-	//token
 	 return new Promise(((resolve, reject) => {
 	TokenTransfer.sum('fromToken', {
 		where: {
 			user_id
 		},
-	}).then( sum =>  {
+	}).then(sum =>  {
 		resolve(sum);
 	}).catch(err => {
 		reject(err)
 	});
-	}));
+}));
 }
