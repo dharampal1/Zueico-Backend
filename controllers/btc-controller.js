@@ -1,7 +1,7 @@
 var Web3 = require("web3");
 var web3 = new Web3();
 import request from 'request';
-import {Btc_price,Vesting} from '../models';
+import {Btc_price,VestingPeriod} from '../models';
 import token_abi from './../config/abi.json'
 import sale_abi from './../config/sale_abi.json'
 import refund_abi from './../config/refund_abi.json'
@@ -196,51 +196,8 @@ module.exports = {
       });
    },
 
-   vestingInit(req, res, next){
 
-    var address = req.body.address,
-        amount = req.body.amount,
-        startDate = req.body.startDate,
-        mainValues = [address, amount, startDate ]
-
-       if(checkBlank(mainValues) === 0 ) {
-
-       } else {
-        res.status(422).json({
-           status: false,
-           message: "You are not sending valid Request Params",
-           required: "startDate, address, amount"
-        });
-       }
-        var new_vesting = new Vesting({
-            address,
-            amount,
-            startDate
-        });
-
-        new_vesting.save()
-          .then(data => {
-             if(data){
-              res.status(200).json({
-                    status:true,
-                    message:"vesting Address saved",
-                    data
-                }); 
-             } else {
-              res.status(404).json({
-                    status:false,
-                    message:"No data saved"
-                }); 
-             }
-          })
-          .catch(err => {
-             res.status(500).json({
-                status:false,
-                message:err.message
-              }); 
-          });
-
-   }
+ 
 }
    
 

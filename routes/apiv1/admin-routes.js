@@ -37,9 +37,6 @@ router.post('/update/contract', adminAuthenticate, adminController.updateContrac
 // reject KYC 
 router.post('/kyc/reject', adminAuthenticate, adminController.rejectKyc);
 
-// get ETH contribution 
-router.post('/vesting', adminAuthenticate, btcController.vestingInit);
-
 // get stripe API key  
 router.post('/getstripeKey', adminAuthenticate, adminController.getstripeKey);
 

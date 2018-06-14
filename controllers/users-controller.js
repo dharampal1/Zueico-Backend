@@ -24,7 +24,7 @@ import Sequelize from 'sequelize';
 import path from 'path';
 import  hbs from 'nodemailer-express-handlebars';
 import emailCheck from 'email-check';
-
+import request from 'request';
 import stripePackage from 'stripe';
 const stripe = stripePackage('sk_test_lwuoPgxDNCtdTYyG7YoDfyAw');
 
@@ -773,6 +773,7 @@ module.exports = {
   //     "name": card_holder_name
   //   }
   // }, function(err, token) {
+  //   console.log(token);
     // if (err) {
     //   return res.status(500).send({
     //      status: false,
@@ -801,18 +802,24 @@ module.exports = {
              status: false,
              message: err.message
           });
-        }else{  
+        } else {  
 
+          User.findOne({
+            where:{id:user_id},
+            attributes:['id','ethWalletAddress']
+          })
+          .then(user => {
+            if(user){
          var usdtokenvalue = amount / 0.60,
-             toAddress = '';
+             toAddress = user.ethWalletAddress;
    
-     const body = { usdtokenvalue , toAddress };
+       const body = { usdtokenvalue , toAddress };
   
-    request.post({url:`${url}/sendTokensUSDusers`,form:body },function(err,httpResponse,body){
+      request.post({url:`${url}/sendTokensUSDusers`,form:body },function(err,httpResponse,body){
 
-        if(err){
-           reject(err);
-        } else {
+          if(err){
+             reject(err);
+          } else {
 
           var result = JSON.parse(body);
 
@@ -831,7 +838,7 @@ module.exports = {
                   res.status(201).json({
                     status:true,
                     message:"Payment sent successful"   
-                  });	
+                  }); 
                 }
             })
             .catch(err => {
@@ -850,9 +857,22 @@ module.exports = {
         });
         }
        });
+        } else {
+           res.status(404).send({
+             status: false,
+             message: "No user Found"
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+         status: false,
+         message: err.message
+        });
+      })
       }
     });    
-  })      
+  })   
 }
 
 }

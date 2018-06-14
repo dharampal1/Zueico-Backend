@@ -232,6 +232,45 @@ module.exports = {
 			console.log(err);
 		})
 	});
+  },
+
+  vestingPeroid(){
+  	    
+   var  ico_tokens  = '',
+        pre_ico_tokens = '',
+        name = '',
+        email = '',
+        phone = '',
+        total_purchase = '',
+        vesting_period = 0,
+        country = '',
+        vested_tokens = '',
+        remaining_tokens = '',
+        vesting_period_date = '';
+
+        var new_vesting = new VestingPeriod({
+            ico_tokens,
+            pre_ico_tokens,
+            name,
+            email,
+            phone,
+            total_purchase,
+            vesting_period,
+            country,
+            vested_tokens,
+            remaining_tokens,
+            vesting_period_date,
+        });
+
+        new_vesting.save()
+          .then(data => {
+             if(data){
+              console.log('vesting saved');
+             }
+          })
+          .catch(err => {
+            console.log(err);
+          });
   }
 
 }

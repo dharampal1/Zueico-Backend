@@ -157,7 +157,7 @@ module.exports = {
          defaultValue:'',
          type: Sequelize.STRING
       },
-      previledge: { 
+      previlege: { 
          allowNull: false,
          defaultValue:'0',
          type: Sequelize.ENUM('0','1')

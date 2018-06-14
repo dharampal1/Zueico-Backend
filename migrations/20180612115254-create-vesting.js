@@ -1,21 +1,45 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Vestings', {
+    return queryInterface.createTable('VestingPeriods', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      address: {
-        type: Sequelize.STRING
+      ico_tokens: {
+        type:Sequelize.STRING
       },
-      amount: {
-        type: Sequelize.STRING
+      pre_ico_tokens: {
+        type:Sequelize.STRING
       },
-      startDate: {
-        type: Sequelize.DATE
+      name: {
+        type:Sequelize.STRING
+      },
+      email: {
+        type:Sequelize.STRING
+      },
+      phone: {
+        type:Sequelize.STRING
+      },
+      total_purchase: { 
+        type:Sequelize.STRING
+      },
+      vesting_period:{
+        type:Sequelize.INTEGER
+      },
+      country:{
+        type:Sequelize.STRING
+      },
+      vested_tokens:{
+        type:Sequelize.STRING
+      },
+      remaining_tokens:{
+        type:Sequelize.STRING
+      },
+      vesting_period_date:{
+        type:Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -28,6 +52,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Vestings');
+    return queryInterface.dropTable('VestingPeriods');
   }
 };

@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     vewtingToken: DataTypes.STRING,
     vewtingRemainingToken: DataTypes.STRING,
     vewtingStartDate: DataTypes.STRING,
-    previledge: DataTypes.ENUM('0','1')
+    previlege: DataTypes.ENUM('0','1')
    }, {});
    User.associate = function(models) {
         // associations can be defined here
