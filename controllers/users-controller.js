@@ -758,29 +758,30 @@ module.exports = {
   //var currency = req.body.currency
   //var token = req.body.stripeToken;
   let description = "Charge for " + req.body.email; 
-  let credit_card = req.body.credit_card;//'4242424242424242';
-  let exp_month = req.body.exp_month;//12;
-  let exp_year = req.body.exp_year;//2019;
-  let cvc = req.body.cvc;//'123';
-  let card_holder_name = req.body.card_holder_name;  
-  stripe.tokens.create({
-    card: {
-      "number": credit_card,
-      "exp_month": exp_month,
-      "exp_year": exp_year,
-      "cvc": cvc,
-      "name": card_holder_name
-    }
-  }, function(err, token) {
-    if (err) {
-      return res.status(500).send({
-         status: false,
-         message: err.message
-      });
-    }
+  let token = req.body.token
+  // let credit_card = req.body.credit_card;//'4242424242424242';
+  // let exp_month = req.body.exp_month;//12;
+  // let exp_year = req.body.exp_year;//2019;
+  // let cvc = req.body.cvc;//'123';
+  // let card_holder_name = req.body.card_holder_name;  
+  // stripe.tokens.create({
+  //   card: {
+  //     "number": credit_card,
+  //     "exp_month": exp_month,
+  //     "exp_year": exp_year,
+  //     "cvc": cvc,
+  //     "name": card_holder_name
+  //   }
+  // }, function(err, token) {
+    // if (err) {
+    //   return res.status(500).send({
+    //      status: false,
+    //      message: err.message
+    //   });
+    // }
     stripe.customers.create({
       email: email,
-      source: token.id
+      source: token
     }, function(err, customer) {
       if (err) {
         return res.status(500).send({
@@ -852,7 +853,6 @@ module.exports = {
       }
     });    
   })      
-});
 }
 
 }

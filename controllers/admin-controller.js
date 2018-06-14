@@ -348,7 +348,7 @@ module.exports = {
 	         	res.status(200).json({
 	  	  		status:true,
 	  	  		message:"All Remaining Tokens",
-	  	  		data1
+	  	  		data:data.sum - data1.sum
   	     	  })
 	        })
     	 })
