@@ -38,13 +38,11 @@ router.post('/upload/drivingLicenceBack', authenticate, kycController.uploadDriv
 // upload user address Proof 
 router.post('/upload/addressProof', authenticate, kycController.uploadAddressProof);
 
-
 // get stats for eth , usd and btc raised
 router.post('/contribuationStatistics', authenticate, btcController.contribuationStatistics);
 
 // get current price for btc and usd and eth 
 router.post('/getCurrentPrice', authenticate, btcController.getCurrentPrice);
-
 
 // set current price for btc and usd
 router.post('/setCurrentPrice', authenticate, btcController.setCurrentPrice);

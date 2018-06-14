@@ -69,32 +69,40 @@ exports.createWallet = function(email, user) {
            reject(err);
         } else {
 
-        var body = JSON.parse(body),
-            ethWalletAddress = body.addr[0],
-            keystore = JSON.parse(body.keystore)
+          var result = JSON.parse(body);
 
-        User.update({
-          ethWalletAddress,
-          keystore:keystore,
-          tokenPassword:password
-        },{
-          where: { id:user.id},
-          returing:true,
-          plain:true
-        })
-        .then(data => {
-          if(data){
-            resolve({
-              isValid: true
-            });
+          if(result.status === true){
+
+            var ethWalletAddress = result.data.addr[0],
+                keystore = JSON.parse(result.data.keystore);
+
+            User.update({
+              ethWalletAddress,
+              keystore:keystore,
+              tokenPassword:password
+            },{
+              where: { id:user.id},
+              returing:true,
+              plain:true
+            })
+            .then(data => {
+              if(data){
+                resolve({
+                  isValid: true
+                });
+              } else {
+               reject(new Error("No user Found"));
+              }
+            })
+            .catch(err => {
+              reject(err)
+            })
           } else {
-           reject(new Error("No user Found"));
-          }
-        })
-        .catch(err => {
-          reject(err)
-        })
-      }
+            reject(
+              new Error(result.message)
+            )
+         }
+       }
     });
   }));
 }
