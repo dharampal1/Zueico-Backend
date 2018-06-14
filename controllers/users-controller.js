@@ -28,6 +28,9 @@ import emailCheck from 'email-check';
 import stripePackage from 'stripe';
 const stripe = stripePackage('sk_test_lwuoPgxDNCtdTYyG7YoDfyAw');
 
+
+const  url = 'http://13.126.28.220:5000';
+
 const Op = Sequelize.Op;
 
 module.exports = {
@@ -798,12 +801,27 @@ module.exports = {
              message: err.message
           });
         }else{  
+
+         var usdtokenvalue = amount / 0.60,
+             toAddress = '';
+   
+     const body = { usdtokenvalue , toAddress };
+  
+    request.post({url:`${url}/sendTokensUSDusers`,form:body },function(err,httpResponse,body){
+
+        if(err){
+           reject(err);
+        } else {
+
+          var result = JSON.parse(body);
+
         User.update(userData,{where:{id:user_id}})
         .then(result => {          
            var new_token = new BuyToken({
                 walletMethod:'USD',
-                amount,
-                tokens:purchasedtokens,
+                buyHash:result.data.hash,
+                amount:usdtokenvalue,
+                tokens:result.data.tokens,
                 user_id
             });
             new_token.save()
@@ -829,6 +847,8 @@ module.exports = {
             message: err.message
           });
         });
+        }
+       });
       }
     });    
   })      

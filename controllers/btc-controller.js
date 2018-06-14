@@ -212,7 +212,6 @@ module.exports = {
            required: "startDate, address, amount"
         });
        }
-
         var new_vesting = new Vesting({
             address,
             amount,
