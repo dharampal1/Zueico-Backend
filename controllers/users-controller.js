@@ -26,7 +26,8 @@ import  hbs from 'nodemailer-express-handlebars';
 import emailCheck from 'email-check';
 import request from 'request';
 import stripePackage from 'stripe';
-const stripe = stripePackage('sk_test_lwuoPgxDNCtdTYyG7YoDfyAw');
+//const stripe = stripePackage('sk_test_lwuoPgxDNCtdTYyG7YoDfyAw');
+// const stripe = stripePackage('sk_test_umWqt35opoHjlW2FOT9ML8yK');
 
 
 const  url = 'http://13.126.28.220:5000';
@@ -780,6 +781,11 @@ module.exports = {
     //      message: err.message
     //   });
     // }
+    Settings.findOne({
+      where:{ type: 'test'}
+    })
+    .then(keys => {
+    const stripe = stripePackage(keys.key);
     stripe.customers.create({
       email: email,
       source: token
@@ -803,6 +809,11 @@ module.exports = {
              message: err.message
           });
         } else {  
+
+          return res.status(200).send({
+             status: false,
+             message: charge
+          });
 
           User.findOne({
             where:{id:user_id},
@@ -872,7 +883,14 @@ module.exports = {
       })
       }
     });    
-  })   
+  })  
+  })
+  .catch(err => {
+    res.status(500).send({
+         status: false,
+         message: err.message
+        });
+      })
 }
 
 }

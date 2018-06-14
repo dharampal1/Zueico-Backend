@@ -43,7 +43,7 @@ module.exports = {
 
                 ethervalue = (1 / usd) * 0.60,
                 btcvalue = ethervalue * btc,
-                usdvalue = usd * 0.60,
+                usdvalue = 0.60,
                 data = {
                   ethervalue,
                   btcvalue,
@@ -194,9 +194,7 @@ module.exports = {
            });    
         }   
       });
-   },
-
-
+   }
  
 }
    

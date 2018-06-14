@@ -192,6 +192,7 @@ module.exports = {
 
   checkTxHashTrans(){
 
+
 	cron.schedule('*/1 * * * *', function(){
 	     console.log("running trans");
 
@@ -235,6 +236,11 @@ module.exports = {
   },
 
   vestingPeroid(){
+
+  	var today  = new Date();
+    var next   = today.setDate(today.getDate() + 30);
+
+    console.log(today, next);
   	    
    var  ico_tokens  = '',
         pre_ico_tokens = '',

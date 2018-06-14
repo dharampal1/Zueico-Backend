@@ -28,6 +28,9 @@ router.post('/remainingCoins', adminAuthenticate, adminController.remainingCoins
 // approve Kyc 
 router.post('/kyc/approve', adminAuthenticate, adminController.approveKyc);
 
+// add Start date of vesting 
+router.post('/addVestingDate', adminAuthenticate, adminController.addVestingDate);
+
 // get contract  
 router.post('/getContract', adminAuthenticate, adminController.getContracts);
 

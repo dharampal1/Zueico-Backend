@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import request from 'request';
-import { User, Admin, Setting, BuyToken, TokenTransfer } from '../models';
+import { User, Admin, Setting, BuyToken, TokenTransfer, VestingPeriod } from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
 import config from './../config/environment';
@@ -418,6 +418,37 @@ module.exports = {
   	  		message:err.message
   	  	})
      });   
+    },
+
+    addVestingDate(req, res, next) {
+    	var user_id = req.body.user_id;
+    	var vesting_period_date = req.body.startDate;
+
+    	User.update({
+    		vesting_period_date
+    	},
+    	{
+    		where: { user_id }
+    	})
+    	.then(data => {
+    		if(data){
+    			res.status(200).json({
+		  	  		status:true,
+		  	  		message:"Vesting Start date added"
+		  	  	})
+    		} else {
+    			res.status(404).json({
+		  	  		status:false,
+		  	  		message:'No user Found'
+		  	  })
+    		}
+    	})
+    	.catch(err => {
+    		res.status(500).json({
+  	  		status:false,
+  	  		message:err.message
+  	      });
+    	});
     }
 }
 
