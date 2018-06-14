@@ -28,18 +28,17 @@ router.post('/remainingCoins', adminAuthenticate, adminController.remainingCoins
 // approve Kyc 
 router.post('/kyc/approve', adminAuthenticate, adminController.approveKyc);
 
+// get contract  
+router.post('/getContract', adminAuthenticate, adminController.getContracts);
+
+// update contract  
+router.post('/update/contract', adminAuthenticate, adminController.updateContract);
+
 // reject KYC 
 router.post('/kyc/reject', adminAuthenticate, adminController.rejectKyc);
 
-
 // get stats for eth , usd and btc raised
 router.post('/contribuationStatistics', adminAuthenticate, btcController.contribuationStatistics);
-
-// get BTC contribution 
-router.post('/contribution/BTC', adminAuthenticate, adminController.btcContribution);
-
-// get ETH contribution 
-router.post('/contribution/ETH', adminAuthenticate, adminController.ethContribution);
 
 // get ETH contribution 
 router.post('/vesting', adminAuthenticate, btcController.vestingInit);

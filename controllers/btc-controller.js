@@ -43,7 +43,7 @@ module.exports = {
 
                 ethervalue = (1 / usd) * 0.60,
                 btcvalue = ethervalue * btc,
-                usdvalue = usd,
+                usdvalue = usd * 0.60,
                 data = {
                   ethervalue,
                   btcvalue,
@@ -131,6 +131,8 @@ module.exports = {
                      var setvalue = ethervalue * 10**18;
 
                       sale_contract.setPrice(setvalue);
+
+
 
                        res.status(200).json({
                         status:true,

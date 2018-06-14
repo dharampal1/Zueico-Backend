@@ -322,17 +322,6 @@ module.exports = {
 	 })
 		
 	},
-
-
-	btcContribution(req, res, next){
-   
-		
-	},
-
-    ethContribution(req, res, next){
-
-    },
-
     totalCoins(req, res, next) {
     	sumOfBoughtTokens()
     	 .then(data => {
@@ -369,6 +358,66 @@ module.exports = {
   	  		message:err.message
   	  	})
      });   
+    },
+
+    getContracts(req, res, next){
+    	var id = req.id;
+    	Admin.findOne({
+    		where:{ id },
+    		attributes: ['id','contract'],
+    	})
+    	 .then(data => {
+    	 	if(data){
+	         	res.status(200).json({
+	  	  		status:true,
+	  	  		message:"Your Contact",
+	  	  		data
+  	     	  });
+	        } else {
+	        	res.status(404).json({
+	  	  		status:false,
+	  	  		message:"No contract found",
+    	      });
+	        }
+	     })
+    	 .catch(err => {
+    	 	res.status(500).json({
+  	  		status:false,
+  	  		message:err.message
+  	  	})
+     });   
+    },
+
+    updateContract(req, res, next){
+    	var id = req.id;
+    	var contract = req.body.contract;
+
+    	Admin.update({
+    		contract
+    	},
+    	{
+    		where:{ id }
+    	})
+    	 .then(data => {
+    	 	if(data){
+	         	res.status(200).json({
+	  	  		status:true,
+	  	  		message:"Update contract",
+	  	  		data
+  	     	  });
+	        } else {
+	        	res.status(404).json({
+	  	  		status:false,
+	  	  		message:"No contract found",
+    	      });
+	        }
+	     })
+    	 .catch(err => {
+    	 	res.status(500).json({
+  	  		status:false,
+  	  		message:err.message
+  	  	})
+     });   
     }
 }
 
@@ -378,13 +427,13 @@ function approveAddress(body){
 	  	 	if(err){
 	  	 	  reject(err)
 	  	 	} else {
-	  	 		resolve({
-  	 				isValid:true,
-  		 			body
-  	 			})
-	  	 	}
-	});
-  }));
+	 		resolve({
+ 				isValid:true,
+	 			body
+ 			})
+	  	 }
+	  });
+   }));
 }
 
 function sumOfBoughtTokens() {
