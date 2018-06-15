@@ -618,6 +618,144 @@ module.exports = {
     		message:err.message
     	 });
       })
+    },
+    totalBTCOrders(req, res, next){
+ 		var user_id = req.userId ;
+
+    	BuyToken.findAll({
+    		where: { user_id , walletMethod:'BTC'}
+    	})
+    	.then( data => {
+    		if(data.length) {
+    			
+    			User.findOne({
+    				where: { id: user_id }
+    			})
+    			.then(data1 => {
+
+    				var tokens = data.map(token => {
+		    		var data = {
+		    			tokens  : token.tokens,
+		    			method  : token.walletMethod,
+		    			date  :  token.createdAt,
+		    			price :  token.amount,
+		    			status: token.buyStatus,
+		    			comment:data1.comments
+		    		 };
+		    			return data;
+		    		});
+    				
+    				res.status(200).json({
+		    		status:true,
+		    		message:"All BTC Orders",
+		    		data:tokens
+		    	 });
+    		  })
+    		} else {
+    		 res.status(404).json({
+	    		status:false,
+	    		message:'no data found'
+	    	 });
+    		}
+    	})
+    	.catch(err => {
+    	  res.status(500).json({
+    		status:false,
+    		message:err.meesage
+    	 });
+      })   		
+    },
+    totalETHOrders(req, res, next){
+		var user_id = req.userId ;
+
+    	BuyToken.findAll({
+    		where: { user_id, walletMethod:'ETH' }
+    	})
+    	.then( data => {
+    		if(data.length) {
+    			
+    			User.findOne({
+    				where: { id: user_id }
+    			})
+    			.then(data1 => {
+
+    				var tokens = data.map(token => {
+		    		var data = {
+		    			tokens  : token.tokens,
+		    			method  : token.walletMethod,
+		    			date  :  token.createdAt,
+		    			price :  token.amount,
+		    			status: token.buyStatus,
+		    			comment:data1.comments,
+		    		 };
+		    			return data;
+		    		});
+    				
+    				res.status(200).json({
+		    		status:true,
+		    		message:"All ETH Orders",
+		    		data:tokens
+		    	 });
+    		  })
+    		} else {
+    		 res.status(404).json({
+	    		status:false,
+	    		message:'no data found'
+	    	 });
+    		}
+    	})
+    	.catch(err => {
+    	  res.status(500).json({
+    		status:false,
+    		message:err.meesage
+    	 });
+      })	
+    },
+    totalUSDOrders(req, res, next){
+		var user_id = req.userId ;
+
+    	BuyToken.findAll({
+    		where: { user_id,walletMethod:'USD' }
+    	})
+    	.then( data => {
+    		if(data.length) {
+    			
+    			User.findOne({
+    				where: { id: user_id }
+    			})
+    			.then(data1 => {
+
+    				var tokens = data.map(token => {
+		    		var data = {
+		    			tokens  : token.tokens,
+		    			method  : token.walletMethod,
+		    			date  :  token.createdAt,
+		    			price :  token.amount,
+		    			status: token.buyStatus,
+		    			comment:data1.comments,
+		    		 };
+		    			return data;
+		    		});
+    				
+    				res.status(200).json({
+		    		status:true,
+		    		message:"All USD Orders",
+		    		data:tokens
+		    	 });
+    		  })
+    		} else {
+    		 res.status(404).json({
+	    		status:false,
+	    		message:'no data found'
+	    	 });
+    		}
+    	})
+    	.catch(err => {
+    	  res.status(500).json({
+    		status:false,
+    		message:err.meesage
+    	 });
+      })
     }
 }
 

@@ -46,7 +46,8 @@ function  getCurrentStats(socket) {
      axios.get(`${api_url}/getICOstats`)
       .then(response => {
         if(response.status === 200){
-          socket.emit("currentStats", res.data.data); // Emitting a new stats.
+         
+          socket.emit("currentStats", response.data.data); // Emitting a new stats.
         } 
       })
       .catch(err => {

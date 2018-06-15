@@ -60,11 +60,20 @@ router.post('/getTransferdTokens', authenticate, tokenController.getTransferdTok
 // total orders
 router.post('/totalOrders', authenticate, tokenController.totalOrders);
 
+// total orders
+router.post('/orders/BTC', authenticate, tokenController.totalBTCOrders);
+
+// total orders
+router.post('/orders/ETH', authenticate, tokenController.totalETHOrders);
+
+// total orders
+router.post('/orders/USD', authenticate, tokenController.totalUSDOrders);
+
 // // place order BTC
 // router.post('/buyToken', authenticate, tokenController.buyToken);
 
 // 
-router.post('/tokenTranfer', authenticate, tokenController.tokenTranfer);
+router.post('/tokenTransfer', authenticate, tokenController.tokenTranfer);
 
 //  tokenTranfer
 router.post('/getTokenDetails', authenticate, tokenController.getTokenDetails);
