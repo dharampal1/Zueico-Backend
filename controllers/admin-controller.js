@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import request from 'request';
 import { User, Admin, Setting, BuyToken, 
-	     TokenTransfer, VestingPeriod ,VestingTimes, VestingAddressDetails} from '../models';
+	     TokenTransfer, VestingPeriod ,VestingTimes} from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
 import config from './../config/environment';
@@ -168,64 +168,61 @@ module.exports = {
 	 },
 
 	approveKyc(req, res, next) {
-		var user_id  = req.body.user_id,
-		    status = req.body.status;
+		var user_id  = req.body.user_id;
 
-		User.findOne({
-            where: {
-              id:user_id
-            }
-        })
-        .then(data => {
-        	var address = data.ethWalletAddress;
-        	if(address){
-        		const body = { address };
-        		approveAddress(body).then(address=>{
-        			if(address.isValid === true ){
-						 User.update({
-							status:'Pending'
-						 },{
-							where : { id : user_id }
-						 },{
-						 	returning:true, 
-						 	plain:true
-						 })
-						  .then(data => {
-						  	  if(data){
-						  	  	res.status(200).json({
-						  	  		status:true,
-						  	  		message:"Kyc Approved but it Takes Time",
-						  	  		data: address.body
-						  	  	});
-						  	  } else {
-						  	  	res.status(404).json({
-						  	  		status:false,
-						  	  		message:"No user Found"
-						  	  	});
-						  	  }
-						  })
-						  .catch(err => {
-						  	res.status(500).json({
-						  	  		status:false,
-						  	  		message:err.message
-						  	  	})
-						  });
-        			} 
-        		})
-        		 .catch(err => {
-				  	res.status(500).json({
-				  	  		status:false,
-				  	  		message:err.message
-				  	  	})
-				  });
-        	}
-        })
-        .catch(err => {
-            res.status(500).json({
-              status:false,
-              message: err.message
-            });
-        });
+	      User.findOne({
+	     	where:{ id:user_id }
+	       })
+	       .then(data => {
+	       	  	if(data) {
+	      	  
+	       	  	var address = data.ethWalletAddress;
+	       	  	const body = { address };
+
+			     request.post({url:`${url}/approveAddress`,form:body },function(err,httpResponse,body){
+			  	 	if(err){
+			  	 	 console.log(err);
+			  	 	} else {
+
+			  	 	  let result = JSON.parse(body);
+
+			  	 	  var walletHash = result.data;
+
+			          if(result.status === true){
+			  	 		User.update({
+			  	 			walletHash
+			  	 		},{
+			  	 			where: { id : data.id}
+			  	 		})
+			  	 		.then(user => {
+			  	 			res.status(200).json({
+					  	  		status:true,
+					  	  		message:result.message
+					  	  });
+			  	 		})
+			  	 		.catch(err => {
+			  	 			res.status(500).json({
+					  	  		status:false,
+					  	  		message:err.message
+					  	  });
+			  	 		});
+			  	 	  }
+			  	 	}
+			    });
+			 
+	       	  } else {
+	       	  	res.status(404).json({
+		  	  		status:false,
+		  	  		message:"No user Found"
+		  	  });
+	       	  }
+	       })
+	       .catch(err => {
+	       	  res.status(500).json({
+		  	  		status:false,
+		  	  		message:err.message
+		  	  });
+	     });
 	 },
 
 	rejectKyc(req, res, next) {
@@ -450,7 +447,7 @@ module.exports = {
 	newVestingTimes.save()
     .then(data1 => {
 	  if(data1){
-	    User.findAll({})
+	    User.findAll({where:{previlege:'1'}})
 	  	  .then((users,i) => {
 	  	   if(users.length){ 
 			VestingPeriod.findAll({})
@@ -471,12 +468,11 @@ module.exports = {
 				          });
 				        } else {
 
-				        let result = JSON.parse(body),
-				            vestHash = result.data,
-				            newVestDetail = new VestingAddressDetails({
-				            	vestHash
-				            })
-				            newVestDetail.save()
+				        let result = JSON.parse(body);
+				        
+				            VestingPeriod.update({
+				            	vestHash:result.data
+				            },{where:{id : vester.id}})
 				            .then(data => {
 				            	if(data){
 				            	  if(i === users.length + 1 ){

@@ -38,6 +38,14 @@ module.exports = {
       remaining_tokens:{
         type:Sequelize.STRING
       },
+      vestHash: {
+         type:Sequelize.STRING
+       },
+      vestStatus: {
+         allowNull: false,
+         defaultValue:'Pending',
+         type:Sequelize.ENUM('Pending','Success','Failed')
+       },
       vesting_period_date:{
         type:Sequelize.STRING
       },

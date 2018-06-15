@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     mobileNumber:  DataTypes.STRING,
     participationAmount: DataTypes.INTEGER,
     image: DataTypes.STRING,
-    status: DataTypes.ENUM('0','1','2'),
+    status: DataTypes.ENUM('Pending','Success','Failed'),
     gender: DataTypes.STRING,
     dob: DataTypes.STRING,
     country: DataTypes.STRING,
@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
          type: DataTypes.BOOLEAN,
          defaultValue:false
     },
+    walletHash:DataTypes.STRING,
     purchaseToken: DataTypes.STRING,
     tokenPassword:DataTypes.STRING,
     keystore:DataTypes.JSON,

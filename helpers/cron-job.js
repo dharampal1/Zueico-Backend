@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import request from 'request';
-import { User, btc_transaction , BuyToken, TokenTransfer , VestingAddressDetails} from '../models';
+import { User, btc_transaction , BuyToken, TokenTransfer, VestingPeriod,VestingTimes } from '../models';
 
 const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
 const btc_url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
@@ -101,49 +101,47 @@ module.exports = {
 	  });
     });	  
   },
-   
- approveAddress(){
-	cron.schedule('*/1 * * * *', function(){
-	     console.log("running approve");
 
-	     User.findAll({
+   checkTxHashWallet(){
+	cron.schedule('*/1 * * * *', function(){
+	     console.log("running wallet");
+
+	    User.findAll({
 	     	where:{ status:'Pending' }
 	     })
-	       .then(data => {
-	       	  	if(data.length) {
+	      .then(data => {
+	      	  if(data.length) {
 	      	  	data.map(data1 => {
+	      	  	 var walletHash = data1.walletHash;
+	      	  	 const body = { txhash:walletHash };
+				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	console.log(result);
+			        	if(result.status === true) {
 
-	       	  	var address = data1.ethWalletAddress;
-	       	  	const body = { address };
-
-			     request.post({url:`${url}/approveAddress`,form:body },function(err,httpResponse,body){
-			  	 	if(err){
-			  	 	 console.log(err);
-			  	 	} else {
-
-			  	 	  let result = JSON.parse(body);
-
-			          if(result.status === true){
-			  	 		User.update({
-			  	 			status:result.data
-			  	 		},{
-			  	 			where: { id : data1.id}
-			  	 		})
-			  	 		.then(user => {
-			  	 			console.log("user updated");
-			  	 		})
-			  	 		.catch(err => {
-			  	 			console.log(err);
-			  	 		});
-			  	 	  }
-			  	 	}
-			    });
-			   });
-	       	  }
-	       })
-	       .catch(err => {
-	       	  console.log(err);
-	       })
+			        	User.update({
+			        		status:result.data
+			        	},{
+			        		where: { id : data1.id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated user");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			          }
+			        }
+	      	    });
+	      	 });
+			}
+	      })
+	      .catch(err => {
+	      	console.log(err);
+	      })
 	});
   },
 
@@ -238,8 +236,8 @@ module.exports = {
   	cron.schedule('*/1 * * * *', function(){
 	     console.log("running vest");
 
-	   VestingAddressDetails.findAll({
-	     	where:{ status:'Pending' }
+	   VestingPeriod.findAll({
+	     	where:{ vestStatus:'Pending' }
 	     })
 	    .then(data => {
 		  if(data.length) {
@@ -251,11 +249,10 @@ module.exports = {
 			          console.log(err);
 			        } else {
 			        	let result = JSON.parse(body);
-			        	console.log(result);
 			        	if(result.status === true) {
 
-			        	VestingAddressDetails.update({
-			        		status:result.data
+			        	VestingPeriod.update({
+			        		vestStatus:result.data
 			        	},{
 			        		where: { id : data1.id}
 			        	})
@@ -277,27 +274,66 @@ module.exports = {
 	});
   	    
    },
+ 
+
+  //  manageVestCron(){
+  //  	cron.schedule('*/1 * *', function(){
+	 //     console.log("running vest times");
+
+	 //     VestingTimes.findOne({
+	 //     	where:{ }
+	 //     })
+
+	 // }
+
+  //  },
+
 
    vestingReleaseToken(){
 
-   	var schedule = require('node-schedule');
-	var date = new Date(2012, 11, 21, 5, 30, 0);
+   //	var schedule = require('node-schedule');
+	// var date = new Date(2012, 11, 21, 5, 30, 0);
 	 
-	var j = schedule.scheduleJob(date, function(){
-	  console.log('The world is going to end today.');
-	});
+	// var j = schedule.scheduleJob(date, function(){
+	//   console.log('The world is going to end today.');
+	// });
     
-    // User.findAll({}){
 
-    // }
+    User.findAll({where:{previlege:'1'}})
+	    .then((users,i) => {
+	  	if(users.length){ 
+	  		users.map(user => {
+	  			var vestingAddress = user.ethWalletAddress;
 
-//    	  cronjob every vestTime1, vestTime2, vestTime3, vestTime4
-// LOOP in
-// vestingAddress == privelage user wallet address fetched from user table
-// HIT releaseVestedTokens{vestingAddress} => hash    //insert DB hash and status as pending
+	  			 const body = { vestingAddress };
 
-   }
+				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
 
- 
+			        	VestingTimes.update({
+			        		vestHash:result.data.txhash
+			        	},{
+			        		where: { id : data1.id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			         }
+			       } 
+			    });
+	  		});
+	  	}
+    })
+    .catch(err => {
+   	  console.log(err);
+    })	    
+  }
 
 }

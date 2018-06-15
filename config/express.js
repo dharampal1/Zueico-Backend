@@ -9,7 +9,7 @@ import path   from 'path';
 import cors from 'cors';
 import {
   BTC_Tranctions,
-  approveAddress,
+  checkTxHashWallet,
   checkTxHashBuy,
   checkTxHashTrans
 } from '../helpers/cron-job';
@@ -35,7 +35,7 @@ const initApp = function () {
       
 
     BTC_Tranctions();
-    approveAddress();
+    checkTxHashWallet();
     checkTxHashBuy();
     checkTxHashTrans();
   
