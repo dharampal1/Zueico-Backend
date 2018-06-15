@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize';
 import request from 'request';
-import { User, Admin, Setting, BuyToken, TokenTransfer, VestingPeriod } from '../models';
+import { User, Admin, Setting, BuyToken, 
+	     TokenTransfer, VestingPeriod ,VestingTimes, VestingAddressDetails} from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
 import config from './../config/environment';
@@ -421,35 +422,127 @@ module.exports = {
     },
 
     addVestingDate(req, res, next) {
-    	var user_id = req.body.user_id;
-    	var vesting_period_date = req.body.startDate;
+    // var user_id = req.body.user_id;
+	 var vesting_period_date = req.body.vesting_period_date,
+	     startTime  = new Date(vesting_period_date),
+  	     vestTime1   = startTime.setDate(startTime.getDate() + 30),
+  	     time1  = new Date(vestTime1),
+         vestTime2   = time1.setDate(time1.getDate() + 30),
+         time2 = new Date(vestTime2),
+  	     vestTime3   = time2.setDate(time2.getDate() + 30),
+         time3 = new Date(vestTime3),
+         endTime = time3.setDate(time3.getDate() + 30),
+         vestingAddress = '',
+         tokenValue = '';
 
-    	User.update({
+     VestingPeriod.update({
     		vesting_period_date
-    	},
-    	{
-    		where: { user_id }
     	})
     	.then(data => {
     		if(data){
-    			res.status(200).json({
-		  	  		status:true,
-		  	  		message:"Vesting Start date added"
-		  	  	})
-    		} else {
-    			res.status(404).json({
+		var newVestingTimes = new VestingTimes({
+			vestTime1,
+			vestTime2,
+			vestTime3,
+			endTime
+		});
+
+	newVestingTimes.save()
+    .then(data1 => {
+	  if(data1){
+	    User.findAll({})
+	  	  .then((users,i) => {
+	  	   if(users.length){ 
+			VestingPeriod.findAll({})
+			  .then(vest => {
+			  	 if(vest.length){
+			  	  vest.map(vester => {
+			  	  	tokenValue = vester.pre_ico_tokens;
+			  	    users.map(user => {
+	  	    		 vestingAddress = user.ethWalletAddress;
+
+	  	    		 const body = {vestingAddress, tokenValue, startTime, vestTime1, vestTime2, vestTime3, endTime};	
+
+					 request.post({url:`${url}/setVestingAddressDetails`,form:body},function(err,httpResponse,body ){
+				        if(err){
+				          return res.status(500).json({
+				            status:false,
+				            message:err.message
+				          });
+				        } else {
+
+				        let result = JSON.parse(body),
+				            vestHash = result.data,
+				            newVestDetail = new VestingAddressDetails({
+				            	vestHash
+				            })
+				            newVestDetail.save()
+				            .then(data => {
+				            	if(data){
+				            	  if(i === users.length + 1 ){
+				            	   res.status(200).json({
+						  	  		 status:true,
+						  	  		 message:'vesting Date Stored'
+						  	  	   });
+				            	 }
+				            	} else {
+				            	res.status(404).json({
+						  	  		status:false,
+						  	  		message:'NO vest Deatil Stored'
+						  	  	});
+				               }
+				            })
+				         }
+				      });
+	  	    		});
+	  	    	  });
+			  	 } else {
+			  	 	res.status(404).json({
+			  	  		status:false,
+			  	  		message:'No Data Found'
+				  	});
+			  	 }
+			  })
+	    	} else {
+	    		res.status(404).json({
 		  	  		status:false,
-		  	  		message:'No user Found'
-		  	  })
-    		}
-    	})
-    	.catch(err => {
+		  	  		message:'No Data Found'
+			  	});
+	    	 }
+	  	   })
+	  	   .catch(err => {
+	  	   	 res.status(500).json({
+	  	  		status:false,
+	  	  		message:err.message
+	         });
+	  	   })
+		 } else {
+		 		res.status(404).json({
+		  	  		status:false,
+		  	  		message:'No Data Found'
+			  	 });
+		 	}
+		 })
+		 .catch(err => {
     		res.status(500).json({
   	  		status:false,
   	  		message:err.message
   	      });
     	});
-    }
+	} else {
+		res.status(404).json({
+  	  		status:false,
+  	  		message:'No Data Found'
+  	  })
+	}
+   })
+	.catch(err => {
+		res.status(500).json({
+	  		status:false,
+	  		message:err.message
+	      });
+	});
+   }
 }
 
 function approveAddress(body){

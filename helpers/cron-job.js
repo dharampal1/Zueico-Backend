@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import request from 'request';
-import { User, btc_transaction , BuyToken, TokenTransfer } from '../models';
+import { User, btc_transaction , BuyToken, TokenTransfer , VestingAddressDetails} from '../models';
 
 const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
 const btc_url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
@@ -158,7 +158,7 @@ module.exports = {
 	      	  if(data.length) {
 	      	  	data.map(data1 => {
 	      	  	 var buyHash = data1.buyHash;
-	      	  	 const body = { buyHash };
+	      	  	 const body = { txhash:buyHash };
 				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
 			        if(err){
 			          console.log(err);
@@ -192,7 +192,6 @@ module.exports = {
 
   checkTxHashTrans(){
 
-
 	cron.schedule('*/1 * * * *', function(){
 	     console.log("running trans");
 
@@ -203,7 +202,7 @@ module.exports = {
 		  if(data.length) {
 	      	  	data.map(data1 => {
 	      	  	  var transHash = data1.transHash;
-		          const body = { transHash };
+		          const body = { txhash:transHash };
 				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
 			        if(err){
 			          console.log(err);
@@ -235,48 +234,70 @@ module.exports = {
 	});
   },
 
-  vestingPeroid(){
+  vestingHashStatus(){
+  	cron.schedule('*/1 * * * *', function(){
+	     console.log("running vest");
 
-  	var today  = new Date();
-    var next   = today.setDate(today.getDate() + 30);
+	   VestingAddressDetails.findAll({
+	     	where:{ status:'Pending' }
+	     })
+	    .then(data => {
+		  if(data.length) {
+	      	  	data.map(data1 => {
+	      	  	  var vestHash = data1.vestHash;
+		          const body = { txhash:vestHash };
+				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	console.log(result);
+			        	if(result.status === true) {
 
-    console.log(today, next);
+			        	VestingAddressDetails.update({
+			        		status:result.data
+			        	},{
+			        		where: { id : data1.id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			          }
+			        }
+	      	    });
+	      	 });
+			}
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	});
   	    
-   var  ico_tokens  = '',
-        pre_ico_tokens = '',
-        name = '',
-        email = '',
-        phone = '',
-        total_purchase = '',
-        vesting_period = 0,
-        country = '',
-        vested_tokens = '',
-        remaining_tokens = '',
-        vesting_period_date = '';
+   },
 
-        var new_vesting = new VestingPeriod({
-            ico_tokens,
-            pre_ico_tokens,
-            name,
-            email,
-            phone,
-            total_purchase,
-            vesting_period,
-            country,
-            vested_tokens,
-            remaining_tokens,
-            vesting_period_date,
-        });
+   vestingReleaseToken(){
 
-        new_vesting.save()
-          .then(data => {
-             if(data){
-              console.log('vesting saved');
-             }
-          })
-          .catch(err => {
-            console.log(err);
-          });
-  }
+   	var schedule = require('node-schedule');
+	var date = new Date(2012, 11, 21, 5, 30, 0);
+	 
+	var j = schedule.scheduleJob(date, function(){
+	  console.log('The world is going to end today.');
+	});
+    
+    // User.findAll({}){
+
+    // }
+
+//    	  cronjob every vestTime1, vestTime2, vestTime3, vestTime4
+// LOOP in
+// vestingAddress == privelage user wallet address fetched from user table
+// HIT releaseVestedTokens{vestingAddress} => hash    //insert DB hash and status as pending
+
+   }
+
+ 
 
 }

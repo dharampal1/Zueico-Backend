@@ -60,8 +60,8 @@ router.post('/getTransferdTokens', authenticate, tokenController.getTransferdTok
 // total orders
 router.post('/totalOrders', authenticate, tokenController.totalOrders);
 
-// place order BTC
-router.post('/buyToken', authenticate, tokenController.buyToken);
+// // place order BTC
+// router.post('/buyToken', authenticate, tokenController.buyToken);
 
 // 
 router.post('/tokenTranfer', authenticate, tokenController.tokenTranfer);

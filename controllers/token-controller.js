@@ -143,73 +143,73 @@ module.exports = {
       })
     },
 
-	buyToken(req, res, next) {
+	// buyToken(req, res, next) {
 	 
-	  var  walletMethod = req.body.walletMethod,
-		   amount = req.body.amount,
-		   tokens = req.body.tokens,
-	       user_id = req.userId,
-	       txhash = '',
-           status = '',
-           userAddress = '',
-	       mainValues = [walletMethod, amount, tokens];
+	//   var  walletMethod = req.body.walletMethod,
+	// 	   amount = req.body.amount,
+	// 	   tokens = req.body.tokens,
+	//        user_id = req.userId,
+	//        txhash = '',
+ //           status = '',
+ //           userAddress = '',
+	//        mainValues = [walletMethod, amount, tokens];
 
-	   if(checkBlank(mainValues) === 0 ){
+	//    if(checkBlank(mainValues) === 0 ){
 
-	   	User.findOne({
-	   		where:{id:user_id}
-	   	})
-	   	.then(user =>{
-	   		if(user){
-	   		    userAddress = user.ethWalletAddress;
-	   		var new_token = new BuyToken({
-	   	    	walletMethod,
-				amount,
-				tokens,
-				user_id,
-				txhash,
-				status,
-				userAddress
-	   	    });
+	//    	User.findOne({
+	//    		where:{id:user_id}
+	//    	})
+	//    	.then(user =>{
+	//    		if(user){
+	//    		    userAddress = user.ethWalletAddress;
+	//    		var new_token = new BuyToken({
+	//    	    	walletMethod,
+	// 			amount,
+	// 			tokens,
+	// 			user_id,
+	// 			txhash,
+	// 			status,
+	// 			userAddress
+	//    	    });
 
-	   		new_token.save()
-	   		 .then(data => {
-	   		 	if(data) {
-	   		 	  res.status(200).json({
-		    		status:true,
-		    		message:"order Placed successfully",
-		    		data
-		    	});	
-	   		 	}
-	   		 })
-	   		 .catch(err => {
-	   		 	res.status(500).json({
-		    		status:false,
-		    		message:err.message
-		    	});
-	   		 })
-	   		} else {
-	   			 res.status(404).json({
-		    		status:false,
-		    		message:"No user Found",
-		    	});	
-	   		}
-	   	})
-	   	.catch(err =>{
-	   		 res.status(500).json({
-		    		status:false,
-		    		message:err.message,
-		    	});	
-	   	});
+	//    		new_token.save()
+	//    		 .then(data => {
+	//    		 	if(data) {
+	//    		 	  res.status(200).json({
+	// 	    		status:true,
+	// 	    		message:"order Placed successfully",
+	// 	    		data
+	// 	    	});	
+	//    		 	}
+	//    		 })
+	//    		 .catch(err => {
+	//    		 	res.status(500).json({
+	// 	    		status:false,
+	// 	    		message:err.message
+	// 	    	});
+	//    		 })
+	//    		} else {
+	//    			 res.status(404).json({
+	// 	    		status:false,
+	// 	    		message:"No user Found",
+	// 	    	});	
+	//    		}
+	//    	})
+	//    	.catch(err =>{
+	//    		 res.status(500).json({
+	// 	    		status:false,
+	// 	    		message:err.message,
+	// 	    	});	
+	//    	});
 	   	   
-        } else {
-        	res.status(422).json({
-    		status:false,
-    		message:"walletMethod, amount, tokens, are required"
-    	});
-       }
+ //        } else {
+ //        	res.status(422).json({
+ //    		status:false,
+ //    		message:"walletMethod, amount, tokens, are required"
+ //    	});
+ //       }
 	
-	},
+	// },
 
 	tokenTranfer(req, res, next) {
 

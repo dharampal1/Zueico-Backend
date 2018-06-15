@@ -45,9 +45,9 @@ module.exports = {
                 btcvalue = ethervalue * btc,
                 usdvalue = 0.60,
                 data = {
-                  ethervalue,
-                  btcvalue,
-                  usdvalue
+                  ethervalue:ethervalue.toString(),
+                  btcvalue:btcvalue.toString(),
+                  usdvalue:usdvalue.toString()
                 };
 
            res.status(200).json({
@@ -77,14 +77,14 @@ module.exports = {
                 btc_raised = eth_raised * btc,
                 usd_raised = eth_raised * usd,
                 data = {
-                  eth_raised,
-                  btc_raised,
-                  usd_raised
+                  eth_raised:eth_raised.toString(),
+                  btc_raised:btc_raised.toString(),
+                  usd_raised:usd_raised.toString()
                 };
 
            res.status(200).json({
             status:true,
-            message:"current BTC and USD",
+            message:"Rise in BTC and USD and ETH",
             data
           }); 
         }   
