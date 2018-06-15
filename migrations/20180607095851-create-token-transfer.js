@@ -24,12 +24,12 @@ module.exports = {
       totalTokens:{
          allowNull: false,
          defaultValue:0.0,
-         type: Sequelize.DECIMAL(30,30)
+         type: Sequelize.DECIMAL(60,20)
       },
       fromToken:{
          allowNull: false,
          defaultValue:0.0,
-         type: Sequelize.DECIMAL(10, 10) 
+         type: Sequelize.DECIMAL(60,20)
       },
       transHash:{
          allowNull: false,
@@ -44,7 +44,7 @@ module.exports = {
       toToken:{
          allowNull: false,
          defaultValue:0.0,
-         type: Sequelize.DECIMAL(10, 10) 
+         type: Sequelize.DECIMAL(60,20)
       },
       createdAt: {
         allowNull: false,

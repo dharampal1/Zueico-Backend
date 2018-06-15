@@ -131,7 +131,7 @@ module.exports = {
 			        		console.log("updated user");
 			        	})
 			        	.catch(err => {
-			        		console.log(err);
+			        		console.log(err,"wallet");
 			        	})
 			          }
 			        }
@@ -174,7 +174,7 @@ module.exports = {
 			        		console.log("updated");
 			        	})
 			        	.catch(err => {
-			        		console.log(err);
+			        		console.log(err,"buy");
 			        	})
 			          }
 			        }
@@ -218,7 +218,7 @@ module.exports = {
 			        		console.log("updated");
 			        	})
 			        	.catch(err => {
-			        		console.log(err);
+			        		console.log(err,"trans");
 			        	})
 			          }
 			        }
@@ -286,25 +286,28 @@ module.exports = {
 	       .then(data => {
 	       	  data.map(data1 => {
 	       	  	console.log(data);
-	       	  	  if(data1 === date){
+	       	  	  if(data1.vetingTime1 === date){
+	       	  	  	vestingReleaseToken(date);
+	       	  	  } else if(data1.vetingTime2 === date){
+	       	  	  	console.log(data1);
+	       	  	  } else if (data1.vetingTime3 === date){
+	       	  	  	console.log(data1);
+	       	  	  } else {
 	       	  	  	console.log(data1);
 	       	  	  }
 	       	  })
 	       })
 	 });
-
    },
 
-   vestingReleaseToken(){
+   vestingReleaseToken(date){
 
    	var schedule = require('node-schedule');
 
-	var date = new Date().getTime();
+	var date = new Date(date).getTime();
 
 	 
 	var j = schedule.scheduleJob(date, function(){
-	  console.log('The world is going to end today.');
-	});
     
 
     User.findAll({where:{previlege:'1'}})
@@ -323,7 +326,7 @@ module.exports = {
 			        	if(result.status === true) {
 
 			        	VestingTimes.update({
-			        		vestHash:result.data.data
+			        		vestTimeHash1:result.data
 			        	},{
 			        		where: { id : data1.id}
 			        	})
@@ -341,7 +344,8 @@ module.exports = {
     })
     .catch(err => {
    	  console.log(err);
-    })	    
+    })	  
+    });  
   }
 
 }

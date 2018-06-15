@@ -3,8 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   var BuyToken = sequelize.define('BuyToken', {
   	user_id:  DataTypes.INTEGER,
     walletMethod: DataTypes.STRING,
-    amount: DataTypes.INTEGER,
-    tokens: DataTypes.DECIMAL(10,10),
+    amount: DataTypes.DECIMAL(60,20),
+    tokens: DataTypes.DECIMAL(60,20),
     buyHash: DataTypes.STRING,
     buyStatus: DataTypes.ENUM('Pending','Success','Failed'),
     userAddress:DataTypes.STRING

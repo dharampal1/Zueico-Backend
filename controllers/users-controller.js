@@ -266,15 +266,12 @@ module.exports = {
       } else {
         User.findOne({
             where: {
-              [Op.and]: [{
                 email
-              }, {
-                emailVerified: 1
-              }]
             }
           })
           .then(data => {
             if (data) {
+              if(data.emailVerified === 1){
               verifyPassword(password, data)
                 .then(result => {
                   if (result.isValid === true) {
@@ -303,6 +300,12 @@ module.exports = {
               res.status(404).json({
                 status:false,
                 message: 'Email is not varified'
+              });
+            }
+            } else {
+              res.status(404).json({
+                status:false,
+                message: 'No user Found, Please check you Email'
               });
             }
           })
@@ -838,9 +841,9 @@ module.exports = {
         .then(result => {          
            var new_token = new BuyToken({
                 walletMethod:'USD',
-                buyHash:result.data.txhash,
-                amount:usdtokenvalue,
-                tokens:result.data.tokens,
+                buyHash:result.data,
+                amount,
+                tokens:usdtokenvalue,
                 user_id
             });
             new_token.save()
