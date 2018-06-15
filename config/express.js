@@ -8,6 +8,7 @@ import logger  from 'morgan';
 import path   from 'path';
 import cors from 'cors';
 import {
+  manageVestCron,
   BTC_Tranctions,
   checkTxHashWallet,
   checkTxHashBuy,
@@ -33,7 +34,7 @@ const initApp = function () {
   // serving static files to the client    
   app.use('/public/uploads', express.static('public/uploads'));
       
-
+    manageVestCron();
     BTC_Tranctions();
     checkTxHashWallet();
     checkTxHashBuy();

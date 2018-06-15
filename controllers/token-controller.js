@@ -182,7 +182,7 @@ module.exports = {
    	   	      toToken = token;
    	   	  	  totalTokens = total.sum;
    	   	  	  fromToken = totalTokens - toToken;
-   	   	  	  transHash = result.txhash;
+   	   	  	  transHash = result.data;
 
 
 	   	   	var new_token = new TokenTransfer({
@@ -394,7 +394,7 @@ module.exports = {
 
 	  	 		if(result.status === true){ 
 						
-	   	   	  	  buyHash = result.txhash;
+	   	   	  	  buyHash = result.data;
 
 		  	 		var new_token = new BuyToken({
 						amount:value,

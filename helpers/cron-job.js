@@ -55,7 +55,7 @@ module.exports = {
 				  	    var newBuy = new BuyToken({
 				  	    	amount:trans.amount,
 				  	    	walletMethod:'BTC',
-				  	    	buyHash:result.txhash,
+				  	    	buyHash:result.data,
 				  	    	user_id:user.id
 				  	    });
 
@@ -276,27 +276,35 @@ module.exports = {
    },
  
 
-  //  manageVestCron(){
-  //  	cron.schedule('*/1 * *', function(){
-	 //     console.log("running vest times");
+   manageVestCron(){
+   	cron.schedule('*/1 * * * *', function(){
+	     console.log("running vest times");
 
-	 //     VestingTimes.findOne({
-	 //     	where:{ }
-	 //     })
+	     var date = new Date().getTime();
 
-	 // }
+	     VestingTimes.findAll({})
+	       .then(data => {
+	       	  data.map(data1 => {
+	       	  	console.log(data);
+	       	  	  if(data1 === date){
+	       	  	  	console.log(data1);
+	       	  	  }
+	       	  })
+	       })
+	 });
 
-  //  },
-
+   },
 
    vestingReleaseToken(){
 
-   //	var schedule = require('node-schedule');
-	// var date = new Date(2012, 11, 21, 5, 30, 0);
+   	var schedule = require('node-schedule');
+
+	var date = new Date().getTime();
+
 	 
-	// var j = schedule.scheduleJob(date, function(){
-	//   console.log('The world is going to end today.');
-	// });
+	var j = schedule.scheduleJob(date, function(){
+	  console.log('The world is going to end today.');
+	});
     
 
     User.findAll({where:{previlege:'1'}})
@@ -315,7 +323,7 @@ module.exports = {
 			        	if(result.status === true) {
 
 			        	VestingTimes.update({
-			        		vestHash:result.data.txhash
+			        		vestHash:result.data.data
 			        	},{
 			        		where: { id : data1.id}
 			        	})
