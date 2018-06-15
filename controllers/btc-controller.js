@@ -2,17 +2,24 @@ var Web3 = require("web3");
 var web3 = new Web3();
 import request from 'request';
 import {Btc_price,VestingPeriod} from '../models';
-import token_abi from './../config/abi.json'
+import token_abi from './../config/token_abi.json'
 import sale_abi from './../config/sale_abi.json'
 import refund_abi from './../config/refund_abi.json'
+import vest_abi from './../config/vest_abi.json'
 import {
   checkBlank
 } from '../helpers/requestHelper';
 
 
-var token_ContractAddress = '0x8b6091f3e23e6bfbcdf255c2895f12ce58629e64';
-var sale_ContractAddress = '0xdb34991aea9bb31b8a2a2758b54f0b49426b6c7f';
-var refund_ContractAddress = '0xf5a84cad55a9d027fcd1c07fa98eb1241002f4d2';
+var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
+var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
+var refund_ContractAddress = '0x89306887d540b9b937814ed36c0c315a8908218d';
+var veting_ContractAddress = '0xc971e6bbdade0a3e2b85aec31d08697ca845b4e7';
+
+// Token: 0x6806a1fb780173323ad41902539e12214ed3d994
+// TokenSale: 0x3164afeadb754210c077b723fb2c32106cf0df65
+// Refund: 0x89306887d540b9b937814ed36c0c315a8908218d
+//TokenVesting: 0xc971e6bbdade0a3e2b85aec31d08697ca845b4e7
 
 var web3 = new Web3(new Web3.providers.HttpProvider("http://13.126.28.220:8899"));
 // web3.eth.defaultAccount = '0x8b6091f3e23e6bfbcdf255c2895f12ce58629e64';
@@ -20,6 +27,7 @@ var web3 = new Web3(new Web3.providers.HttpProvider("http://13.126.28.220:8899")
 var token_contract = web3.eth.contract(token_abi).at(token_ContractAddress);
 var sale_contract = web3.eth.contract(sale_abi).at(sale_ContractAddress);
 var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
+var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
 
 
 module.exports = {

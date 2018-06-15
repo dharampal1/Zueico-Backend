@@ -51,25 +51,6 @@
       "type": "function"
     },
     {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "deposited",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "constant": false,
       "inputs": [
         {
@@ -84,7 +65,12 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "saleAddress",
+          "type": "address"
+        }
+      ],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "constructor"
@@ -147,7 +133,7 @@
     {
       "constant": false,
       "inputs": [],
-      "name": "closeRefunds",
+      "name": "enableRefunds",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -156,7 +142,7 @@
     {
       "constant": false,
       "inputs": [],
-      "name": "enableRefunds",
+      "name": "closeRefunds",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",

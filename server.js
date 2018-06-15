@@ -32,7 +32,7 @@ app.use(session({
 io.on("connection", (socket) => {
   console.log("New client connected");
 
-  //getCurrentStats(socket);
+  getCurrentStats(socket);
   getCurrentIco(socket);
 
   socket.on("disconnect", () => {

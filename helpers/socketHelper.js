@@ -2,7 +2,6 @@ import axios from 'axios';
 import cron from 'node-cron';
 import { User } from '../models'
 const  url = 'http://13.126.28.220:5000';
-const  url1 = 'localhost:4000/api/admin/totalUsersCount';
 
 
  exports.getCurrentIco = function(socket) {

@@ -136,6 +136,20 @@
     {
       "constant": true,
       "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
       "name": "symbol",
       "outputs": [
         {
@@ -217,33 +231,62 @@
       "type": "function"
     },
     {
-      "constant": true,
-      "inputs": [],
-      "name": "Admin",
-      "outputs": [
+      "constant": false,
+      "inputs": [
         {
-          "name": "",
+          "name": "newOwner",
           "type": "address"
         }
       ],
+      "name": "transferOwnership",
+      "outputs": [],
       "payable": false,
-      "stateMutability": "view",
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [
         {
-          "name": "_Admin",
+          "name": "_tokenReserverAccount",
           "type": "address"
         },
         {
-          "name": "_reserveAccount",
+          "name": "_icoReserveAccount",
           "type": "address"
+        },
+        {
+          "name": "_vestingReserveAccount",
+          "type": "address"
+        },
+        {
+          "name": "_icoSupply",
+          "type": "uint256"
+        },
+        {
+          "name": "_vestingSupply",
+          "type": "uint256"
         }
       ],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
     },
     {
       "anonymous": false,

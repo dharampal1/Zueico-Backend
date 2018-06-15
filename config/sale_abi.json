@@ -212,7 +212,7 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "usdRaised",
+      "name": "coinsRemaining",
       "outputs": [
         {
           "name": "",
@@ -285,25 +285,7 @@
       "type": "function"
     },
     {
-      "constant": true,
-      "inputs": [],
-      "name": "Admin",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [
-        {
-          "name": "_Admin",
-          "type": "address"
-        },
         {
           "name": "_tokenAddress",
           "type": "address"
@@ -369,7 +351,7 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
+          "indexed": true,
           "name": "addr",
           "type": "address"
         }
@@ -381,7 +363,7 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
+          "indexed": true,
           "name": "addr",
           "type": "address"
         }
@@ -422,20 +404,6 @@
       "constant": false,
       "inputs": [
         {
-          "name": "_newAdmin",
-          "type": "address"
-        }
-      ],
-      "name": "newAdmin",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
           "name": "user",
           "type": "address"
         }
@@ -455,30 +423,11 @@
       "constant": false,
       "inputs": [
         {
-          "name": "users",
-          "type": "address[]"
-        }
-      ],
-      "name": "whitelistMultipleAddress",
-      "outputs": [
-        {
-          "name": "success",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
           "name": "user",
           "type": "address"
         }
       ],
-      "name": "disableWhitelistAddress",
+      "name": "blacklistAddress",
       "outputs": [
         {
           "name": "success",
@@ -586,20 +535,6 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "finished",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
       "name": "coinAddress",
       "outputs": [
         {
@@ -623,20 +558,6 @@
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "coinsRemaining",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
       "type": "function"
     }
   ]
