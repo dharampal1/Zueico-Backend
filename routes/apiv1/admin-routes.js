@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/users', adminAuthenticate, adminController.allUsers);
 
 // Get all users  
-router.post('/totalUsersCount', adminAuthenticate, adminController.allUsersCount);
+router.get('/totalUsersCount', adminController.allUsersCount);
 
 // get all users with privilege 
 router.post('/privilageuser', adminAuthenticate, adminController.getUserPreviledge);

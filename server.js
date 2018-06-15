@@ -7,9 +7,9 @@ import express from './config/express';
 import colors from 'colors';
 import session from 'express-session';
 import cron from 'node-cron';
-import axios from 'axios';
-const api_url = 'http://13.126.28.220:5000';
+import request from 'request';
 
+import { getCurrentIco } from './helpers/socketHelper';
 
 // Create server
 const app = express();
@@ -32,7 +32,8 @@ app.use(session({
 io.on("connection", (socket) => {
   console.log("New client connected");
 
-  getCurrentStats(socket);
+  //getCurrentStats(socket);
+  getCurrentIco(socket);
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
@@ -43,16 +44,30 @@ io.on("connection", (socket) => {
 function  getCurrentStats(socket) {
   cron.schedule('*/15 * * * * *', function(){
        console.log("running stats");
-     axios.get(`${api_url}/getICOstats`)
-      .then(response => {
-        if(response.status === 200){
-         
-          socket.emit("currentStats", response.data.data); // Emitting a new stats.
-        } 
-      })
-      .catch(err => {
-        console.log(err);
-     }); 
+
+     const url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
+
+      request.get({url},function(err,httpResponse,body ){
+        if(err){
+           console.log(err);
+        } else {
+
+            var pasedCoin=JSON.parse(body);
+
+            var btc = pasedCoin.ETH.BTC,
+                usd = pasedCoin.ETH.USD,
+
+                ethervalue = (1 / usd) * 0.60,
+                btcvalue = ethervalue * btc,
+                usdvalue = 0.60,
+                data = {
+                  ethervalue:ethervalue.toString(),
+                  btcvalue:btcvalue.toString(),
+                  usdvalue:usdvalue.toString()
+                };
+               socket.emit("currentPrice", data); // Emitting a new stats.
+           }   
+      });
    });
 };
 
