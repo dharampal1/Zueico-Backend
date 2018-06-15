@@ -163,13 +163,13 @@ module.exports = {
 	   	})
 	   	.then(data => {
 	   		if(data){
-
+	   	   let value = token *  0.0011923688394276629;
 	   	   const body = {
 		   	   	keystore:JSON.stringify(data.keystore),
 		   	   	password:data.tokenPassword,
 		   	   	fromAddress,
 		   	   	toAddress,
-		   	   	value:parseInt(token)
+		   	   	value
 	   	   	};
 
 	   	   sendTokens(body)
@@ -179,10 +179,10 @@ module.exports = {
 	   	   	sumOfBoughtTokens(user_id)
 	   	   	  .then(total => {
 
-   	   	      toToken = token;
+   	   	      toToken = value;
    	   	  	  totalTokens = total.sum;
    	   	  	  fromToken = totalTokens - toToken;
-   	   	  	  transHash = result.data;
+   	   	  	  transHash = result.data.txhash;
 
 
 	   	   	var new_token = new TokenTransfer({
@@ -374,12 +374,14 @@ module.exports = {
 	   	.then(data => {
 	   		if(data){ 
 
+	   	    let tokens = value * 0.0011923688394276629;
+
    			const body = {
    				keystore:JSON.stringify(data.keystore),
    				password:data.tokenPassword,
    				fromAddress,
    				toAddress,
-   				value
+   				value:tokens
    			};
 
 	   		request.post({url:`${url}/sendETH`, form:body },function(err,httpResponse,body){
@@ -400,6 +402,7 @@ module.exports = {
 						amount:value,
 						walletMethod:'ETH',
 						user_id,
+						tokens,
 						buyHash
 			   	    });
 			   	   	  new_token.save()

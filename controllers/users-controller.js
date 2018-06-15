@@ -838,7 +838,7 @@ module.exports = {
         .then(result => {          
            var new_token = new BuyToken({
                 walletMethod:'USD',
-                buyHash:result.data.hash,
+                buyHash:result.data.txhash,
                 amount:usdtokenvalue,
                 tokens:result.data.tokens,
                 user_id

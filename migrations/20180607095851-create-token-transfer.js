@@ -23,13 +23,13 @@ module.exports = {
       },
       totalTokens:{
          allowNull: false,
-         defaultValue:0,
-         type: Sequelize.INTEGER
+         defaultValue:0.0,
+         type: Sequelize.DECIMAL(30,30)
       },
       fromToken:{
          allowNull: false,
-         defaultValue:0,
-         type: Sequelize.INTEGER
+         defaultValue:0.0,
+         type: Sequelize.DECIMAL(30,30)
       },
       transHash:{
          allowNull: false,
@@ -43,8 +43,8 @@ module.exports = {
       },
       toToken:{
          allowNull: false,
-         defaultValue:0,
-         type: Sequelize.INTEGER
+         defaultValue:0.0,
+         type: Sequelize.DECIMAL(30,30)
       },
       createdAt: {
         allowNull: false,
