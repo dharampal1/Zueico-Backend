@@ -18,13 +18,13 @@ module.exports = {
       },
       amount: {
          allowNull: false,
-         defaultValue:0.0,
-         type: Sequelize.DECIMAL(30,30)
+         defaultValue:0,
+         type: Sequelize.INTEGER
       },
       tokens: {
         allowNull: false,
         defaultValue:0.0,
-        type: Sequelize.DECIMAL(30,30)
+        type: Sequelize.DECIMAL(10, 10)   
       },
       userAddress:{
         allowNull: false,

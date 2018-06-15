@@ -29,7 +29,7 @@ module.exports = {
       fromToken:{
          allowNull: false,
          defaultValue:0.0,
-         type: Sequelize.DECIMAL(30,30)
+         type: Sequelize.DECIMAL(10, 10) 
       },
       transHash:{
          allowNull: false,
@@ -44,7 +44,7 @@ module.exports = {
       toToken:{
          allowNull: false,
          defaultValue:0.0,
-         type: Sequelize.DECIMAL(30,30)
+         type: Sequelize.DECIMAL(10, 10) 
       },
       createdAt: {
         allowNull: false,
