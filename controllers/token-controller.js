@@ -89,7 +89,7 @@ module.exports = {
 		    			status: data1.status,
 		    			comment:data1.comments
 		    		 };
-		    		 if(i + 1 === data.length){
+		    		 if(i === data.length + 1){
 		    		   res.status(200).json({
 			    		 status:true,
 			    		 message:"All Orders",
