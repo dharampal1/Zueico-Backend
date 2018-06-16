@@ -835,13 +835,13 @@ module.exports = {
               });
           } else {
 
-          var result = JSON.parse(body);
+          var result1 = JSON.parse(body);
 
         User.update(userData,{where:{id:user_id}})
         .then(result => {          
            var new_token = new BuyToken({
                 walletMethod:'USD',
-                buyHash:result.data,
+                buyHash:result1.data,
                 amount,
                 tokens:usdtokenvalue,
                 user_id
