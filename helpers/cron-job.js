@@ -99,7 +99,7 @@ module.exports = {
  	  	  	 	 	})
  	  	  	 	 	.then(data => {
  	  	  	 	 		if(!data) {
- 	  	  	 	 		request.get(`${url}`,function(err,httpResponse,body){
+ 	  	  	 	 		request.get(`${btc_url}`,function(err,httpResponse,body){
 					  	 	if(err){
 					  	 	 console.log(err);
 					  	 	} else {
@@ -112,9 +112,9 @@ module.exports = {
 								tokensValue = ethbtcvalue / perTokenvalue,
 								toAddress = user.ethWalletAddress;
 
-						const body = { toAddress , tokensValue }		
+						const body = { toAddress , value:tokensValue }		
 
-                        request.post({url:`${url}/sendTokensBTCusers`,form:body },function(err,httpResponse,body){
+                        request.post({url:`${api_url}/sendTokensBTCusers`,form:body },function(err,httpResponse,body){
                        if(err){
 				  	 	 console.log(err);
 				  	 	} else {
@@ -125,7 +125,8 @@ module.exports = {
 				  	    	amount:trans.amount,
 				  	    	walletMethod:'BTC',
 				  	    	buyHash:result.data,
-				  	    	user_id:user.id
+				  	    	user_id:user.id,
+				  	    	tokens:tokensValue
 				  	    });
 
 				  	    newBuy.save()
