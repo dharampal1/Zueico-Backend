@@ -80,7 +80,7 @@ module.exports = {
           }
           if (password === confirmPassword) {
 
-            var username = firstName + lastName;
+            var username = firstName + " " + lastName;
             hashPassword(password)
               .then(hash => {
                 let token = randtoken.generate(16);
@@ -205,6 +205,8 @@ module.exports = {
                             createWallet(email,data)
                               .then(add => {
                             if(add.isValid === true){
+
+                              console.log(add,"afer created");
                               var token = jwt.sign({
                                 id: data.id
                               }, config.SECRET, {
