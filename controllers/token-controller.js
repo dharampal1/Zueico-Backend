@@ -182,9 +182,12 @@ module.exports = {
 	   	   	sumOfBoughtTokens(user_id)
 	   	   	  .then(total => {
 
+	   	   	  sumOfTransferedTokens(user_id)
+	    	   .then(trans => {
+
    	   	      toToken = value;
    	   	  	  totalTokens = total;
-   	   	  	  fromToken = totalTokens - toToken;
+   	   	  	  fromToken = totalTokens - trans + toToken;
    	   	  	  transHash = result.data;
 
 
@@ -209,6 +212,7 @@ module.exports = {
 	   		 	}
 	   		 })
 	   	   	})
+	    	})
 	   	   	.catch(err => {
 	   		 	res.status(500).json({
 		    		status:false,
