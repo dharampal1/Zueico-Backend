@@ -2,7 +2,8 @@ import Promise from 'promise';
 import {
   User,
   mastercard,
-  BuyToken
+  BuyToken,
+  Setting
 } from '../models';
 import jwt from 'jsonwebtoken';
 import config from './../config/environment';
@@ -786,7 +787,7 @@ module.exports = {
     //      message: err.message
     //   });
     // }
-    Settings.findOne({
+    Setting.findOne({
       where:{ type: 'test'}
     })
     .then(keys => {
@@ -813,13 +814,7 @@ module.exports = {
              status: false,
              message: err.message
           });
-        } else {  
-
-          return res.status(200).send({
-             status: false,
-             message: charge
-          });
-
+        } else { 
           User.findOne({
             where:{id:user_id},
             attributes:['id','ethWalletAddress']
@@ -829,12 +824,15 @@ module.exports = {
          var usdtokenvalue = amount / 0.60,
              toAddress = user.ethWalletAddress;
    
-       const body = { usdtokenvalue , toAddress };
+       const body = { value:usdtokenvalue , toAddress };
   
       request.post({url:`${url}/sendTokensUSDusers`,form:body },function(err,httpResponse,body){
 
           if(err){
-             reject(err);
+             return res.status(500).send({
+               status: false,
+               message: err.message
+              });
           } else {
 
           var result = JSON.parse(body);
