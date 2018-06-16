@@ -374,7 +374,7 @@ module.exports = {
 	   	.then(data => {
 	   		if(data){ 
 
-	   	    let tokens = value * 0.0011923688394276629;
+	   	    let tokens = value;
 
    			const body = {
    				keystore:JSON.stringify(data.keystore),
@@ -384,6 +384,8 @@ module.exports = {
    				value:tokens
    			};
 
+   			console.log(body,"buttoken");
+
 	   		request.post({url:`${url}/sendETH`, form:body },function(err,httpResponse,body){
 		  	 	if(err){
 		  	 	   res.status(500).json({
@@ -391,6 +393,8 @@ module.exports = {
 		  	 	   	  message:err.message
 		  	 	   });
 		  	 	} else {
+
+
 
 	  	 		var result = JSON.parse(body);
 
