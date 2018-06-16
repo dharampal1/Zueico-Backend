@@ -187,7 +187,7 @@ module.exports = {
 
    	   	      toToken = value;
    	   	  	  totalTokens = total;
-   	   	  	  fromToken = totalTokens - trans + toToken;
+   	   	  	  fromToken = totalTokens - (trans + toToken);
    	   	  	  transHash = result.data;
 
 

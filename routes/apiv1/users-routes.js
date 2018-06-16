@@ -47,6 +47,12 @@ router.post('/getCurrentPrice', authenticate, btcController.getCurrentPrice);
 // set current price for btc and usd
 router.post('/setCurrentPrice', authenticate, btcController.setCurrentPrice);
 
+// get contract  
+router.post('/getContract', authenticate, btcController.getContracts);
+
+// update contract  
+router.post('/update/contract', authenticate, btcController.updateContract);
+
 
 // total buy token
 router.post('/totalRemainingToken', authenticate, tokenController.totalRemainingToken);

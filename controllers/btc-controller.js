@@ -202,6 +202,12 @@ module.exports = {
            });    
         }   
       });
+   },
+   getContracts(req, res, next){
+
+   }
+   updateContract(req, res, next){
+
    }
  
 }
