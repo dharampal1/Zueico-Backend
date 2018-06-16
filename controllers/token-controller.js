@@ -81,7 +81,7 @@ module.exports = {
     			})
     			.then(data1 => {
     			   data.map((token,i) => {
-		    		var data = {
+		    		var finaldata = {
 		    			tokens  : token.tokens,
 		    			method  : token.walletMethod,
 		    			date  :  token.createdAt,
@@ -93,7 +93,7 @@ module.exports = {
 		    		   res.status(200).json({
 			    		 status:true,
 			    		 message:"All Orders",
-			    		 data:tokens
+			    		 data:finaldata
 			    	    });
 		    		 }
 		    	 });
