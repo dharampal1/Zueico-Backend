@@ -31,6 +31,11 @@ module.exports = {
          defaultValue:'',
         type: Sequelize.STRING
       },
+      tokenUpdateStatus:{
+         allowNull: false,
+         type: Sequelize.BOOLEAN,
+         defaultValue:false
+      },
       buyHash: {
         type:Sequelize.STRING
       },

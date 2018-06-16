@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     amount: DataTypes.DECIMAL(60,20),
     tokens: DataTypes.DECIMAL(60,20),
     buyHash: DataTypes.STRING,
+    tokenUpdateStatus:DataTypes.BOOLEAN,
     buyStatus: DataTypes.ENUM('Pending','Success','Failed'),
     userAddress:DataTypes.STRING
   }, {});

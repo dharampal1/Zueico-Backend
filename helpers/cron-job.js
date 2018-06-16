@@ -27,40 +27,56 @@ module.exports = {
 
 	cronForTransfer(){
 
-		//  cron.schedule('*/10 * * * * *', function(){
-	 //     console.log("running cron for  event");
-		// //var blockNumber = "0";
-
-		// var purchaseEvent = sale_contract.Purchase({ buyer:buyerAddress }, {fromBlock: blockNumber, toBlock: 'latest'});
-		// 	purchaseEvent.watch(function(err, result){
-		// 		console.log(result.args.value.toNumber() / 10**18);
-		// 	console.log(result.args.tokens.toNumber() / 10**18);
-		// });
-
-// BuyToken.findAll({})
-//   .then(data => {
-//   	  if(data.length){
-
-//   	  	data.map(hash => {
-
-
-
-//   	  	var blockNumber = "0";
-// 	    var buyerAddress = hash.;
-
-// 		var purchaseEvent = sale_contract.Purchase({ buyer:buyerAddress }, {fromBlock: blockNumber, toBlock: 'latest'});
-// 			purchaseEvent.watch(function(err, result){
-// 				console.log(result.args.value.toNumber() / 10**18);
-// 			console.log(result.args.tokens.toNumber() / 10**18);
-// 		});
-// 		});
-//   	  }
-//       })
-// 	});
-
-	},
-
+	cron.schedule('*/1 * * * *', function(){
+	  console.log("running cron for  event");
 	
+
+ BuyToken.findAll({
+	 where: { tokenUpdateStatus:false },
+     include:[
+       {
+           model:User,
+           attributes: ['id','ethWalletAddress'],
+           group: ['user_id']
+       }
+      ]
+   })
+    .then(data => {
+  	  if(data.length){
+
+  	  	console.log(data);
+
+  	  	data.map(hash => {
+
+         console.log(hash.User.ethWalletAddress);
+
+  	  	var blockNumber = "0";
+	    var buyerAddress = '0x727b6f8a93195b6aa6bd155b24b50f5af3d0813f';//hash.User.ethWalletAddress;
+
+		var purchaseEvent = sale_contract.Purchase({ buyer:buyerAddress }, {fromBlock: blockNumber, toBlock: 'latest'});
+			purchaseEvent.watch(function(err, result){
+
+				
+			  var tokens = result.args.tokens.toNumber() / 10**18;
+			   BuyToken.update({
+			     	tokens,
+			     	tokenUpdateStatus: 1
+			   },{
+			   	  where:{ buyHash : result.transactionHash}
+			   })
+			   .then(data1 => {
+			   	  if(data1){
+			   	  	console.log("update tokens");
+			   	  	 return true; 
+			   	  }
+			   })
+
+		   })
+		});
+      }
+	});
+   });
+  },
 	BTC_Tranctions(){
 	 cron.schedule('*/30 * * * *', function(){
 	     console.log("running btc");
