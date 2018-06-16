@@ -89,14 +89,14 @@ module.exports = {
 		    			status: data1.status,
 		    			comment:data1.comments
 		    		 };
-		    		 if(i === data.length ){
+		    		 if(i + 1 === data.length){
 		    		   res.status(200).json({
 			    		 status:true,
 			    		 message:"All Orders",
 			    		 data:tokens
 			    	    });
 		    		 }
-		    		});
+		    	 });
     		  })
     		  .catch(err => {
 		    	  res.status(500).json({
