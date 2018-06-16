@@ -79,7 +79,7 @@ exports.createWallet = function(email, user) {
             User.update({
               ethWalletAddress,
               keystore:keystore,
-              tokenPassword:password
+              tokenPassword:password,
             },{
               where: { id:user.id},
               returing:true,

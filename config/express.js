@@ -12,7 +12,8 @@ import {
   BTC_Tranctions,
   checkTxHashWallet,
   checkTxHashBuy,
-  checkTxHashTrans
+  checkTxHashTrans,
+  cronForTransfer
 } from '../helpers/cron-job';
 
 const initApp = function () {
@@ -33,7 +34,7 @@ const initApp = function () {
    
   // serving static files to the client    
   app.use('/public/uploads', express.static('public/uploads'));
-      
+     cronForTransfer(); 
     manageVestCron();
     BTC_Tranctions();
     checkTxHashWallet();

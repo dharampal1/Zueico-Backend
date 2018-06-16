@@ -5,9 +5,62 @@ import { User, btc_transaction , BuyToken, TokenTransfer, VestingPeriod,VestingT
 const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
 const btc_url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
 const api_url = 'http://13.126.28.220:5000';
+import token_abi from './../config/token_abi.json'
+ import sale_abi from './../config/sale_abi.json'
+// import refund_abi from './../config/refund_abi.json'
+// import vest_abi from './../config/vest_abi.json'
 
+var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
+
+
+var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
+
+var Web3 = require("web3");
+var web3 = new Web3();
+web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
+
+var token_contract = web3.eth.contract(token_abi).at(token_ContractAddress);
+
+var sale_contract = web3.eth.contract(sale_abi).at(sale_ContractAddress);
 
 module.exports = {
+
+	cronForTransfer(){
+
+		//  cron.schedule('*/10 * * * * *', function(){
+	 //     console.log("running cron for  event");
+		// //var blockNumber = "0";
+
+		// var purchaseEvent = sale_contract.Purchase({ buyer:buyerAddress }, {fromBlock: blockNumber, toBlock: 'latest'});
+		// 	purchaseEvent.watch(function(err, result){
+		// 		console.log(result.args.value.toNumber() / 10**18);
+		// 	console.log(result.args.tokens.toNumber() / 10**18);
+		// });
+
+// BuyToken.findAll({})
+//   .then(data => {
+//   	  if(data.length){
+
+//   	  	data.map(hash => {
+
+
+
+//   	  	var blockNumber = "0";
+// 	    var buyerAddress = hash.;
+
+// 		var purchaseEvent = sale_contract.Purchase({ buyer:buyerAddress }, {fromBlock: blockNumber, toBlock: 'latest'});
+// 			purchaseEvent.watch(function(err, result){
+// 				console.log(result.args.value.toNumber() / 10**18);
+// 			console.log(result.args.tokens.toNumber() / 10**18);
+// 		});
+// 		});
+//   	  }
+//       })
+// 	});
+
+	},
+
+	
 	BTC_Tranctions(){
 	 cron.schedule('*/30 * * * *', function(){
 	     console.log("running btc");

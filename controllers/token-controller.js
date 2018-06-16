@@ -406,7 +406,6 @@ module.exports = {
 						amount:value,
 						walletMethod:'ETH',
 						user_id,
-						tokens,
 						buyHash
 			   	    });
 			   	   	  new_token.save()

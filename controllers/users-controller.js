@@ -273,7 +273,7 @@ module.exports = {
           })
           .then(data => {
             if (data) {
-              if(data.emailVerified === 1){
+              if(data.emailVerified === true){
               verifyPassword(password, data)
                 .then(result => {
                   if (result.isValid === true) {
