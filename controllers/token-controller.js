@@ -163,7 +163,7 @@ module.exports = {
 	   	})
 	   	.then(data => {
 	   		if(data){
-	   	   let value = token *  0.0011923688394276629;
+	   	   let value = token;
 	   	   const body = {
 		   	   	keystore:JSON.stringify(data.keystore),
 		   	   	password:data.tokenPassword,
@@ -172,15 +172,18 @@ module.exports = {
 		   	   	value
 	   	   	};
 
+	   	   	console.log(body,"Transfer token");
+
 	   	   sendTokens(body)
 	   	   	.then(tokens => {
 	   	   if(tokens.isValid === true ){
+	   	   	console.log(tokens.data,"sent after");
 	   	   	var result  = tokens.body; 
 	   	   	sumOfBoughtTokens(user_id)
 	   	   	  .then(total => {
 
    	   	      toToken = value;
-   	   	  	  totalTokens = total.sum;
+   	   	  	  totalTokens = total;
    	   	  	  fromToken = totalTokens - toToken;
    	   	  	  transHash = result.data;
 
@@ -712,7 +715,7 @@ function sendTokens(body) {
 	  	 		if(result.status === true){
 	  	 		  resolve({
 	  	 			isValid:true,
-	  	 			body:result.data
+	  	 			body:result
 	  	 		})
 	  	 	  } else {
 	  	 	  	  reject(
