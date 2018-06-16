@@ -76,26 +76,28 @@ module.exports = {
     	})
     	.then( data => {
     		if(data.length) {
+    			
     			User.findOne({
     				where: { id: user_id }
     			})
     			.then(data1 => {
-    			   data.map((token,i) => {
-		    		var finaldata = {
+
+    				var tokens = data.map(token => {
+		    		var data = {
 		    			tokens  : token.tokens,
 		    			method  : token.walletMethod,
 		    			date  :  token.createdAt,
 		    			price :  token.amount,
 		    			status: data1.status,
-		    			comment:data1.comments
+		    			comment:data1.comments,
 		    		 };
-		    		 if(i === data.length + 1){
-		    		   res.status(200).json({
-			    		 status:true,
-			    		 message:"All Orders",
-			    		 data:finaldata
-			    	    });
-		    		 }
+		    			return data;
+		    		});
+    				
+    				res.status(200).json({
+		    		status:true,
+		    		message:"All Orders",
+		    		data:tokens
 		    	 });
     		  })
     		  .catch(err => {
