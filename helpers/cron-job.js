@@ -357,20 +357,20 @@ module.exports = {
 	       	  data.map(data1 => {
 	       	  	console.log(data);
 	       	  	  if(data1.vetingTime1 === date){
-	       	  	  	vestingReleaseToken(date);
+	       	  	  	vestingReleaseToken1(date,data1.VestingPeriod,data1.id);
 	       	  	  } else if(data1.vetingTime2 === date){
-	       	  	  	console.log(data1);
+	       	  	  	vestingReleaseToken2(date, data1.VestingPeriod,data1.id);
 	       	  	  } else if (data1.vetingTime3 === date){
-	       	  	  	console.log(data1);
+	       	  	  	vestingReleaseToken3(date, data1.VestingPeriod,data1.id);
 	       	  	  } else {
-	       	  	  	console.log(data1);
+	       	  	  	vestingReleaseToken4(date, data1.VestingPeriod,data1.id);
 	       	  	  }
 	       	  })
 	       })
-	 });
+	   });
    },
 
-   vestingReleaseToken(date){
+   vestingReleaseToken1(date, VestingPeriod, id ){
 
    	var schedule = require('node-schedule');
 
@@ -396,9 +396,157 @@ module.exports = {
 			        	if(result.status === true) {
 
 			        	VestingTimes.update({
-			        		vestTimeHash1:result.data
+			        		vestTimeHash1:result.data,
+			        		VestingPeriod:VestingPeriod - 1
 			        	},{
-			        		where: { id : data1.id}
+			        		where: { id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			         }
+			       } 
+			    });
+	  		});
+	      }
+	    })
+	    .catch(err => {
+	   	  console.log(err);
+	    })	  
+    });  
+  },
+
+   vestingReleaseToken2(date, VestingPeriod, id){
+
+   	var schedule = require('node-schedule');
+
+	var date = new Date(date).getTime();
+
+	 
+	var j = schedule.scheduleJob(date, function(){
+    
+
+    User.findAll({where:{previlege:'1'}})
+	    .then((users,i) => {
+	  	if(users.length){ 
+	  		users.map(user => {
+	  			var vestingAddress = user.ethWalletAddress;
+
+	  			 const body = { vestingAddress };
+
+				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        	VestingTimes.update({
+			        		vestTime2Hash:result.data,
+			        		VestingPeriod:VestingPeriod - 1
+			        	},{
+			        		where: { id }
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			         }
+			       } 
+			    });
+	  		});
+	  	}
+    })
+    .catch(err => {
+   	  console.log(err);
+    })	  
+    });  
+  },
+
+   vestingReleaseToken3(date, VestingPeriod, id){
+
+   	var schedule = require('node-schedule');
+
+	var date = new Date(date).getTime();
+
+	 
+	var j = schedule.scheduleJob(date, function(){
+    
+
+    User.findAll({where:{previlege:'1'}})
+	    .then((users,i) => {
+	  	if(users.length){ 
+	  		users.map(user => {
+	  			var vestingAddress = user.ethWalletAddress;
+
+	  			 const body = { vestingAddress };
+
+				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        	VestingTimes.update({
+			        		vestTime3Hash:result.data,
+			        		VestingPeriod:VestingPeriod - 1
+			        	},{
+			        		where: { id }
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			         }
+			       } 
+			    });
+	  		});
+	  	}
+    })
+    .catch(err => {
+   	  console.log(err);
+    })	  
+    });  
+  },
+
+   vestingReleaseToken4(date, VestingPeriod, id){
+
+   	var schedule = require('node-schedule');
+
+	var date = new Date(date).getTime();
+
+	 
+	var j = schedule.scheduleJob(date, function(){
+    
+
+    User.findAll({where:{previlege:'1'}})
+	    .then((users,i) => {
+	  	if(users.length){ 
+	  		users.map(user => {
+	  			var vestingAddress = user.ethWalletAddress;
+
+	  			 const body = { vestingAddress };
+
+				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        	VestingTimes.update({
+			        		endTimeHash:result.data,
+			        		VestingPeriod:VestingPeriod - 1
+			        	},{
+			        		where: { id }
 			        	})
 			        	.then(stat => {
 			        		console.log("updated");

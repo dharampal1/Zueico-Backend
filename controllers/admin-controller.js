@@ -12,7 +12,15 @@ const  url = 'http://13.126.28.220:5000';
 module.exports = { 
 
   allTrancations(req, res, next) {
-    BuyToken.findAll({})
+    BuyToken.findAll({
+    	include:[
+       {
+           model:User,
+           attributes: ['id','username'],
+           group: ['user_id']
+       }
+      ]
+    })
       .then(data => {
       	 if(data.length) {
       	 	res.status(200).json({
