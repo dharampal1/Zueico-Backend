@@ -275,6 +275,52 @@ module.exports = {
           .then(data => {
             if (data) {
               if(data.emailVerified === true){
+                if(data.ethWalletAddress === ''){
+
+                 verifyPassword(password, data)
+                .then(result => {
+                  if (result.isValid === true) {
+
+                  createWallet(email,data)
+                  .then(add => {
+                    console.log(add);
+                  if(add.isValid === true){
+
+                    var token = jwt.sign({
+                      id: data.id
+                    }, config.SECRET, {
+                      expiresIn: config.JWT_EXPIRATION
+                    });
+                     res.status(200).json({
+                      status:true,
+                      message: 'Authenticated, Token Attached',
+                      userId: data.id,
+                      username:data.username,
+                      email:data.email,
+                      token
+                    });
+                     }
+                    })
+                    .catch(err => {
+                       res.status(500).json({
+                        status:false,
+                        message: err.message
+                      });
+                    })
+                    } else {
+                    res.status(422).json({
+                      status:false,
+                      message: 'Authentication failed'
+                    });
+                  }
+                })
+                .catch(err => {
+                   res.status(500).json({
+                    status:false,
+                    message: err.message
+                  });
+                })
+            } else {
               verifyPassword(password, data)
                 .then(result => {
                   if (result.isValid === true) {
@@ -299,6 +345,7 @@ module.exports = {
                     });
                   }
                 })
+              }
             } else {
               res.status(404).json({
                 status:false,

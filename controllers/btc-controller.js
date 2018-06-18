@@ -1,7 +1,7 @@
 var Web3 = require("web3");
 var web3 = new Web3();
 import request from 'request';
-import {Btc_price,VestingPeriod} from '../models';
+import {Btc_price} from '../models';
 import token_abi from './../config/token_abi.json'
 import sale_abi from './../config/sale_abi.json'
 import refund_abi from './../config/refund_abi.json'

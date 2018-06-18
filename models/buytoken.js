@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     tokens: DataTypes.DECIMAL(60,20),
     buyHash: DataTypes.STRING,
     tokenUpdateStatus:DataTypes.BOOLEAN,
-    buyStatus: DataTypes.ENUM('Pending','Success','Failed'),
+    buyStatus: DataTypes.ENUM('Pending','Approved','Failed'),
     userAddress:DataTypes.STRING
   }, {});
   BuyToken.associate = function(models) {

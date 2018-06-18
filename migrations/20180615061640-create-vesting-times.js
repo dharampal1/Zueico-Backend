@@ -17,7 +17,7 @@ module.exports = {
       vestTime1Status:{
          allowNull: false,
          defaultValue:'Pending',
-         type:Sequelize.ENUM('Pending','Success','Failed')
+         type:Sequelize.ENUM('Pending','Approved','Failed')
       },
       vestTime2: {
         type: Sequelize.STRING
@@ -28,7 +28,7 @@ module.exports = {
       vestTime2Status:{
          allowNull: false,
          defaultValue:'Pending',
-         type:Sequelize.ENUM('Pending','Success','Failed')
+         type:Sequelize.ENUM('Pending','Approved','Failed')
       },
       vestTime3: {
         type: Sequelize.STRING
@@ -39,7 +39,7 @@ module.exports = {
       vestTime3Status:{
          allowNull: false,
          defaultValue:'Pending',
-         type:Sequelize.ENUM('Pending','Success','Failed')
+         type:Sequelize.ENUM('Pending','Approved','Failed')
       },
       endTime: {
         type: Sequelize.STRING
@@ -50,7 +50,7 @@ module.exports = {
       endTimeStatus:{
          allowNull: false,
          defaultValue:'Pending',
-         type:Sequelize.ENUM('Pending','Success','Failed')
+         type:Sequelize.ENUM('Pending','Approved','Failed')
       },
       createdAt: {
         allowNull: false,

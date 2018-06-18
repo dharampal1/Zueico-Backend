@@ -42,7 +42,7 @@ module.exports = {
       buyStatus: {
         allowNull: false,
         defaultValue:'Pending',
-        type: Sequelize.ENUM('Pending','Success','Failed')
+        type: Sequelize.ENUM('Pending','Approved','Failed')
       },
       createdAt: {
         allowNull: false,

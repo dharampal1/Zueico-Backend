@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import request from 'request';
-import { User, btc_transaction , BuyToken, TokenTransfer, VestingPeriod,VestingTimes } from '../models';
+import { User, btc_transaction , BuyToken, TokenTransfer, PrivelegeUser,VestingTimes } from '../models';
 
 const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
 const btc_url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
@@ -306,7 +306,7 @@ module.exports = {
   	cron.schedule('*/1 * * * *', function(){
 	     console.log("running vest");
 
-	   VestingPeriod.findAll({
+	   PrivelegeUser.findAll({
 	     	where:{ vestStatus:'Pending' }
 	     })
 	    .then(data => {
@@ -321,7 +321,7 @@ module.exports = {
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) {
 
-			        	VestingPeriod.update({
+			        	PrivelegeUser.update({
 			        		vestStatus:result.data
 			        	},{
 			        		where: { id : data1.id}
@@ -357,13 +357,13 @@ module.exports = {
 	       	  data.map(data1 => {
 	       	  	console.log(data);
 	       	  	  if(data1.vetingTime1 === date){
-	       	  	  	vestingReleaseToken1(date,data1.VestingPeriod,data1.id);
+	       	  	  	vestingReleaseToken1(date,3,data1.id);
 	       	  	  } else if(data1.vetingTime2 === date){
-	       	  	  	vestingReleaseToken2(date, data1.VestingPeriod,data1.id);
+	       	  	  	vestingReleaseToken2(date,2,data1.id);
 	       	  	  } else if (data1.vetingTime3 === date){
-	       	  	  	vestingReleaseToken3(date, data1.VestingPeriod,data1.id);
+	       	  	  	vestingReleaseToken3(date,1,data1.id);
 	       	  	  } else {
-	       	  	  	vestingReleaseToken4(date, data1.VestingPeriod,data1.id);
+	       	  	  	vestingReleaseToken4(date,0,data1.id);
 	       	  	  }
 	       	  })
 	       })
@@ -397,7 +397,7 @@ module.exports = {
 
 			        	VestingTimes.update({
 			        		vestTimeHash1:result.data,
-			        		VestingPeriod:VestingPeriod - 1
+			        		VestingPeriod
 			        	},{
 			        		where: { id}
 			        	})
@@ -446,7 +446,7 @@ module.exports = {
 
 			        	VestingTimes.update({
 			        		vestTime2Hash:result.data,
-			        		VestingPeriod:VestingPeriod - 1
+			        		VestingPeriod
 			        	},{
 			        		where: { id }
 			        	})
@@ -495,7 +495,7 @@ module.exports = {
 
 			        	VestingTimes.update({
 			        		vestTime3Hash:result.data,
-			        		VestingPeriod:VestingPeriod - 1
+			        		VestingPeriod
 			        	},{
 			        		where: { id }
 			        	})
@@ -544,7 +544,7 @@ module.exports = {
 
 			        	VestingTimes.update({
 			        		endTimeHash:result.data,
-			        		VestingPeriod:VestingPeriod - 1
+			        		VestingPeriod
 			        	},{
 			        		where: { id }
 			        	})

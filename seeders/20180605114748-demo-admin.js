@@ -9,6 +9,8 @@ module.exports = {
         totalToken: '10',
         soldToken: '5',
         email: 'admin@gmail.com',
+        createdAt: new Date(),
+        updatedAt:  new Date()
       }], {});
   },
 

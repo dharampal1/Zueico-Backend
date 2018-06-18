@@ -1,16 +1,145 @@
 import Sequelize from 'sequelize';
 import request from 'request';
 import { User, Admin, Setting, BuyToken, 
-	     TokenTransfer, VestingPeriod ,VestingTimes} from '../models';
+	     TokenTransfer, PrivelegeUser ,VestingTimes} from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
+import { sendEmail } from '../helpers/userHelper';
 import config from './../config/environment';
-
+import { storage, csvFileFilter } from '../helpers/fileUpload';
 const Op = Sequelize.Op;
 const  url = 'http://13.126.28.220:5000';
+import {
+  hashPassword
+} from '../helpers/userHelper';
+
+import multer from 'multer';
+
+
 
 module.exports = { 
 
+  uploadPrivelgeUsers(req, res, next){
+
+    var upload = multer({
+       fileFilter:csvFileFilter,
+       storage: storage
+    }).single('Privelege_Users');
+
+    upload(req, res, function(err) {
+      if (err) {
+          return res.status(500).json({
+          status: false,
+          message: err.message
+        });
+      }
+      if (req.file) {
+      	const csvFilePath=req.file.path;
+		const csv=require('csvtojson');
+		csv()
+		.fromFile(csvFilePath)
+		.then(jsonObj => {
+
+		    jsonObj.map((data,i) => {
+
+		    PrivelegeUser.findOne({
+		    	where: { Email:data.Email } 
+		    })
+		    .then(puser => {
+		     if(puser){
+		     	if( i + 1 === jsonObj.length){
+		          return res.send("ok")
+		      }
+		     } else {
+
+		     var newPrevUser = new PrivelegeUser({
+		    		Name:data.Name,
+					Email:data.Email,
+					Phone:data.Phone,
+					Country:data.Country,
+					ICOTokens:data.ICOTokens,
+					PreICOTokens:data.PreICOTokens,
+					TotalPurchase:data.TotalPurchase,
+					VestingPeriod:data.VestingPeriod,
+					VestedTokens:data.VestedTokens,
+					RemainingTokens:data.RemainingTokens
+		    	});
+
+		    	newPrevUser.save()
+		    	 .then(user => {	 	
+		    	 	hashPassword(data.Password)
+		    	 	 .then(pass => {
+		    	 	var new_user = new User({
+		    	 		username:data.Name,
+						email:data.Email,
+						phone:data.Phone,
+						password:pass,
+						country:data.Country,
+						emailVerified:true,
+						previlege:1
+		    	 	});
+		    	 	sendEmail(data.Name,data.Email,data.Password)
+		    	 	.then(data => {
+		    	 		if(data.isValid === true){
+
+			    	 	new_user.save()
+			    	 	 .then(data1 => {
+			    	 	   if( i + 1  === jsonObj.length){
+			    	 	 		res.status(200).json({
+					            status:true,
+					            message: 'Privilege Users added and Login Deatails is sent to Email',
+					          });
+			    	 	 	}
+			    	 	 })
+			    	 	  .catch(err => {
+				           res.status(500).json({
+				             status:false,
+				             message: err.message
+				           });   
+						})
+		    	 	  }
+		    	   })
+		    	 	.catch(err => {
+			           res.status(500).json({
+			             status:false,
+			             message: err.message
+			           });   
+					});
+		    	 })
+		    	 .catch(err => {
+		           res.status(500).json({
+		             status:false,
+		             message: err.message
+		           });   
+				})
+		       
+		    })
+		    .catch(err => {
+		    	res.status(500).json({
+		             status:false,
+		             message: err.message
+		          }); 
+		      });
+		}
+		})
+		.catch(err => {
+			res.status(500).json({
+	             status:false,
+	             message: err.message
+	          });   
+		   })		
+       });
+    })
+	.catch(err => {
+		res.status(500).json({
+	         status:false,
+	         message: err.message
+	      });   
+	 })	
+   }
+});
+
+  },
   allTrancations(req, res, next) {
     BuyToken.findAll({
     	include:[
@@ -462,7 +591,7 @@ module.exports = {
          vestingAddress = '',
          tokenValue = '';
 
-     VestingPeriod.update({
+     PrivelegeUser.update({
     		vesting_period_date
     	})
     	.then(data => {
@@ -480,11 +609,11 @@ module.exports = {
 	    User.findAll({where:{previlege:'1'}})
 	  	  .then((users,i) => {
 	  	   if(users.length){ 
-			VestingPeriod.findAll({})
+			PrivelegeUser.findAll({})
 			  .then(vest => {
 			  	 if(vest.length){
 			  	  vest.map(vester => {
-			  	  	tokenValue = vester.pre_ico_tokens;
+			  	  	tokenValue = vester.PreICOTokens;
 			  	    users.map(user => {
 	  	    		 vestingAddress = user.ethWalletAddress;
 
@@ -500,7 +629,7 @@ module.exports = {
 
 				        let result = JSON.parse(body);
 				        
-				            VestingPeriod.update({
+				            PrivelegeUser.update({
 				            	vestHash:result.data
 				            },{where:{id : vester.id}})
 				            .then(data => {

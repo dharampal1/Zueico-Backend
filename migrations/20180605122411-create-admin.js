@@ -44,13 +44,15 @@ module.exports = {
         defaultValue:'',
         type: Sequelize.STRING
       },
-      createdAt: {
-        type: Sequelize.DATE,
-        default: Date.now()
+      updatedAt: { 
+         allowNull: false,
+         type: Sequelize.DATE,
+         defaultValue: Sequelize.NOW
       },
-      updatedAt: {
-        type: Sequelize.DATE,
-        default: Date.now()
+      createdAt: { 
+         allowNull: false,
+         type: Sequelize.DATE,
+         defaultValue: Sequelize.NOW
       }
     });
   },

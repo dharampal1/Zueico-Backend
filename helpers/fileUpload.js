@@ -23,6 +23,16 @@ export const imageFileFilter = (req, file, cb) => {
   }
 };
 
+export const csvFileFilter = (req, file, cb) => {
+  // reject a file
+  if (!file.originalname.match(/\.(csv|CSV)$/)) {
+
+    cb(new Error('Please send the valid File Type'));
+  } else {
+
+    cb(null, true);
+  }
+};
 
 
  

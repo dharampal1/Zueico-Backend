@@ -57,7 +57,7 @@ module.exports = {
       status: { 
          allowNull: false,
          defaultValue:'Pending',
-         type: Sequelize.ENUM('Pending','Success','Failed')
+         type: Sequelize.ENUM('Pending','Approved','Failed')
       },
       gender: { 
          allowNull: false,

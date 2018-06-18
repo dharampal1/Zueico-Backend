@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     mobileNumber:  DataTypes.STRING,
     participationAmount: DataTypes.INTEGER,
     image: DataTypes.STRING,
-    status: DataTypes.ENUM('Pending','Success','Failed'),
+    status: DataTypes.ENUM('Pending','Approved','Failed'),
     gender: DataTypes.STRING,
     dob: DataTypes.STRING,
     country: DataTypes.STRING,

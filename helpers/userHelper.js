@@ -2,7 +2,10 @@
  import bcrypt from 'bcryptjs';
  import { User } from '../models';
  import request from 'request';
-
+import config from './../config/environment';
+import nodemailer from 'nodemailer';
+import path from 'path';
+import  hbs from 'nodemailer-express-handlebars';
 import mdEncrypt from 'md5';
 
 const  url = 'http://13.126.28.220:5000';
@@ -59,6 +62,7 @@ exports.verifyPassword = function(password, user) {
 exports.createWallet = function(email, user) {
   return new Promise(((resolve, reject) => {
 
+
      var password = mdEncrypt(email);
        
      const body = { password };
@@ -66,10 +70,12 @@ exports.createWallet = function(email, user) {
     request.post({url:`${url}/createWallet`,form:body },function(err,httpResponse,body){
 
         if(err){
+          console.log(err);
            reject(err);
         } else {
 
           var result = JSON.parse(body);
+          console.log(result);
 
           if(result.status === true){
 
@@ -125,3 +131,46 @@ exports.approveAddress = function(address, user) {
     });
   }));
 }
+
+exports.sendEmail = function(username,email,password) {
+
+ return new Promise(((resolve, reject) => {
+       
+ let link = "https://zuenchain.io/user/login";
+ var transporter = nodemailer.createTransport(config.smtpConfig);
+                var handlebarsOptions = {
+                    viewEngine: 'handlebars',
+                    viewPath: path.resolve('./templates/'),
+                    layoutsDir:path.resolve('./templates/'),
+                    extName: '.hbs'
+                  };
+
+                 transporter.use('compile', hbs(handlebarsOptions));
+
+                var data = {
+                  from: `${config.smtpConfig.auth.user}`,
+                  to: `${email}`,
+                  template: 'privelege-user',
+                  subject: 'Account Deatils Email',
+                  context: {
+                   email: email,
+                   name: username,
+                   password:password,
+                   url:link
+                  }
+                };
+
+                transporter.sendMail(data, (error) => {
+
+                  if (error) {
+                   reject(err);
+                  } else {
+                   resolve({
+                      isValid: true,
+                    });
+                  }
+             });
+
+          }));
+
+  }

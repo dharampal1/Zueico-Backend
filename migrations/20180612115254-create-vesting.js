@@ -1,41 +1,41 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('VestingPeriods', {
+    return queryInterface.createTable('PrivelegeUsers', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ico_tokens: {
+      ICOTokens: {
         type:Sequelize.STRING
       },
-      pre_ico_tokens: {
+      PreICOTokens: {
         type:Sequelize.STRING
       },
-      name: {
+      Name: {
         type:Sequelize.STRING
       },
-      email: {
+      Email: {
         type:Sequelize.STRING
       },
-      phone: {
+      Phone: {
         type:Sequelize.STRING
       },
-      total_purchase: { 
+      TotalPurchase: { 
         type:Sequelize.STRING
       },
-      vesting_period:{
+      VestingPeriod:{
         type:Sequelize.INTEGER
       },
-      country:{
+      Country:{
         type:Sequelize.STRING
       },
-      vested_tokens:{
+      VestedTokens:{
         type:Sequelize.STRING
       },
-      remaining_tokens:{
+      RemainingTokens:{
         type:Sequelize.STRING
       },
       vestHash: {
@@ -44,7 +44,7 @@ module.exports = {
       vestStatus: {
          allowNull: false,
          defaultValue:'Pending',
-         type:Sequelize.ENUM('Pending','Success','Failed')
+         type:Sequelize.ENUM('Pending','Approved','Failed')
        },
       vesting_period_date:{
         type:Sequelize.STRING
@@ -60,6 +60,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('VestingPeriods');
+    return queryInterface.dropTable('PrivelegeUsers');
   }
 };

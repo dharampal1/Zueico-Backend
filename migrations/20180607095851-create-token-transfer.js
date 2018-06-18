@@ -39,7 +39,7 @@ module.exports = {
       transStatus:{
          allowNull: false,
         defaultValue:'Pending',
-        type: Sequelize.ENUM('Pending','Success','Failed')
+        type: Sequelize.ENUM('Pending','Approved','Failed')
       },
       toToken:{
          allowNull: false,

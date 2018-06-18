@@ -6,6 +6,8 @@ import { adminAuthenticate } from './../../helpers/ensure-authenticated';
 
 const router = express.Router();
 
+// upload privilege Users   
+router.post('/upload/privilegeUsers', adminController.uploadPrivelgeUsers);
 
 // Get all users  
 router.post('/users', adminAuthenticate, adminController.allUsers);

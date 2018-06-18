@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     fromToken: DataTypes.DECIMAL(60,20),
     toToken: DataTypes.DECIMAL(60,20),
     transHash:DataTypes.STRING,
-    transStatus:DataTypes.ENUM('Pending','Success','Failed'),
+    transStatus:DataTypes.ENUM('Pending','Approved','Failed'),
   }, {});
   TokenTransfer.associate = function(models) {
     // associations can be defined here
