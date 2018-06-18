@@ -66,11 +66,13 @@ exports.createWallet = function(email, user) {
      var password = mdEncrypt(email);
        
      const body = { password };
+
+     console.log(password);
   
     request.post({url:`${url}/createWallet`,form:body },function(err,httpResponse,body){
 
         if(err){
-          console.log(err);
+          console.log(err,"api gras");
            reject(err);
         } else {
 
