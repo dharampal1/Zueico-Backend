@@ -190,12 +190,19 @@ module.exports = {
 
 	   	   	  sumOfTransferedTokens(user_id)
 	    	   .then(trans => {
-              
-   	   	      toToken = value;
-   	   	  	  totalTokens = total;
-   	   	  	  fromToken = totalTokens - trans;
-   	   	  	  transHash = result.data;
+                if(trans == 0){
+               	 toToken = value;
+	   	   	  	  totalTokens = total;
+	   	   	  	  fromToken = totalTokens - toToken;
+	   	   	  	  transHash = result.data;
+                } else {
+                	 toToken = value;
+	   	   	  	  totalTokens = total;
+	   	   	  	  fromToken = totalTokens - trans;
+	   	   	  	  transHash = result.data;
 
+                }
+   	   	     
 
 	   	   	var new_token = new TokenTransfer({
 	   	    	fromAddress,
