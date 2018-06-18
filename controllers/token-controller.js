@@ -88,7 +88,7 @@ module.exports = {
 		    			method  : token.walletMethod,
 		    			date  :  token.createdAt,
 		    			price :  token.amount,
-		    			status: data1.status,
+		    			status: token.buyStatus,
 		    			comment:data1.comments,
 		    		 };
 		    			return data;
@@ -183,17 +183,17 @@ module.exports = {
 	   	   sendTokens(body)
 	   	   	.then(tokens => {
 	   	   if(tokens.isValid === true ){
-	   	   	console.log(tokens.data,"sent after");
+	   	   	console.log(tokens.body,"sent after");
 	   	   	var result  = tokens.body; 
 	   	   	sumOfBoughtTokens(user_id)
 	   	   	  .then(total => {
 
 	   	   	  sumOfTransferedTokens(user_id)
 	    	   .then(trans => {
-
+              
    	   	      toToken = value;
    	   	  	  totalTokens = total;
-   	   	  	  fromToken = totalTokens - (trans + toToken);
+   	   	  	  fromToken = totalTokens - trans;
    	   	  	  transHash = result.data;
 
 
@@ -518,7 +518,7 @@ module.exports = {
 	    	 .then(trans => {
 
 	    	 	var trans_token = trans,
-	    	 	    total_tokens = buy ;
+	    	 	    total_tokens = buy;
 
 	    	let remain = total_tokens - trans_token;
 
@@ -753,14 +753,25 @@ function sumOfBoughtTokens(user_id) {
 
 function sumOfTransferedTokens(user_id) {
 	 return new Promise(((resolve, reject) => {
-	TokenTransfer.sum('fromToken', {
-		where: {
-			user_id
-		},
-	}).then(sum =>  {
-		resolve(sum);
-	}).catch(err => {
-		reject(err)
-	});
-}));
+	TokenTransfer.count({ where : { user_id: user_id}})
+	 .then(data => {
+	 	 if(data > 0){
+           	TokenTransfer.sum('toToken', {
+				where: {
+					user_id
+				},
+			}).then(sum =>  {
+				resolve(sum);
+			}).catch(err => {
+				reject(err)
+			});
+	 	 } else {
+	 	 	var count = 0;
+	 	 	resolve(count)
+	 	 }
+	 })	
+	 .catch(err => {
+	 	reject(err)
+	 })
+  }));
 }

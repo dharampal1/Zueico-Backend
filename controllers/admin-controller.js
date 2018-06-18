@@ -76,7 +76,7 @@ module.exports = {
 						password:pass,
 						country:data.Country,
 						emailVerified:true,
-						previlege:1
+						previlege:'1'
 		    	 	});
 		    	 	sendEmail(data.Name,data.Email,data.Password)
 		    	 	.then(data => {
@@ -271,7 +271,7 @@ module.exports = {
 
 	getUserPreviledge(req, res, next) {
 		User.findAll({
-			where: { previledge : '1' }
+			where: { previlege : '1' }
 		 })
 		  .then(data => {
 		  	  if(data){
@@ -579,6 +579,8 @@ module.exports = {
 
     addVestingDate(req, res, next) {
     // var user_id = req.body.user_id;
+
+    if(req.body.vesting_period_date){
 	 var vesting_period_date = req.body.vesting_period_date,
 	     startTime  = new Date(vesting_period_date),
   	     vestTime1   = startTime.setDate(startTime.getDate() + 30),
@@ -588,14 +590,19 @@ module.exports = {
   	     vestTime3   = time2.setDate(time2.getDate() + 30),
          time3 = new Date(vestTime3),
          endTime = time3.setDate(time3.getDate() + 30),
-         vestingAddress = '',
+         vestingUserAddress = '',
          tokenValue = '';
 
      PrivelegeUser.update({
     		vesting_period_date
+    	},{
+    		where:{}
     	})
     	.then(data => {
-    		if(data){
+
+      if(data){
+    
+    			
 		var newVestingTimes = new VestingTimes({
 			vestTime1,
 			vestTime2,
@@ -606,18 +613,24 @@ module.exports = {
 	newVestingTimes.save()
     .then(data1 => {
 	  if(data1){
-	    User.findAll({where:{previlege:'1'}})
+
+	    User.findAll({ where:{ previlege:'1' } })
 	  	  .then((users,i) => {
+
 	  	   if(users.length){ 
 			PrivelegeUser.findAll({})
 			  .then(vest => {
+
 			  	 if(vest.length){
 			  	  vest.map(vester => {
 			  	  	tokenValue = vester.PreICOTokens;
 			  	    users.map(user => {
-	  	    		 vestingAddress = user.ethWalletAddress;
 
-	  	    		 const body = {vestingAddress, tokenValue, startTime, vestTime1, vestTime2, vestTime3, endTime};	
+			  	     if(user.ethWalletAddress){
+
+	  	    		 vestingUserAddress = user.ethWalletAddress;
+
+	  	    		 const body = {vestingUserAddress, tokenValue, startTime, vestTime1, vestTime2, vestTime3, endTime};	
 
 					 request.post({url:`${url}/setVestingAddressDetails`,form:body},function(err,httpResponse,body ){
 				        if(err){
@@ -628,13 +641,14 @@ module.exports = {
 				        } else {
 
 				        let result = JSON.parse(body);
-				        
+				    
+				         if(result.status === true ) {
 				            PrivelegeUser.update({
 				            	vestHash:result.data
-				            },{where:{id : vester.id}})
+				            },{ where:{ id : vester.id} })
 				            .then(data => {
 				            	if(data){
-				            	  if(i === users.length + 1 ){
+				            	  if(i + 1  === users.length ){
 				            	   res.status(200).json({
 						  	  		 status:true,
 						  	  		 message:'vesting Date Stored'
@@ -643,12 +657,30 @@ module.exports = {
 				            	} else {
 				            	res.status(404).json({
 						  	  		status:false,
-						  	  		message:'NO vest Deatil Stored'
+						  	  		message:'NO vest Detail Stored'
 						  	  	});
 				               }
 				            })
+				            .catch(err => {
+					  	   	 res.status(500).json({
+					  	  		status:false,
+					  	  		message:err.message
+					         });
+					  	   });
+				        }  else {
+				        	return res.status(422).json({
+						  	  		status:false,
+						  	  		message:result.message
+						  	 });
 				         }
+				        }
 				      });
+					}  else {
+						return res.status(422).json({
+						  	  		status:false,
+						  	  		message:"Create wallet address first"
+						  });
+					}
 	  	    		});
 	  	    	  });
 			  	 } else {
@@ -658,6 +690,12 @@ module.exports = {
 				  	});
 			  	 }
 			  })
+			  .catch(err => {
+		  	   	 res.status(500).json({
+		  	  		status:false,
+		  	  		message:err.message
+		         });
+		  	   });
 	    	} else {
 	    		res.status(404).json({
 		  	  		status:false,
@@ -677,6 +715,7 @@ module.exports = {
 		  	  		message:'No Data Found'
 			  	 });
 		 	}
+		 	return true;
 		 })
 		 .catch(err => {
     		res.status(500).json({
@@ -697,7 +736,13 @@ module.exports = {
 	  		message:err.message
 	      });
 	});
+   } else {
+   	res.status(422).json({
+  	  		status:false,
+  	  		message:'vesting_period_date is required'
+  	  })
    }
+  }
 }
 
 function approveAddress(body){

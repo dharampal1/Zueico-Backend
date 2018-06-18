@@ -48,10 +48,8 @@ module.exports = {
 
   	  	data.map(hash => {
 
-         console.log(hash.User.ethWalletAddress);
-
   	  	var blockNumber = "0";
-	    var buyerAddress = '0x727b6f8a93195b6aa6bd155b24b50f5af3d0813f';//hash.User.ethWalletAddress;
+	    var buyerAddress = hash.User.ethWalletAddress;
 
 		var purchaseEvent = sale_contract.Purchase({ buyer:buyerAddress }, {fromBlock: blockNumber, toBlock: 'latest'});
 			purchaseEvent.watch(function(err, result){
@@ -565,15 +563,15 @@ module.exports = {
    },
 
    manageVestCron(){
-   	cron.schedule('*/1 * * * *', function(){
+   	cron.schedule('*/30 * * * *', function(){
 	     console.log("running vest times");
 
 	     var date = new Date().getTime();
 
 	     VestingTimes.findAll({})
 	       .then(data => {
+	       	if(data.length){
 	       	  data.map(data1 => {
-	       	  	console.log(data);
 	       	  	  if(data1.vetingTime1 === date){
 	       	  	  	vestingReleaseToken1(date,3,data1.id);
 	       	  	  } else if(data1.vetingTime2 === date){
@@ -583,7 +581,13 @@ module.exports = {
 	       	  	  } else {
 	       	  	  	vestingReleaseToken4(date,0,data1.id);
 	       	  	  }
-	       	  })
+	       	  });
+	       	} else {
+	       		console.log("no data found");
+	       	}
+	       })
+	       .catch(err => {
+	       	console.log(err);
 	       })
 	   });
    },
@@ -593,7 +597,6 @@ module.exports = {
    	var schedule = require('node-schedule');
 
 	var date = new Date(date).getTime();
-
 	 
 	var j = schedule.scheduleJob(date, function(){
     
