@@ -1,12 +1,17 @@
 import express from 'express';
 import usersController from './../../controllers/users-controller';
 import kycController from './../../controllers/kyc-controller';
+import adminController from './../../controllers/admin-controller';
 import tokenController from './../../controllers/token-controller';
 import { authenticate } from './../../helpers/ensure-authenticated';
 import btcController from './../../controllers/btc-controller';
 
 const router = express.Router();
 
+
+
+// get user profile 
+router.post('/getPricePerToken',authenticate ,btcController.getPricePerToken);
 
 // get user profile 
 router.post('/me', authenticate, usersController.getSingleUser);
@@ -48,11 +53,7 @@ router.post('/getCurrentPrice', authenticate, btcController.getCurrentPrice);
 router.post('/setCurrentPrice', authenticate, btcController.setCurrentPrice);
 
 // get contract  
-router.post('/getContract', authenticate, btcController.getContracts);
-
-// update contract  
-router.post('/update/contract', authenticate, btcController.updateContract);
-
+router.post('/getContract', authenticate, adminController.getContracts);
 
 // total buy token
 router.post('/totalRemainingToken', authenticate, tokenController.totalRemainingToken);

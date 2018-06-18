@@ -382,10 +382,9 @@ module.exports = {
     },
 
     getContracts(req, res, next){
-    	var id = req.id;
     	Admin.findOne({
-    		where:{ id },
-    		attributes: ['id','contract'],
+    		where:{ id: 1 },
+    		attributes: ['id','email','contract'],
     	})
     	 .then(data => {
     	 	if(data){

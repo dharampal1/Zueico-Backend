@@ -894,7 +894,7 @@ module.exports = {
          message: err.message
         });
       })
-}
+  }
 
 }
 

@@ -33,6 +33,30 @@ var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
 module.exports = {
 
 
+  getPricePerToken(req, res, next) {
+
+    const get_url = 'http://13.126.28.220:5000/getPricePerToken';
+
+      request.get({url:get_url},function(err,httpResponse,body ){
+        if(err){
+          console.log(err);
+          return res.status(500).json({
+            status:false,
+            message:err.message
+          });
+        } else {
+
+         var result = JSON.parse(body); 
+
+         return res.status(200).json({
+            status:true,
+            message:result.message,
+            data:result.data
+          });
+        }
+      });
+  },
+
   getCurrentPrice(req,res, next) {
      const url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
 
@@ -43,7 +67,8 @@ module.exports = {
             message:err.message
           });
         } else {
-
+            //We need to Fetch Ether Value form getPricePerToken
+            
             var pasedCoin=JSON.parse(body);
 
             var btc = pasedCoin.ETH.BTC,
@@ -202,14 +227,7 @@ module.exports = {
            });    
         }   
       });
-   },
-   getContracts(req, res, next){
-     
-   },
-   updateContract(req, res, next){
-
    }
- 
 }
    
 
