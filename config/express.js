@@ -13,7 +13,12 @@ import {
   checkTxHashWallet,
   checkTxHashBuy,
   checkTxHashTrans,
-  cronForTransfer
+  cronForTransfer,
+  vestingHashStatus,
+  endTimeHashStatus,
+  vestingTime1HashStatus,
+  vestingTime2HashStatus,
+  vestingTime3HashStatus
 } from '../helpers/cron-job';
 
 const initApp = function () {
@@ -37,6 +42,11 @@ const initApp = function () {
   
     cronForTransfer(); 
     manageVestCron();
+    vestingHashStatus();
+    vestingTime1HashStatus();
+    vestingTime2HashStatus();
+    vestingTime3HashStatus();
+    endTimeHashStatus();
     BTC_Tranctions();
     checkTxHashWallet();
     checkTxHashBuy();

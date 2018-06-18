@@ -192,8 +192,15 @@ module.exports = {
 			        	console.log(result);
 			        	if(result.status === true) {
 
+			             var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
+
 			        	User.update({
-			        		status:result.data
+			        		status:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
@@ -235,8 +242,15 @@ module.exports = {
 			        	console.log(result);
 			        	if(result.status === true) {
 
+				          var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
+
 			        	BuyToken.update({
-			        		buyStatus:result.data
+			        		buyStatus:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
@@ -278,9 +292,15 @@ module.exports = {
 			        	let result = JSON.parse(body);
 			        	console.log(result);
 			        	if(result.status === true) {
+			        		var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
 
 			        	TokenTransfer.update({
-			        		transStatus:result.data
+			        		transStatus:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
@@ -321,8 +341,14 @@ module.exports = {
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) {
 
+			        		var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
 			        	PrivelegeUser.update({
-			        		vestStatus:result.data
+			        		vestStatus:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
@@ -344,7 +370,199 @@ module.exports = {
 	});
   	    
    },
- 
+   
+   vestingTime1HashStatus(){
+  	cron.schedule('*/30 * * * *', function(){
+	     console.log("running vest time");
+
+	   VestingTimes.findAll({
+	     	where:{ vestTime1Hash:'Pending' }
+	     })
+	    .then(data => {
+		  if(data.length) {
+	      	  	data.map(data1 => {
+	      	  	  var vestTime1Hash = data1.vestTime1Hash;
+		          const body = { txhash:vestTime1Hash };
+				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        		var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
+			        	VestingTimes.update({
+			        		vestTime1Hash:new_status
+			        	},{
+			        		where: { id : data1.id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			          }
+			        }
+	      	    });
+	      	 });
+			}
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	});
+  	    
+   },
+    vestingTime2HashStatus(){
+  	cron.schedule('*/30 * * * *', function(){
+	     console.log("running vest time");
+
+	   VestingTimes.findAll({
+	     	where:{ vestTime2Hash:'Pending' }
+	     })
+	    .then(data => {
+		  if(data.length) {
+	      	  	data.map(data1 => {
+	      	  	  var vestTime2Hash = data1.vestTime2Hash;
+		          const body = { txhash:vestTime2Hash };
+				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        		var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
+			        	VestingTimes.update({
+			        		vestTime2Hash:new_status
+			        	},{
+			        		where: { id : data1.id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			          }
+			        }
+	      	    });
+	      	 });
+			}
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	});
+  	    
+   },
+    vestingTime3HashStatus(){
+  	cron.schedule('*/30 * * * *', function(){
+	     console.log("running vest time");
+
+	   VestingTimes.findAll({
+	     	where:{ vestTime3Hash:'Pending' }
+	     })
+	    .then(data => {
+		  if(data.length) {
+	      	  	data.map(data1 => {
+	      	  	  var vestTime3Hash = data1.vestTime3Hash;
+		          const body = { txhash:vestTime3Hash };
+				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        		var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
+			        	VestingTimes.update({
+			        		vestTime3Hash:new_status
+			        	},{
+			        		where: { id : data1.id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			          }
+			        }
+	      	    });
+	      	 });
+			}
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	});
+  	    
+   },
+    endTimeHashStatus(){
+  	cron.schedule('*/30 * * * *', function(){
+	     console.log("running vest time");
+
+	   VestingTimes.findAll({
+	     	where:{ vestTimeHash1:'Pending' }
+	     })
+	    .then(data => {
+		  if(data.length) {
+	      	  	data.map(data1 => {
+	      	  	  var endTimeHash = data1.endTimeHash;
+		          const body = { txhash:endTimeHash };
+				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        		var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
+			        	VestingTimes.update({
+			        		endTimeHash:new_status
+			        	},{
+			        		where: { id : data1.id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			          }
+			        }
+	      	    });
+	      	 });
+			}
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	});
+  	    
+   },
 
    manageVestCron(){
    	cron.schedule('*/1 * * * *', function(){
