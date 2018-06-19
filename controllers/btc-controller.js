@@ -267,7 +267,7 @@ module.exports = {
         attributes: ['id','email','btcWalletAddress'],
       })
        .then(data => {
-        if(data){
+        if(data.btcWalletAddress){
             res.status(200).json({
             status:true,
             message:"Admin btcWalletAddress",
@@ -276,7 +276,7 @@ module.exports = {
           } else {
             res.status(404).json({
             status:false,
-            message:"No btcWalletAddress found",
+            message:"No btcWalletAddress Added",
             });
           }
        })
@@ -290,7 +290,7 @@ module.exports = {
   updateBtcWallet(req, res, next){
       var id = req.id;
       var btcWalletAddress = req.body.btcWalletAddress;
-
+     if(btcWalletAddress) {
       Admin.update({
         btcWalletAddress
       },
@@ -317,7 +317,13 @@ module.exports = {
           message:err.message
         })
      });   
-  }
+  } else {
+     res.status(422).json({
+        status:false,
+        message:"btcWalletAddress is required",
+    });
+   }
+ }
 }
    
 
