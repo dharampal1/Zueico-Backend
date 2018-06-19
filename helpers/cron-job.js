@@ -257,6 +257,8 @@ module.exports = {
 			        	.catch(err => {
 			        		console.log(err,"buy");
 			        	})
+			          } else {
+			          	return null;
 			          }
 			        }
 	      	    });
@@ -307,6 +309,8 @@ module.exports = {
 			        	.catch(err => {
 			        		console.log(err,"trans");
 			        	})
+			          } else {
+			          	return null;
 			          }
 			        }
 	      	    });
@@ -355,6 +359,8 @@ module.exports = {
 			        	.catch(err => {
 			        		console.log(err);
 			        	})
+			          } else {
+			          	return null
 			          }
 			        }
 	      	    });
@@ -404,6 +410,8 @@ module.exports = {
 			        	.catch(err => {
 			        		console.log(err);
 			        	})
+			          } else {
+			          	return null;
 			          }
 			        }
 	      	    });
@@ -453,6 +461,9 @@ module.exports = {
 			        		console.log(err);
 			        	})
 			          }
+			          else {
+			          	return null;
+			          }
 			        }
 	      	    });
 	      	 });
@@ -500,6 +511,8 @@ module.exports = {
 			        	.catch(err => {
 			        		console.log(err);
 			        	})
+			           } else {
+			          	return null;
 			          }
 			        }
 	      	    });
@@ -548,6 +561,8 @@ module.exports = {
 			        	.catch(err => {
 			        		console.log(err);
 			        	})
+			           } else {
+			          	return null;
 			          }
 			        }
 	      	    });
