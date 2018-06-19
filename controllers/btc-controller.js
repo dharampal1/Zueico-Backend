@@ -230,13 +230,15 @@ module.exports = {
    },
 
    btcContribution(req, res, next) {
-      BuyToken.count({ walletMethod :'BTC' })
+      BuyToken.count({ where: { walletMethod :'BTC' } })
        .then(data => {
          if(data > 0){
-      BuyToken.sum('tokens',{ where: { walletMethod :'BTC' } }).then(sum => {
+      BuyToken.sum('tokens',{ where: { walletMethod :'BTC' } })
+      .then(sum => {
          res.status(200).json({
               status:true,
-              message:"All btc contributions"
+              message:"All btc contributions",
+              data:sum
             }); 
        }) 
       .catch(err => {
