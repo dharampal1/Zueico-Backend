@@ -746,6 +746,10 @@ function sendTokens(body) {
 
 function sumOfBoughtTokens(user_id) {
 	return new Promise(((resolve, reject) => {
+
+ BuyToken.count({ where : { user_id: user_id}})
+	 .then(data => {
+	 	 if(data > 0){
 	BuyToken.sum('tokens', {
 		where: {
 			user_id
@@ -755,6 +759,14 @@ function sumOfBoughtTokens(user_id) {
 	}).catch(err => {
 		reject(err)
 	});
+	 } else {
+	 	 	var count = 0;
+	 	 	resolve(count)
+	 	 }
+	})
+	 .catch(err => {
+	 	reject(err)
+	 })
   }));
 }
 

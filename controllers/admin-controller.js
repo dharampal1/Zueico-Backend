@@ -761,22 +761,43 @@ function approveAddress(body){
 }
 
 function sumOfBoughtTokens() {
-	 return new Promise(((resolve, reject) => {
+	return new Promise(((resolve, reject) => {
+    BuyToken.count()
+	 .then(data => {
+	 	 if(data > 0){
 	BuyToken.sum('tokens').then(sum => {
 		resolve({sum});
 	}).catch(err => {
 		reject(err)
 	});
+	} else {
+	 	 	resolve({sum:0});
+
+	 	 }
+	 })	
+	 .catch(err => {
+	 	reject(err)
+	 })
 }));
 }
 
 function sumOfTransferedTokens() {
-	//token
 	 return new Promise(((resolve, reject) => {
-	TokenTransfer.sum('fromToken').then( sum =>  {
+	TokenTransfer.count()
+	 .then(data => {
+	 	 if(data > 0){
+	TokenTransfer.sum('toToken').then( sum =>  {
 		resolve({sum});
 	}).catch(err => {
 		reject(err)
-	});
+	 });
+	} else {
+	 	 	resolve({sum:0});
+
+	 	 }
+	 })	
+	 .catch(err => {
+	 	reject(err)
+	 })
 	}));
 }

@@ -1,7 +1,7 @@
 var Web3 = require("web3");
 var web3 = new Web3();
 import request from 'request';
-import {Btc_price} from '../models';
+import {Btc_price, BuyToken} from '../models';
 import token_abi from './../config/token_abi.json'
 import sale_abi from './../config/sale_abi.json'
 import refund_abi from './../config/refund_abi.json'
@@ -227,7 +227,47 @@ module.exports = {
            });    
         }   
       });
-   }
+   },
+
+   btcContribution(req, res, next) {
+      BuyToken.count({ walletMethod :'BTC' })
+       .then(data => {
+         if(data > 0){
+      BuyToken.sum('tokens',{ where: { walletMethod :'BTC' } }).then(sum => {
+         res.status(200).json({
+              status:true,
+              message:"All btc contributions"
+            }); 
+       }) 
+      .catch(err => {
+        res.status(500).json({
+            status:false,
+            message:err.message
+          }); 
+       })
+      } else {
+           res.status(200).json({
+              status:false,
+              message:"No Purchase Yet.."
+            }); 
+         }
+       }) 
+       .catch(err => {
+        res.status(500).json({
+            status:false,
+            message:err.message
+          }); 
+       })
+   },
+  getBtcWallet(req, res, next){
+    
+  },
+  updateBtcWallet(req, res, next){
+
+  },
+  addBtcWallet(req, res, next){
+
+  }
 }
    
 

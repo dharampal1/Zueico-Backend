@@ -24,11 +24,23 @@ router.post('/kyc', adminAuthenticate, adminController.allKyc);
 // get all trancations for user buyt token 
 router.post('/transactions', adminAuthenticate, adminController.allTrancations);
 
-// get total purchased coins
-router.post('/totalCoins', adminAuthenticate, adminController.totalCoins);
+// // get total purchased coins
+// router.post('/totalCoins', adminAuthenticate, adminController.totalCoins);
 
-// get total remaining coins
-router.post('/remainingCoins', adminAuthenticate, adminController.remainingCoins);
+// get btc  wallet address 
+router.post('/getBtcWallet', adminAuthenticate, btcController.getBtcWallet);
+
+// get btc  wallet address 
+router.post('/update/BtcWallet', adminAuthenticate, btcController.updateBtcWallet);
+
+// add  btc  wallet address 
+router.post('/addBtcWallet', adminAuthenticate, btcController.addBtcWallet);
+
+// get all btc  contributions 
+router.post('/btc/contribution', adminAuthenticate, btcController.btcContribution);
+
+// // get total remaining coins
+// router.post('/remainingCoins', adminAuthenticate, adminController.remainingCoins);
 
 // approve Kyc 
 router.post('/kyc/approve', adminAuthenticate, adminController.approveKyc);
