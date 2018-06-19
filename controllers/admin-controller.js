@@ -527,7 +527,7 @@ module.exports = {
     	 	if(data){
 	         	res.status(200).json({
 	  	  		status:true,
-	  	  		message:"Your Contact",
+	  	  		message:"Admin contract",
 	  	  		data
   	     	  });
 	        } else {

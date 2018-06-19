@@ -8,7 +8,8 @@ import btcController from './../../controllers/btc-controller';
 
 const router = express.Router();
 
-
+// get admin btc  wallet address 
+router.post('/btcWalletAddress', authenticate, btcController.getBtcWallet);
 
 // get user profile 
 router.post('/getPricePerToken',authenticate ,btcController.getPricePerToken);

@@ -1,7 +1,7 @@
 var Web3 = require("web3");
 var web3 = new Web3();
 import request from 'request';
-import {Btc_price, BuyToken} from '../models';
+import {Btc_price, BuyToken, Admin} from '../models';
 import token_abi from './../config/token_abi.json'
 import sale_abi from './../config/sale_abi.json'
 import refund_abi from './../config/refund_abi.json'
@@ -262,13 +262,61 @@ module.exports = {
        })
    },
   getBtcWallet(req, res, next){
-    
+    Admin.findOne({
+        where:{ id: 1 },
+        attributes: ['id','email','btcWalletAddress'],
+      })
+       .then(data => {
+        if(data){
+            res.status(200).json({
+            status:true,
+            message:"Admin btcWalletAddress",
+            data
+            });
+          } else {
+            res.status(404).json({
+            status:false,
+            message:"No btcWalletAddress found",
+            });
+          }
+       })
+       .catch(err => {
+        res.status(500).json({
+          status:false,
+          message:err.message
+        })
+     });   
   },
   updateBtcWallet(req, res, next){
+      var id = req.id;
+      var btcWalletAddress = req.body.btcWalletAddress;
 
-  },
-  addBtcWallet(req, res, next){
-
+      Admin.update({
+        btcWalletAddress
+      },
+      {
+        where:{ id },
+        plain:true
+      })
+       .then(data => {
+        if(data){
+            res.status(200).json({
+            status:true,
+            message:"btcWalletAddress Added"
+            });
+          } else {
+            res.status(404).json({
+            status:false,
+            message:"No btcWalletAddress saved",
+            });
+          }
+       })
+       .catch(err => {
+        res.status(500).json({
+          status:false,
+          message:err.message
+        })
+     });   
   }
 }
    

@@ -28,13 +28,10 @@ router.post('/transactions', adminAuthenticate, adminController.allTrancations);
 // router.post('/totalCoins', adminAuthenticate, adminController.totalCoins);
 
 // get btc  wallet address 
-router.post('/getBtcWallet', adminAuthenticate, btcController.getBtcWallet);
+router.post('/btcWalletAddress', adminAuthenticate, btcController.getBtcWallet);
 
-// get btc  wallet address 
-router.post('/update/BtcWallet', adminAuthenticate, btcController.updateBtcWallet);
-
-// add  btc  wallet address 
-router.post('/addBtcWallet', adminAuthenticate, btcController.addBtcWallet);
+// add/update btc  wallet address 
+router.post('/add/btcWalletAddress', adminAuthenticate, btcController.updateBtcWallet);
 
 // get all btc  contributions 
 router.post('/btc/contribution', adminAuthenticate, btcController.btcContribution);
