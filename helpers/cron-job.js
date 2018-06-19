@@ -28,8 +28,7 @@ module.exports = {
 	cronForTransfer(){
 
 	cron.schedule('*/1 * * * *', function(){
-	  console.log("running cron for  event");
-	
+	  console.log("running cron for  event"); 
 
  BuyToken.findAll({
 	 where: { tokenUpdateStatus:false },
@@ -44,8 +43,6 @@ module.exports = {
     .then(data => {
   	  if(data.length){
 
-  	  	console.log(data);
-
   	  	data.map(hash => {
 
   	  	var blockNumber = "0";
@@ -54,7 +51,9 @@ module.exports = {
 		var purchaseEvent = sale_contract.Purchase({ buyer:buyerAddress }, {fromBlock: blockNumber, toBlock: 'latest'});
 			purchaseEvent.watch(function(err, result){
 
-				
+			if(err){
+               console.log(err)
+			} else {
 			  var tokens = result.args.tokens.toNumber() / 10**18;
 			   BuyToken.update({
 			     	tokens,
@@ -68,7 +67,7 @@ module.exports = {
 			   	  	 return true; 
 			   	  }
 			   })
-
+              }
 		   })
 		});
       }
