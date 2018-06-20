@@ -65,6 +65,9 @@ router.post('/totalPurchasedToken', authenticate, tokenController.totalUserbuyto
 // total tansfer token
 router.post('/getTransferdTokens', authenticate, tokenController.getTransferdTokens);
 
+// get stripe API key  
+router.post('/getstripeKey', authenticate, adminController.getstripeKey);
+
 // total orders
 router.post('/totalOrders', authenticate, tokenController.totalOrders);
 
@@ -94,6 +97,9 @@ router.post('/getICOdetails', authenticate, tokenController.getICOdetails);
 
 // getPrivateKey 
 router.post('/getPrivateKey', authenticate, tokenController.getPrivateKey);
+
+// getPublicStripeKey 
+router.post('/getPublicStripeKey', authenticate, tokenController.getPublicStripeKey);
 
 // getBalance 
 router.post('/getBalance', authenticate, tokenController.getBalance);

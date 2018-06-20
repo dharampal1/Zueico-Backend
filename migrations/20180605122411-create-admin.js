@@ -19,6 +19,11 @@ module.exports = {
         unique:true,
         type: Sequelize.STRING
       },
+      publicStripeKey:{
+        allowNull: false,
+        defaultValue:'',
+        type: Sequelize.STRING
+      },
       password: {
         allowNull: false,
         defaultValue:'',

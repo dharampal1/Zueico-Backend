@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import request from 'request';
 import { User, Admin, Setting, BuyToken, 
-	     TokenTransfer, PrivelegeUser ,VestingTimes} from '../models';
+	     TokenTransfer, PrivelegeUser ,VestingTimes,Refund} from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
 import { sendEmail} from '../helpers/userHelper';
@@ -428,6 +428,49 @@ module.exports = {
 		} 
 	},
 
+	publicStripeKey(req, res, next) {
+
+        var id = req.id;
+        var publicStripeKey = req.body.publicStripeKey;
+    	
+    if(publicStripeKey) {
+
+    	var publicStripeKey = req.body.publicStripeKey;
+
+    	Admin.update({
+    		publicStripeKey
+    	},
+    	{
+    		where:{ id }
+    	})
+    	 .then(data => {
+    	 	if(data){
+	         	res.status(200).json({
+	  	  		status:true,
+	  	  		message:"publicStripeKey added",
+	  	  		data
+  	     	  });
+	        } else {
+	        	res.status(404).json({
+	  	  		status:false,
+	  	  		message:"No publicStripeKey found",
+    	      });
+	        }
+	     })
+    	 .catch(err => {
+    	 	res.status(500).json({
+  	  		status:false,
+  	  		message:err.message
+  	  	})
+     });   
+     } else {
+     	res.status(422).json({
+  	  		status:false,
+  	  		message:"publicStripeKey is required",
+	      });
+     }
+	},
+
 	stripeKey(req,res,next){
 	  let id = 0;
 	  var key = req.body.key,
@@ -742,6 +785,39 @@ module.exports = {
   	  		message:'vesting_period_date is required'
   	  })
    }
+  },
+
+  usdContribution(req, res, next) {
+  	 BuyToken.count({ where: { walletMethod :'USD' } })
+       .then(data => {
+         if(data > 0){
+      BuyToken.sum('tokens',{ where: { walletMethod :'USD' } })
+      .then(sum => {
+         res.status(200).json({
+              status:true,
+              message:"All USD contributions",
+              data:sum
+            }); 
+       }) 
+      .catch(err => {
+        res.status(500).json({
+            status:false,
+            message:err.message
+          }); 
+       })
+      } else {
+           res.status(200).json({
+              status:false,
+              message:"No USD Purchase Found"
+            }); 
+         }
+       }) 
+       .catch(err => {
+        res.status(500).json({
+            status:false,
+            message:err.message
+          }); 
+       })
   }
 }
 

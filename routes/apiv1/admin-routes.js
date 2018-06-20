@@ -10,7 +10,13 @@ const router = express.Router();
 router.post('/upload/privilegeUsers',adminAuthenticate, adminController.uploadPrivelgeUsers);
 
 // Get all users  
+router.post('/usd/contribution', adminAuthenticate, adminController.usdContribution);
+
+// Get all users  
 router.post('/users', adminAuthenticate, adminController.allUsers);
+
+// activate the refund for all users  
+router.post('/refund', adminAuthenticate, btcController.refund);
 
 // Get all users  
 router.post('/totalUsersCount', adminAuthenticate, adminController.allUsersCount);
@@ -56,6 +62,12 @@ router.post('/kyc/reject', adminAuthenticate, adminController.rejectKyc);
 
 // get stripe API key  
 router.post('/getstripeKey', adminAuthenticate, adminController.getstripeKey);
+
+// add stripe API key  
+router.post('/publicStripeKey', adminAuthenticate, adminController.publicStripeKey);
+
+// getPublicStripeKey 
+router.post('/getPublicStripeKey', adminAuthenticate, tokenController.getPublicStripeKey);
 
 // add stripe API key  
 router.post('/stripeKey', adminAuthenticate, adminController.stripeKey);

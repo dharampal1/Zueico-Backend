@@ -4,8 +4,9 @@ module.exports = (sequelize, DataTypes) => {
     userAddress: DataTypes.STRING,
     toAddress: DataTypes.STRING,
     amountInEther: DataTypes.STRING,
+    refStart:DataTypes.BOOLEAN,
     refHash: DataTypes.STRING,
-    refStatus: DataTypes.STRING
+    refStatus: DataTypes.ENUM('Pending','Approved','Failed')
   }, {});
   Refund.associate = function(models) {
     // associations can be defined here

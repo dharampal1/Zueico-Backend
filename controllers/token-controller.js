@@ -1,6 +1,6 @@
 import axios from 'axios';
 import request from 'request';
-import { User } from '../models';
+import { User , Admin} from '../models';
 import { checkBlank } from '../helpers/requestHelper';
 import {
   BuyToken,
@@ -714,7 +714,31 @@ module.exports = {
     		message:err.meesage
     	 });
       })
-    }
+    },
+   getPublicStripeKey(req, res, next) {
+
+    Admin.findOne({ where: { id : 1 } } )
+	 .then(data => {
+	 	if(data.publicStripeKey) {
+	 	res.status(200).json({
+	  		status:true,
+	  		message:"Public Stripe key",
+	  		data:data.publicStripeKey
+	  	});
+	   } else {
+	   	res.status(404).json({
+	  		status:false,
+	  		message:"No Public Stripe key added"
+	  	});
+	   } 
+	 })
+	 .catch(err => {
+	 	res.status(500).json({
+  	  		status:false,
+  	  		message:err.message
+  	  	})
+	 });
+   }
 }
 
 

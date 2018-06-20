@@ -851,7 +851,7 @@ module.exports = {
       }
 
       stripe.charges.create({
-           amount:amount,
+           amount:amount * 100,
            description: description,
            currency: "usd",
            customer: customer.id
@@ -898,7 +898,7 @@ module.exports = {
               if(data) {
                   res.status(201).json({
                     status:true,
-                    message:"Payment sent successful"   
+                    message:"Payment sent successful"  
                   }); 
                 }
             })

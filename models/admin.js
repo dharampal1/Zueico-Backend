@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   var Admin = sequelize.define('Admin', {
     username: DataTypes.STRING,
     email: DataTypes.STRING,
+    publicStripeKey:DataTypes.STRING,
     btcWalletAddress:DataTypes.STRING,
     password: DataTypes.STRING,
     phone: DataTypes.STRING,

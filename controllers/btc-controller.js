@@ -1,7 +1,7 @@
 var Web3 = require("web3");
 var web3 = new Web3();
 import request from 'request';
-import {Btc_price, BuyToken, Admin} from '../models';
+import {Btc_price, BuyToken, Admin, Refund} from '../models';
 import token_abi from './../config/token_abi.json'
 import sale_abi from './../config/sale_abi.json'
 import refund_abi from './../config/refund_abi.json'
@@ -31,6 +31,46 @@ var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
 
 
 module.exports = {
+
+   refund(req, res, next){
+     request.get({url:`${url}/enableRefundsForUser`},function(err,httpResponse,body){
+        if(err){
+          return res.status(500).json({
+          status:false,
+          message:err.message
+          });
+        } else {
+          let result = JSON.parse(body);
+
+          let new_refund = new Refund({
+              refHash:result.data,
+              refStart:1
+          });
+
+          new_refund.save()
+            .then(data => {
+            if(data){
+              res.status(200).json({
+                status:true,
+                message:result.message
+              });
+                } else {
+          res.status(400).json({
+              status:false,
+              message:"No Data Found For Refund"
+             });
+                }
+            })
+            .catch(err => {
+               res.status(500).json({
+              status:false,
+              message:err.message
+             });
+            })
+      
+        }
+     });
+  },
 
 
   getPricePerToken(req, res, next) {
@@ -250,7 +290,7 @@ module.exports = {
       } else {
            res.status(200).json({
               status:false,
-              message:"No Purchase Yet.."
+              message:"No BTC Purchase Found."
             }); 
          }
        }) 

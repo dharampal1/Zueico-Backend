@@ -1,18 +1,18 @@
 import cron from 'node-cron';
 import request from 'request';
-import { User, btc_transaction , BuyToken, TokenTransfer, PrivelegeUser,VestingTimes } from '../models';
+ var schedule = require('node-schedule');
+import { User, btc_transaction ,Refund, BuyToken, TokenTransfer, PrivelegeUser,VestingTimes } from '../models';
 
 const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
 const btc_url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
 const api_url = 'http://13.126.28.220:5000';
 import token_abi from './../config/token_abi.json'
  import sale_abi from './../config/sale_abi.json'
-// import refund_abi from './../config/refund_abi.json'
+ import refund_abi from './../config/refund_abi.json'
 // import vest_abi from './../config/vest_abi.json'
 
+var refund_ContractAddress = '0x89306887d540b9b937814ed36c0c315a8908218d';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
-
-
 var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
 
 var Web3 = require("web3");
@@ -20,8 +20,8 @@ var web3 = new Web3();
 web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
 
 var token_contract = web3.eth.contract(token_abi).at(token_ContractAddress);
-
 var sale_contract = web3.eth.contract(sale_abi).at(sale_ContractAddress);
+var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
 
 module.exports = {
 
@@ -45,7 +45,7 @@ module.exports = {
 
   	  	data.map(hash => {
 
-  	  	var blockNumber = "0";
+  	  	var blockNumber = "2400000";
 	    var buyerAddress = hash.User.ethWalletAddress;
 
 		var purchaseEvent = sale_contract.Purchase({ buyer:buyerAddress }, {fromBlock: blockNumber, toBlock: 'latest'});
@@ -323,6 +323,25 @@ module.exports = {
 	});
   },
 
+   refundTxHash(){
+
+   	Refund.findAll({})
+   	 .then(data => {
+   	 	 if(data.length){
+   	 	 	data.map(ref => {
+   	 	 		 if(ref.refStart === true){
+                    refundCron();
+   	 	 		 }
+   	 	 	});
+   	 	 } else {
+   	 	 	console.log("no data");
+   	 	 }
+   	 })
+   	 .catch(err => {
+   	 	console.log(err,"refund error");
+   	 })
+  },
+
   vestingHashStatus(){
   	cron.schedule('*/1 * * * *', function(){
 	     console.log("running vest");
@@ -577,7 +596,7 @@ module.exports = {
    },
 
    manageVestCron(){
-   	cron.schedule('*/30 * * * *', function(){
+   	cron.schedule('*/59 * * * *', function(){
 	     console.log("running vest times");
 
 	     var date = new Date().getTime();
@@ -608,13 +627,6 @@ module.exports = {
 
    vestingReleaseToken1(date, VestingPeriod, id ){
 
-   	var schedule = require('node-schedule');
-
-	var date = new Date(date).getTime();
-	 
-	var j = schedule.scheduleJob(date, function(){
-    
-
     User.findAll({where:{previlege:'1'}})
 	    .then((users,i) => {
 	  	if(users.length){ 
@@ -634,7 +646,7 @@ module.exports = {
 			        		vestTimeHash1:result.data,
 			        		VestingPeriod
 			        	},{
-			        		where: { id}
+			        		where: { id }
 			        	})
 			        	.then(stat => {
 			        		console.log("updated");
@@ -651,19 +663,10 @@ module.exports = {
 	    .catch(err => {
 	   	  console.log(err);
 	    })	  
-    });  
   },
 
    vestingReleaseToken2(date, VestingPeriod, id){
-
-   	var schedule = require('node-schedule');
-
-	var date = new Date(date).getTime();
-
-	 
-	var j = schedule.scheduleJob(date, function(){
     
-
     User.findAll({where:{previlege:'1'}})
 	    .then((users,i) => {
 	  	if(users.length){ 
@@ -699,19 +702,10 @@ module.exports = {
     })
     .catch(err => {
    	  console.log(err);
-    })	  
-    });  
+    })	   
   },
 
    vestingReleaseToken3(date, VestingPeriod, id){
-
-   	var schedule = require('node-schedule');
-
-	var date = new Date(date).getTime();
-
-	 
-	var j = schedule.scheduleJob(date, function(){
-    
 
     User.findAll({where:{previlege:'1'}})
 	    .then((users,i) => {
@@ -749,18 +743,9 @@ module.exports = {
     .catch(err => {
    	  console.log(err);
     })	  
-    });  
   },
 
    vestingReleaseToken4(date, VestingPeriod, id){
-
-   	var schedule = require('node-schedule');
-
-	var date = new Date(date).getTime();
-
-	 
-	var j = schedule.scheduleJob(date, function(){
-    
 
     User.findAll({where:{previlege:'1'}})
 	    .then((users,i) => {
@@ -798,7 +783,58 @@ module.exports = {
     .catch(err => {
    	  console.log(err);
     })	  
-    });  
   }
 
 }
+
+function refundCron(){
+
+	cron.schedule('*/1 * * * *', function(){
+	     console.log("running refund");
+
+	   Refund.findAll({
+	     	where:{ refStatus:'Pending' }
+	     })
+	    .then(data => {
+		  if(data.length) {
+	      	  	data.map(data1 => {
+	      	  	  var refHash = data1.refHash;
+		          const body = { txhash:refHash };
+				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	console.log(result);
+			        	if(result.status === true) {
+			        		var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
+
+			        	Refund.update({
+			        		refStatus:new_status
+			        	},{
+			        		where: { id : data1.id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated refund");
+			        	})
+			        	.catch(err => {
+			        		console.log(err,"refund");
+			        	})
+			          } else {
+			          	return null;
+			          }
+			        }
+	      	    });
+	      	 });
+			}
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	});
+};

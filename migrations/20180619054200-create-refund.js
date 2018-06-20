@@ -17,11 +17,18 @@ module.exports = {
       amountInEther: {
         type: Sequelize.STRING
       },
+      refStart:{
+         allowNull: false,
+         type: Sequelize.BOOLEAN,
+         defaultValue:false
+       },
       refHash: {
         type: Sequelize.STRING
       },
       refStatus: {
-        type: Sequelize.STRING
+         allowNull: false,
+         defaultValue:'Pending',
+         type:Sequelize.ENUM('Pending','Approved','Failed')
       },
       createdAt: {
         allowNull: false,
