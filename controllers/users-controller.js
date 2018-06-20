@@ -497,15 +497,22 @@ module.exports = {
           }
         })
         .catch(err => {
-          res.status(500).json({
-            status:false,
-            message: err.message
-          });
+          if(err.original.errno == 1062){
+             res.status(500).json({
+              status:false,
+              message: `This ${req.body.email} is already used.Please try another One.`
+             });
+           } else {
+             res.status(500).json({
+              status:false,
+              message: err.message
+           });
+          }
         });
     } else {
       res.status(400).json({
         status:false,
-        message: "You not not sending any value"
+        message: "You are not sending any value"
       });
     }
 
