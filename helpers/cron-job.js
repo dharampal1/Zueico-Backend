@@ -838,3 +838,21 @@ function refundCron(){
 		})
 	});
 };
+
+exports.getRefund = function(socket) {
+
+    cron.schedule('*/1 * * * *', function(){
+       console.log("running refund");
+
+   var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
+        
+        console.log(refund);
+
+        if(refund){
+
+           socket.emit("refundData", { data: refund } ); 
+        }
+
+       
+ });   
+}
