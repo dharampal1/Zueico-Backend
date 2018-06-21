@@ -74,6 +74,7 @@ module.exports = {
 	});
    });
   },
+
 	BTC_Tranctions(){
 	 cron.schedule('*/30 * * * *', function(){
 	     console.log("running btc");
@@ -494,7 +495,9 @@ module.exports = {
 	});
   	    
    },
+
     vestingTime3HashStatus(){
+
   	cron.schedule('*/30 * * * *', function(){
 	     console.log("running vest time");
 
@@ -544,6 +547,7 @@ module.exports = {
 	});
   	    
    },
+
     endTimeHashStatus(){
   	cron.schedule('*/30 * * * *', function(){
 	     console.log("running vest time");
@@ -783,7 +787,22 @@ module.exports = {
     .catch(err => {
    	  console.log(err);
     })	  
-  }
+  },
+  getRefund(socket) {
+
+    cron.schedule('*/1 * * * *', function(){
+       console.log("running refund");
+
+   var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
+        
+        console.log(refund);
+
+        if(refund){
+
+           socket.emit("refundData", { data: refund } ); 
+        }   
+ });   
+}
 
 }
 
@@ -838,21 +857,3 @@ function refundCron(){
 		})
 	});
 };
-
-exports.getRefund = function(socket) {
-
-    cron.schedule('*/1 * * * *', function(){
-       console.log("running refund");
-
-   var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
-        
-        console.log(refund);
-
-        if(refund){
-
-           socket.emit("refundData", { data: refund } ); 
-        }
-
-       
- });   
-}
