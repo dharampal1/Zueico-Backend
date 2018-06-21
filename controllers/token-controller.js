@@ -565,7 +565,7 @@ module.exports = {
     			let remain = data - data1 ;
 
     			const result = { 
-    				Puchased : data,
+    				Purchased : data,
     				Remaining:remain
     			};
 
