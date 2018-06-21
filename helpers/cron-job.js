@@ -798,17 +798,13 @@ module.exports = {
     cron.schedule('*/1 * * * *', function(){
        console.log("running refund");
 
-   var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
-             var refuser =  refund_contract.Refunded();
+     var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
+     var refuser =  refund_contract.Refunded({}, {fromBlock: "2400000", toBlock: 'latest'});
+     console.log(refuser,"refundusers");
 
-             console.log(refuser,"user refun");
-        console.log(refund,"refund");
+      socket.emit("refundData", { data: refund } );  
 
-        if(refund){
-
-           socket.emit("refundData", { data: refund } ); 
-        }   
- });   
+  });   
 },
 
   setCurrentPrice() {
