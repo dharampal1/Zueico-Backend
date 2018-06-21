@@ -562,7 +562,7 @@ module.exports = {
     	  .then( data1 => {
     		if(data1){ 
 
-    			remain = data - data1 ;
+    			let remain = data - data1 ;
 
     			const result = { 
     				Puchased : data,
