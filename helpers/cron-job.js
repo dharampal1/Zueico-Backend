@@ -839,8 +839,12 @@ module.exports = {
                   diff = usd - data.USD ;
                 }
                 if(diff > 1 ){
+
                   Btc_price.update({
-                    where:{ id:1 }
+                  	USD:usd
+                  },
+                  {
+                    where:{ id : 1 }
                   })
                   .then(price => {
                     if(price){
@@ -858,7 +862,7 @@ module.exports = {
 
 			        	console.log(body);
 
-                      console.log("price is updated on network");
+                      console.log("price is updated on network and updated");
                      }
                    });
 
@@ -884,7 +888,7 @@ module.exports = {
 		        } else {
 
                   console.log("price is updated on network");
-                  
+
                  }
                });
 

@@ -557,16 +557,41 @@ module.exports = {
     	sumOfBoughtTokens(user_id)
     	.then( data => {
     		if(data){
+
+    	  sumOfTransferedTokens(user_id)
+    	  .then( data1 => {
+    		if(data1){ 
+
+    			remain = data - data1 ;
+
+    			const result = { 
+    				Puchased : data,
+    				Remaining:remain
+    			};
+
     			res.status(200).json({
 		    		status:true,
-		    		message:"Total Tokens Purchased By You.",
-		    		data
+		    		message:"Total Tokens Purchased and Remaining Tokens.",
+		    		data:result
 		    	 });
+    		} else {
+    			res.status(404).json({
+	    		status:false,
+	    		message:'No Token is Transfered Yet.',
+	    		data
+	    	 });
+    		}
+    	})
+    	 .catch( err => {
+    	 	 res.status(500).json({
+    		 status:false,
+    		 message:err.message
+    	   });
+    	  }) 
     		} else {
     		 res.status(404).json({
 	    		status:false,
 	    		message:'No Token is Purchased Yet',
-	    		data
 	    	 });
     		}
     	})
