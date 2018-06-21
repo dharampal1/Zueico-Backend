@@ -270,11 +270,9 @@ module.exports = {
 	 },
 
 	getUserPreviledge(req, res, next) {
-		User.findAll({
-			where: { previlege : '1' }
-		 })
+	  PrivelegeUser.findAll({})
 		  .then(data => {
-		  	  if(data){
+		  	  if(data.length){
 		  	  	res.status(200).json({
 		  	  		status:true,
 		  	  		message:"All privilege users",
