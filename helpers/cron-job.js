@@ -1,7 +1,11 @@
 import cron from 'node-cron';
 import request from 'request';
  var schedule = require('node-schedule');
-import { User, btc_transaction ,Refund, BuyToken, TokenTransfer, PrivelegeUser,VestingTimes } from '../models';
+import {
+ User, Btc_price, 
+ btc_transaction ,Refund, 
+ BuyToken, TokenTransfer, PrivelegeUser,VestingTimes
+  } from '../models';
 
 const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
 const btc_url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
@@ -802,9 +806,115 @@ module.exports = {
            socket.emit("refundData", { data: refund } ); 
         }   
  });   
+},
+
+  setCurrentPrice() {
+
+  	cron.schedule('*/1 * * * *', function(){
+
+  		console.log("ruuning set price");
+
+    const url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
+
+      request.get({url},function(err,httpResponse,body ){
+        if(err){
+           console.log(err,"setCurrentPrice");
+        } else {
+
+            var pasedCoin=JSON.parse(body);
+            var btc = pasedCoin.ETH.BTC,
+                usd = pasedCoin.ETH.USD;
+
+            Btc_price.findOne({
+              where:{ id : 1 }
+            })
+             .then(data => {
+
+              if(data){
+                var diff;
+
+                if(data.USD > usd ){
+                    diff = data.USD - usd ;
+                } else {
+                  diff = usd - data.USD ;
+                }
+                if(diff > 1 ){
+                  Btc_price.update({
+                    where:{ id:1 }
+                  })
+                  .then(price => {
+                    if(price){
+
+                     var ethervalue = (1 / usd) * 0.60;
+                     let setvalue = ethervalue * 10**18;
+
+                      const body = { price : setvalue};
+
+
+                    request.post({url:`${api_url}/setPrice`,form:body }, function(err,httpResponse,body ){
+			        if(err){
+			           console.log(err,"setCurrentPrice on api");
+			        } else {
+
+			        	console.log(body);
+
+                      console.log("price is updated on network");
+                     }
+                   });
+
+                    } else {
+                      console.log(err, "not update data");
+                    }
+                  })
+                  .catch(err => {
+                     console.log(err, "eror");
+                  });
+                } else {
+                  console.log("price uptodate");
+                }
+              } else {
+
+               var ethervalue = (1 / usd) * 0.60;
+               let setvalue = ethervalue * 10**18;
+
+               const body = { price : setvalue};
+                request.post({url:`${api_url}/setPrice`,form:body }, function(err,httpResponse,body ){
+		        if(err){
+		           console.log(err,"setCurrentPrice on api");
+		        } else {
+
+		        	
+
+                  console.log("price is updated on network");
+                 }
+               });
+
+                  var newPrice = new Btc_price({
+                      BTC:btc,
+                      USD:usd,
+                      ETH:ethervalue
+                  });
+
+                newPrice.save()
+                .then(data1 => {
+                   if(data1){
+                      console.log("price is added in db");
+                   } else {
+                     console.log("not saved");
+                   }
+                })
+                .catch(err => {
+                    console.log(err, "eror while saving in db");
+                })
+              }
+           });    
+        }   
+      });
+    });
+  }
+   
 }
 
-}
 
 function refundCron(){
 

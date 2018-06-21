@@ -15,6 +15,7 @@ import {
   checkTxHashTrans,
   cronForTransfer,
   refundTxHash,
+  setCurrentPrice,
   vestingHashStatus,
   endTimeHashStatus,
   vestingTime1HashStatus,
@@ -44,6 +45,7 @@ const initApp = function () {
     cronForTransfer(); 
     manageVestCron();
     refundTxHash();
+    setCurrentPrice();
     vestingHashStatus();
     vestingTime1HashStatus();
     vestingTime2HashStatus();
