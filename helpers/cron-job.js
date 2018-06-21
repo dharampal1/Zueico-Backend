@@ -883,9 +883,8 @@ module.exports = {
 		           console.log(err,"setCurrentPrice on api");
 		        } else {
 
-		        	
-
                   console.log("price is updated on network");
+                  
                  }
                });
 

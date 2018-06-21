@@ -33,6 +33,9 @@ var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
 module.exports = {
 
    refund(req, res, next){
+
+    const  url = 'http://13.126.28.220:5000';
+    
      request.get({url:`${url}/enableRefundsForUser`},function(err,httpResponse,body){
         if(err){
           return res.status(500).json({
