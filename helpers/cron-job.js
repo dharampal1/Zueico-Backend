@@ -334,6 +334,7 @@ module.exports = {
    	 .then(data => {
    	 	 if(data.length){
    	 	 	data.map(ref => {
+   	 	 		console.log(ref.refStart);
    	 	 		 if(ref.refStart === true){
                     refundCron();
    	 	 		 }
@@ -798,8 +799,10 @@ module.exports = {
        console.log("running refund");
 
    var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
-        
-        console.log(refund);
+             var refuser =  refund_contract.Refunded();
+
+             console.log(refuser,"user refun");
+        console.log(refund,"refund");
 
         if(refund){
 
