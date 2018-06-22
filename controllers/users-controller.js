@@ -956,8 +956,7 @@ module.exports = {
 
     User.findOne({
        attributes: ["id","username","passport","drivingLicenceFront","drivingLicenceBack","addressProof"], 
-      },{
-      where : { id : user_id }
+          where : { id : user_id }
        })
       .then(data => {
           if(data){
