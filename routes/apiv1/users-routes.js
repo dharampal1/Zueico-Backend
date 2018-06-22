@@ -80,8 +80,8 @@ router.post('/orders/ETH', authenticate, tokenController.totalETHOrders);
 // total orders
 router.post('/orders/USD', authenticate, tokenController.totalUSDOrders);
 
-// // place order BTC
-// router.post('/buyToken', authenticate, tokenController.buyToken);
+  // get user  kycs
+ router.post('/getKyc', authenticate, usersController.getUserKyc);
 
 // 
 router.post('/tokenTransfer', authenticate, tokenController.tokenTranfer);

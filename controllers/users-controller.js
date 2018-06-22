@@ -948,7 +948,38 @@ module.exports = {
          message: err.message
         });
       })
-  }
+  },
+
+  getUserKyc(req, res, next) {
+
+    var user_id = req.userId;
+
+    User.findOne({
+       attributes: ["id","username","passport","drivingLicenceFront","drivingLicenceBack","addressProof"], 
+      },{
+      where : { id : user_id }
+       })
+      .then(data => {
+          if(data){
+            res.status(200).json({
+              status:true,
+              message:"All Your KYC's",
+              data
+            });
+          } else {
+            res.status(404).json({
+              status:false,
+              message:"No user Found"
+            });
+          }
+      })
+      .catch(err => {
+        res.status(500).json({
+              status:false,
+              message:err.message
+            })
+      });
+   },
 
 }
 
