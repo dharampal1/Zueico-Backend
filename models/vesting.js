@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     Name: DataTypes.STRING,
   	Email: DataTypes.STRING,
   	Phone: DataTypes.STRING,
+    user_id:DataTypes.INTEGER,
     Country: DataTypes.STRING,
     ICOTokens: DataTypes.STRING,
     PreICOTokens:DataTypes.STRING,
@@ -17,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   PrivelegeUser.associate = function(models) {
     // associations can be defined here
+     PrivelegeUser.belongsTo(models.User, {
+      foreignKey: 'user_id',
+    });
   };
   return PrivelegeUser;
 };

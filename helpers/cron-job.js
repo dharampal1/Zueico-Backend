@@ -31,7 +31,7 @@ module.exports = {
 
 	updateTotalPurchase(){
 
-		cron.schedule('*/1 * * * *', function(){
+		cron.schedule('*/30 * * * *', function(){
 	     console.log("running Total Purchase");
 
 	    PrivelegeUser.findAll({})
@@ -67,8 +67,8 @@ module.exports = {
 
 	updateApproveAddress(){
 
-		cron.schedule('*/1 * * * *', function(){
-	     console.log("running Total Purchase");
+		cron.schedule('*/30 * * * *', function(){
+	     console.log("running approve address");
 
 	    User.findAll({
 	     	where:{ previlege:'1' }

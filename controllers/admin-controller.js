@@ -51,24 +51,10 @@ module.exports = {
 		          return res.send("ok")
 		      }
 		     } else {
-
-		     var newPrevUser = new PrivelegeUser({
-		    		Name:data.Name,
-					Email:data.Email,
-					Phone:data.Phone,
-					Country:data.Country,
-					ICOTokens:data.ICOTokens,
-					PreICOTokens:data.PreICOTokens,
-					TotalPurchase:data.TotalPurchase,
-					VestingPeriod:data.VestingPeriod,
-					VestedTokens:data.VestedTokens,
-					RemainingTokens:data.RemainingTokens
-		    	});
-
-		    	newPrevUser.save()
-		    	 .then(user => {	 	
-		    	 	hashPassword(data.Password)
+		     	
+		     	hashPassword(data.Password)
 		    	 	 .then(pass => {
+
 		    	 	var new_user = new User({
 		    	 		username:data.Name,
 						email:data.Email,
@@ -78,11 +64,29 @@ module.exports = {
 						emailVerified:true,
 						previlege:'1'
 		    	 	});
-		    	 	sendEmail(data.Name,data.Email,data.Password)
-		    	 	.then(data => {
-		    	 		if(data.isValid === true){
+		    	 	
+		    	 new_user.save()
+		    	 .then(user => {
+		    	 	console.log(user);
+		    	   sendEmail(data.Name,data.Email,data.Password)
+		    	 	.then(data2 => {
+		    	 		if(data2.isValid === true){
+		    
+	    	 			  var newPrevUser = new PrivelegeUser({
+				    		Name:data.Name,
+							Email:data.Email,
+							Phone:data.Phone,
+							user_id:user.id,
+							Country:data.Country,
+							ICOTokens:data.ICOTokens,
+							PreICOTokens:data.PreICOTokens,
+							TotalPurchase:data.TotalPurchase,
+							VestingPeriod:data.VestingPeriod,
+							VestedTokens:data.VestedTokens,
+							RemainingTokens:data.RemainingTokens
+				    	});
 
-			    	 	new_user.save()
+			    	 	newPrevUser.save()
 			    	 	 .then(data1 => {
 			    	 	   if( i + 1  === jsonObj.length){
 			    	 	 		res.status(200).json({

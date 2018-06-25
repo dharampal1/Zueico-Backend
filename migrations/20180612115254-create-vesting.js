@@ -23,6 +23,9 @@ module.exports = {
       Phone: {
         type:Sequelize.STRING
       },
+      user_id : {
+        type: Sequelize.INTEGER
+      },
       TotalPurchase: { 
         type:Sequelize.STRING
       },

@@ -78,12 +78,20 @@ module.exports = {
     		if(data.length) {
     			
     			User.findOne({
-    				where: { id: user_id }
+    				where: { id: user_id },
+    				include:[
+			       {
+			           model:PrivelegeUser,
+			           attributes: ['VestedTokens'],
+			           group: ['user_id']
+			       }
+			      ]
     			})
     			.then(data1 => {
 
     				var tokens = data.map(token => {
 		    		var data = {
+		    			VestingTokens:data1.PrivelegeUser.VestedTokens,
 		    			tokens  : token.tokens,
 		    			method  : token.walletMethod,
 		    			date  :  token.createdAt,
