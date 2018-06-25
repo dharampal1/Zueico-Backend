@@ -18,6 +18,8 @@ import {
   setCurrentPrice,
   vestingHashStatus,
   endTimeHashStatus,
+  updateTotalPurchase,
+  updateApproveAddress,
   vestingTime1HashStatus,
   vestingTime2HashStatus,
   vestingTime3HashStatus
@@ -47,6 +49,8 @@ const initApp = function () {
     refundTxHash();
     setCurrentPrice();
     vestingHashStatus();
+    updateTotalPurchase();
+    updateApproveAddress();
     vestingTime1HashStatus();
     vestingTime2HashStatus();
     vestingTime3HashStatus();

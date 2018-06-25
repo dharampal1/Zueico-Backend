@@ -29,6 +29,95 @@ var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
 
 module.exports = {
 
+	updateTotalPurchase(){
+
+		cron.schedule('*/1 * * * *', function(){
+	     console.log("running Total Purchase");
+
+	    PrivelegeUser.findAll({})
+	      .then(data => {
+	      	  if(data.length) {
+	      	  	 data.map((user,i) => {
+
+	      	  	  var TotalPurchase = user.ICOTokens + user.PreICOTokens;
+
+	  				PrivelegeUser.update({TotalPurchase},{
+	  					where: { id : user.id }
+	  				})
+ 				    .then(data1 => {
+ 				    	 if(data1){
+ 				    	 	console.log('TotalPurchase updated');
+ 				    	 }
+ 				    	 return null;
+ 				    })
+ 				    .catch(err => {
+ 				    	console.log(err,"error in update TotalPurchase");
+ 				    });
+	      	  	 });
+	      	  	 return null;
+	      	  } else {
+	      	  	console.log("no data found");
+	      	  }
+			})
+	        .catch(err => {
+	        	console.log(err,"error in total purchase");
+	        })
+	    });
+	},
+
+	updateApproveAddress(){
+
+		cron.schedule('*/1 * * * *', function(){
+	     console.log("running Total Purchase");
+
+	    User.findAll({
+	     	where:{ previlege:'1' }
+	     })
+	      .then(data => {
+	      	  if(data.length) {
+	      	  	 data.map((user,i) => {
+
+	      	  	 	 if(user.ethWalletAddress){
+
+		      	  	var address = user.ethWalletAddress;
+		       	  	const body = { address };
+
+			     request.post({url:`${api_url}/approveAddress`,form:body },function(err,httpResponse,body){
+			  	 	if(err){
+			  	 	 console.log(err);
+			  	 	} else {
+
+			  	 	  let result = JSON.parse(body);
+
+			  	 	  var walletHash = result.data;
+
+			          if(result.status === true){
+			  	 		User.update({
+			  	 			walletHash
+			  	 		},{
+			  	 			where: { id : user.id}
+			  	 		})
+			  	 		.then(data1 => {
+			  	 		  console.log('update walletHash');
+			  	 		})
+			  	 		.catch(err => {
+			  	 			console.log(err,"error update walletHash ");
+			  	 		});
+	      	  	 	 } else {
+	      	  	 	 	console.log('result');
+	      	  	 	 }
+	      	  	 	}
+	      	  	 });
+	      	  }
+			})
+	      }
+	    })
+        .catch(err => {
+        	console.log(err,"error in approve address");
+        });
+      });
+	},
+
 	cronForTransfer(){
 
 	cron.schedule('*/1 * * * *', function(){
@@ -241,7 +330,6 @@ module.exports = {
 			          console.log(err);
 			        } else {
 			        	let result = JSON.parse(body);
-			        	console.log(result);
 			        	if(result.status === true) {
 
 				          var new_status;
@@ -294,7 +382,6 @@ module.exports = {
 			          console.log(err);
 			        } else {
 			        	let result = JSON.parse(body);
-			        	console.log(result);
 			        	if(result.status === true) {
 			        		var new_status;
 				          if(result.data == 'Success'){
@@ -404,7 +491,7 @@ module.exports = {
 	     console.log("running vest time");
 
 	   VestingTimes.findAll({
-	     	where:{ vestTime1Hash:'Pending' }
+	     	where:{ vestTime1Status:'Pending' }
 	     })
 	    .then(data => {
 		  if(data.length) {
@@ -425,12 +512,12 @@ module.exports = {
 					  	     	new_status = result.data
 					  	   }
 			        	VestingTimes.update({
-			        		vestTime1Hash:new_status
+			        		vestTime1Status:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
 			        	.then(stat => {
-			        		console.log("updated");
+			        		console.log("vestTime1Status updated");
 			        	})
 			        	.catch(err => {
 			        		console.log(err);
@@ -454,7 +541,7 @@ module.exports = {
 	     console.log("running vest time");
 
 	   VestingTimes.findAll({
-	     	where:{ vestTime2Hash:'Pending' }
+	     	where:{ vestTime2Status:'Pending' }
 	     })
 	    .then(data => {
 		  if(data.length) {
@@ -475,12 +562,12 @@ module.exports = {
 					  	     	new_status = result.data
 					  	   }
 			        	VestingTimes.update({
-			        		vestTime2Hash:new_status
+			        		vestTime2Status:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
 			        	.then(stat => {
-			        		console.log("updated");
+			        		console.log("vestTime2Status updated");
 			        	})
 			        	.catch(err => {
 			        		console.log(err);
@@ -507,7 +594,7 @@ module.exports = {
 	     console.log("running vest time");
 
 	   VestingTimes.findAll({
-	     	where:{ vestTime3Hash:'Pending' }
+	     	where:{ vestTime3Status:'Pending' }
 	     })
 	    .then(data => {
 		  if(data.length) {
@@ -528,12 +615,12 @@ module.exports = {
 					  	     	new_status = result.data
 					  	   }
 			        	VestingTimes.update({
-			        		vestTime3Hash:new_status
+			        		vestTime3Status:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
 			        	.then(stat => {
-			        		console.log("updated");
+			        		console.log("vestTime3Status updated");
 			        	})
 			        	.catch(err => {
 			        		console.log(err);
@@ -558,7 +645,7 @@ module.exports = {
 	     console.log("running vest time");
 
 	   VestingTimes.findAll({
-	     	where:{ vestTimeHash1:'Pending' }
+	     	where:{ endTimeStatus:'Pending' }
 	     })
 	    .then(data => {
 		  if(data.length) {
@@ -579,12 +666,12 @@ module.exports = {
 					  	     	new_status = result.data
 					  	   }
 			        	VestingTimes.update({
-			        		endTimeHash:new_status
+			        		endTimeStatus:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
 			        	.then(stat => {
-			        		console.log("updated");
+			        		console.log("endTimeStatus updated");
 			        	})
 			        	.catch(err => {
 			        		console.log(err);
@@ -652,7 +739,7 @@ module.exports = {
 			        	if(result.status === true) {
 
 			        	VestingTimes.update({
-			        		vestTimeHash1:result.data,
+			        		vestTime1Hash:result.data,
 			        		VestingPeriod
 			        	},{
 			        		where: { id }
@@ -853,13 +940,10 @@ module.exports = {
 
                       const body = { price : setvalue};
 
-
                     request.post({url:`${api_url}/setPrice`,form:body }, function(err,httpResponse,body ){
 			        if(err){
 			           console.log(err,"setCurrentPrice on api");
 			        } else {
-
-			        	console.log(body);
 
                       console.log("price is updated on network and updated");
                      }
@@ -936,7 +1020,6 @@ function refundCron(){
 			          console.log(err);
 			        } else {
 			        	let result = JSON.parse(body);
-			        	console.log(result);
 			        	if(result.status === true) {
 			        		var new_status;
 				          if(result.data == 'Success'){
