@@ -72,32 +72,51 @@ module.exports = {
     	var user_id = req.userId ;
 
     	BuyToken.findAll({
-    		where: { user_id }
+    		where: { user_id },
+    		include:[
+		       {
+		           model:User,
+		           attributes: ['comments'],
+		           group: ['user_id']
+		       }
+		     ]
     	})
     	.then( data => {
     		if(data.length) {
     			
-    			User.findOne({
-    				where: { id: user_id },
-    				include:[
-			       {
-			           model:PrivelegeUser,
-			           attributes: ['VestedTokens'],
-			           group: ['user_id']
-			       }
-			      ]
+    			PrivelegeUser.findOne({
+    				where: { id: user_id }
     			})
     			.then(data1 => {
-
+    				if(data1) {
     				var tokens = data.map(token => {
 		    		var data = {
-		    			VestingTokens:data1.PrivelegeUser.VestedTokens,
+		    			VestingTokens:data1.VestedTokens,
 		    			tokens  : token.tokens,
 		    			method  : token.walletMethod,
 		    			date  :  token.createdAt,
 		    			price :  token.amount,
 		    			status: token.buyStatus,
-		    			comment:data1.comments,
+		    			comment:token.User.comments,
+		    		 };
+		    			return data;
+		    		});
+    				
+    				res.status(200).json({
+			    		status:true,
+			    		message:"All Orders",
+			    		data:tokens
+		    	    });
+
+    				} else {
+    				var tokens = data.map(token => {
+		    		var data = {
+		    			tokens  : token.tokens,
+		    			method  : token.walletMethod,
+		    			date  :  token.createdAt,
+		    			price :  token.amount,
+		    			status: token.buyStatus,
+		    			comment:token.User.comments,
 		    		 };
 		    			return data;
 		    		});
@@ -107,6 +126,7 @@ module.exports = {
 		    		message:"All Orders",
 		    		data:tokens
 		    	 });
+    			}
     		  })
     		  .catch(err => {
 		    	  res.status(500).json({
