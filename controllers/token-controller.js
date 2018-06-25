@@ -4,7 +4,8 @@ import { User , Admin} from '../models';
 import { checkBlank } from '../helpers/requestHelper';
 import {
   BuyToken,
-  TokenTransfer
+  TokenTransfer,
+  PrivelegeUser
 } from '../models';
 import Sequelize from 'sequelize';
 
