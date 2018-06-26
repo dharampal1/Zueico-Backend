@@ -86,7 +86,7 @@ module.exports = {
     		if(data.length) {
     			
     			PrivelegeUser.findOne({
-    				where: { id: user_id }
+    				where: { user_id }
     			})
     			.then(data1 => {
     				if(data1) {
@@ -137,7 +137,7 @@ module.exports = {
 		      })
     		} else {
     			PrivelegeUser.findOne({
-    				where: { id: user_id }
+    				where: { user_id }
     			})
     			.then(data1 => {
     				if(data1) {
