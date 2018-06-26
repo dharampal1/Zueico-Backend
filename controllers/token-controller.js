@@ -92,7 +92,7 @@ module.exports = {
     				if(data1) {
     				var tokens = data.map(token => {
 		    		var data = {
-		    			VestingTokens:data1.VestedTokens,
+		    			vestingTokens:data1.VestedTokens,
 		    			tokens  : token.tokens,
 		    			method  : token.walletMethod,
 		    			date  :  token.createdAt,
@@ -136,10 +136,27 @@ module.exports = {
 		    	 });
 		      })
     		} else {
-    		 res.status(404).json({
-	    		status:false,
-	    		message:'no data found'
-	    	 });
+    			PrivelegeUser.findOne({
+    				where: { id: user_id }
+    			})
+    			.then(data1 => {
+    				if(data1) {
+		    		var data = {
+		    			vestingTokens:data1.VestedTokens
+		    		}
+		    	 } else {
+		    	 	 res.status(404).json({
+			    		status:false,
+			    		message:'no data found'
+			    	 });
+		    	 }
+		    	})
+		    	.catch(err => {
+    			 res.status(500).json({
+		    		status:false,
+		    		message:err.meesage
+		    	 });
+		    	})
     		}
     	})
     	.catch(err => {
