@@ -147,17 +147,17 @@ module.exports = {
          defaultValue:'',
          type: Sequelize.STRING
       },
-      vewtingToken: { 
+      vestingToken: { 
          allowNull: false,
          defaultValue:'',
          type: Sequelize.STRING
       },
-      vewtingRemainingToken: { 
+      vestingRemainingToken: { 
          allowNull: false,
          defaultValue:'',
          type: Sequelize.STRING
       },
-      vewtingStartDate: { 
+      vestingStartDate: { 
          allowNull: false,
          defaultValue:'',
          type: Sequelize.STRING

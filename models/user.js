@@ -32,9 +32,9 @@ module.exports = (sequelize, DataTypes) => {
     addressProof: DataTypes.STRING,
     comments: DataTypes.STRING,
     emailVerifyToken:DataTypes.STRING,
-    vewtingToken: DataTypes.STRING,
-    vewtingRemainingToken: DataTypes.STRING,
-    vewtingStartDate: DataTypes.STRING,
+    vestingToken: DataTypes.STRING,
+    vestingRemainingToken: DataTypes.STRING,
+    vestingStartDate: DataTypes.STRING,
     previlege: DataTypes.ENUM('0','1')
    }, {});
    User.associate = function(models) {

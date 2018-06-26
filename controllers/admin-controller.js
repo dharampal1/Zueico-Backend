@@ -62,6 +62,7 @@ module.exports = {
 						password:pass,
 						country:data.Country,
 						emailVerified:true,
+						vestingToken:data.VestedTokens,
 						previlege:'1'
 		    	 	});
 		    	 	
