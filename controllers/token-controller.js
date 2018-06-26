@@ -144,6 +144,12 @@ module.exports = {
 		    		var data = {
 		    			vestingTokens:data1.VestedTokens
 		    		}
+		    		res.status(200).json({
+			    		status:true,
+			    		message:'Vesting Tokens',
+			    		data
+			    	 });
+
 		    	 } else {
 		    	 	 res.status(404).json({
 			    		status:false,
