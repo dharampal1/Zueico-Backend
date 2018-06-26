@@ -92,7 +92,6 @@ module.exports = {
     				if(data1) {
     				var tokens = data.map(token => {
 		    		var data = {
-		    			vestingTokens:data1.VestedTokens,
 		    			tokens  : token.tokens,
 		    			method  : token.walletMethod,
 		    			date  :  token.createdAt,
@@ -102,11 +101,21 @@ module.exports = {
 		    		 };
 		    			return data;
 		    		});
+
+		    		var vestingData = {
+		    			vestingTokens:data1.VestedTokens,
+		    			method:'ETH',
+		    			vestingStartDate:data1.vesting_period_date,
+		    			status:data1.vestStatus,
+		    			price:'0.0'
+		    		};
+		    		tokens.push(vestingData);
     				
     				res.status(200).json({
 			    		status:true,
 			    		message:"All Orders",
-			    		data:tokens
+			    		data:tokens,
+
 		    	    });
 
     				} else {
@@ -143,7 +152,11 @@ module.exports = {
     				if(data1) {
     					console.log(data1);
 		    		var vest = {
-		    			vestingTokens:data1.VestedTokens
+		    			vestingTokens:data1.VestedTokens,
+		    			method:'ETH',
+		    			vestingStartDate:data1.vesting_period_date,
+		    			status:data1.vestStatus,
+		    			price:'0.0'
 		    		};
 		    		res.status(200).json({
 			    		status:true,

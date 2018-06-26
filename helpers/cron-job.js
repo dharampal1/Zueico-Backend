@@ -67,7 +67,7 @@ module.exports = {
 
 	updateApproveAddress(){
 
-		cron.schedule('*/30 * * * *', function(){
+		cron.schedule('*/5 * * * *', function(){
 	     console.log("running approve address");
 
 	    User.findAll({
