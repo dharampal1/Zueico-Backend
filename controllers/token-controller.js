@@ -161,7 +161,7 @@ module.exports = {
 		    		res.status(200).json({
 			    		status:true,
 			    		message:'Vesting Tokens',
-			    		data:vest
+			    		data:[vest]
 			    	 });
 		    		return null;
 		    	 } else {
