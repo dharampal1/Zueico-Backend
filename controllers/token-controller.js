@@ -141,15 +141,16 @@ module.exports = {
     			})
     			.then(data1 => {
     				if(data1) {
-		    		var data = {
+    					console.log(data1);
+		    		var vest = {
 		    			vestingTokens:data1.VestedTokens
-		    		}
+		    		};
 		    		res.status(200).json({
 			    		status:true,
 			    		message:'Vesting Tokens',
-			    		data
+			    		data:vest
 			    	 });
-
+		    		return null;
 		    	 } else {
 		    	 	 res.status(404).json({
 			    		status:false,
