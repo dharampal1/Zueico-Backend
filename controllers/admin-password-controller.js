@@ -1,4 +1,4 @@
-mport Promise from 'promise';
+import Promise from 'promise';
 import { Admin } from '../models';
 import jwt from 'jsonwebtoken';
 import config from './../config/environment';
