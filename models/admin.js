@@ -6,6 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     publicStripeKey:DataTypes.STRING,
     btcWalletAddress:DataTypes.STRING,
     password: DataTypes.STRING,
+    resetPasswordToken:DataTypes.STRING,
+    resetPasswordExpires:DataTypes.STRING,
     phone: DataTypes.STRING,
     totalToken: DataTypes.INTEGER,
     contract:DataTypes.STRING,

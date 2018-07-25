@@ -211,7 +211,9 @@ order: [['createdAt', 'DESC']]
           })
           .then(data => {
             if (data) {
-            	if(data.password === password) {
+             verifyPassword(password, data)
+              .then(result => {
+                if (result.isValid === true) {
             		 var token = jwt.sign({
 		                id: data.id
 		              }, config.SECRET, {
@@ -228,7 +230,14 @@ order: [['createdAt', 'DESC']]
 		              status:false,
 		              message: 'Authentication failed'
 		            });
-            	}	               
+            	}
+              })
+              .catch(err => {
+                res.status(500).json({
+                  status:false,
+                  message: err.message
+                });
+              });	               
 	    } else {
 	      res.status(422).json({
 	        status:false,
@@ -250,7 +259,6 @@ order: [['createdAt', 'DESC']]
       });
     }
 	},
-
 	allUsers(req, res, next) {
 		User.findAll({})
 		  .then(data => {
