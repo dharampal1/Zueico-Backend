@@ -4,8 +4,7 @@ import { User , Admin} from '../models';
 import { checkBlank } from '../helpers/requestHelper';
 import {
   BuyToken,
-  TokenTransfer,
-  PrivelegeUser
+  TokenTransfer
 } from '../models';
 import Sequelize from 'sequelize';
 
@@ -83,15 +82,17 @@ module.exports = {
 		     ]
     	})
     	.then( data => {
+    console.log(data);
     		if(data.length) {
     			
     			PrivelegeUser.findOne({
-    				where: { user_id }
+    				where: { id: user_id }
     			})
     			.then(data1 => {
     				if(data1) {
     				var tokens = data.map(token => {
 		    		var data = {
+		    			VestingTokens:data1.VestedTokens,
 		    			tokens  : token.tokens,
 		    			method  : token.walletMethod,
 		    			date  :  token.createdAt,
@@ -101,27 +102,11 @@ module.exports = {
 		    		 };
 		    			return data;
 		    		});
-
-		    		var vestingData = {
-		    			vestingTokens:data1.VestedTokens,
-		    			method:'ETH',
-		    			vestingStartDate:data1.vesting_period_date,
-		    			status:data1.vestStatus,
-		    			price:'0.0',
-						icotokens:data1.ICOTokens,
-						preicotokens:data1.PreICOTokens,
-						remainingtokens:data1.RemainingTokens,
-						vestedperiod:data1.VestingPeriod,
-		    		};
-		    		tokens.unshift(vestingData);
     				
     				res.status(200).json({
 			    		status:true,
 			    		message:"All Orders",
-						priv_users:data1.VestingPeriod,
-						priv_vestedtoken:data1.PreICOTokens,
-			    		data:tokens,
-
+			    		data:tokens
 		    	    });
 
     				} else {
@@ -140,7 +125,6 @@ module.exports = {
     				res.status(200).json({
 		    		status:true,
 		    		message:"All Orders",
-					priv_users:"no_priv_users",
 		    		data:tokens
 		    	 });
     			}
@@ -152,44 +136,10 @@ module.exports = {
 		    	 });
 		      })
     		} else {
-    			PrivelegeUser.findOne({
-    				where: { user_id }
-    			})
-    			.then(data1 => {
-    				if(data1) {
-    					console.log(data1);
-		    		var vest = {
-		    			vestingTokens:data1.VestedTokens,
-		    			method:'ETH',
-		    			vestingStartDate:data1.vesting_period_date,
-		    			status:data1.vestStatus,
-		    			price:'0.0',
-						icotokens:data1.ICOTokens,
-						preicotokens:data1.PreICOTokens,
-						remainingtokens:data1.RemainingTokens,
-						vestedperiod:data1.VestingPeriod,
-		    		};
-		    		res.status(200).json({
-			    		status:true,
-			    		message:'Vesting Tokens',
-						priv_users:data1.VestingPeriod,
-						priv_vestedtoken:data1.PreICOTokens,
-			    		data:[vest]
-			    	 });
-		    		return null;
-		    	 } else {
-		    	 	 res.status(404).json({
-			    		status:false,
-			    		message:'no data found'
-			    	 });
-		    	 }
-		    	})
-		    	.catch(err => {
-    			 res.status(500).json({
-		    		status:false,
-		    		message:err.meesage
-		    	 });
-		    	})
+    		 res.status(404).json({
+	    		status:false,
+	    		message:'no data found'
+	    	 });
     		}
     	})
     	.catch(err => {

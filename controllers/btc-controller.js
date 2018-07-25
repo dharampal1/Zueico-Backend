@@ -13,8 +13,8 @@ import {
 
 var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
-var refund_ContractAddress = '0x89306887d540b9b937814ed36c0c315a8908218d';
-var veting_ContractAddress = '0xc971e6bbdade0a3e2b85aec31d08697ca845b4e7';
+var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
+var veting_ContractAddress = '0x224b52bca2224fd4ba14c1a88fb5704d05a1e6b2';
 
 // Token: 0x6806a1fb780173323ad41902539e12214ed3d994
 // TokenSale: 0x3164afeadb754210c077b723fb2c32106cf0df65
@@ -171,7 +171,7 @@ module.exports = {
       BuyToken.count({ where: { walletMethod :'BTC' } })
        .then(data => {
          if(data > 0){
-      BuyToken.sum('tokens',{ where: { walletMethod :'BTC' } })
+      BuyToken.sum('amount',{ where: { walletMethod :'BTC' } })
       .then(sum => {
          res.status(200).json({
               status:true,

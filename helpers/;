@@ -7,8 +7,7 @@ import {
  BuyToken, TokenTransfer, PrivelegeUser,VestingTimes
   } from '../models';
 
-//const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
-const url = 'http://zuenchain.io/user/transaction?Address=31uV49X3CysyAN2q2WDz9j1iAjxZtX6n5F';
+const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
 const btc_url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
 const api_url = 'http://13.126.28.220:5000';
 import token_abi from './../config/token_abi.json'
@@ -16,7 +15,7 @@ import token_abi from './../config/token_abi.json'
  import refund_abi from './../config/refund_abi.json'
 // import vest_abi from './../config/vest_abi.json'
 
-var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
+var refund_ContractAddress = '0x89306887d540b9b937814ed36c0c315a8908218d';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
 var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
 
@@ -170,40 +169,35 @@ module.exports = {
   },
 
 	BTC_Tranctions(){
-	 cron.schedule('*/1 * * * *', function(){
+	 cron.schedule('*/30 * * * *', function(){
 	     console.log("running btc");
       request.get({url},function(err,httpResponse,body ){
         if(err){
           console.log(err);
         } else {
-	
          var result = JSON.parse(body);
          if(result.status === 1) {
-	console.log(result,"res");
+
          	User.findAll({})
          	  .then(data => {
-		console.log(data,"data");
+
      	  	  data.map(user => {
  	  	  	   result.data.map(trans => {
-				console.log(user.btcWalletAddress === trans.sent_from,"chek");
+
  	  	  	 	 if(user.btcWalletAddress === trans.sent_from){
  	  	  	 	 	btc_transaction.findOne({
  	  	  	 	 		where: { hash : trans.hase_of_tx }
  	  	  	 	 	})
  	  	  	 	 	.then(data => {
-					console.log(data,"dat1");
  	  	  	 	 		if(!data) {
  	  	  	 	 		request.get(`${btc_url}`,function(err,httpResponse,body){
 					  	 	if(err){
 					  	 	 console.log(err);
 					  	 	} else {
 
-					   	   console.log(httpResponse,"http");
-						console.log(httpResponse.body,"http");
- 						var pasedCoin = JSON.parse(httpResponse.body);
-						console.log(pasedCoin,"con");
-						  var btc = pasedCoin.ETH.BTC,	
-				                    usd = pasedCoin.ETH.USD,	
+					  	    var pasedCoin=JSON.parse(body);
+				            var btc = pasedCoin.ETH.BTC,
+				                usd = pasedCoin.ETH.USD,	
 								ethbtcvalue = (1 / btc) * trans.amount,
 								perTokenvalue= (1 / usd) * 0.60,
 								tokensValue = ethbtcvalue / perTokenvalue,
@@ -217,7 +211,6 @@ module.exports = {
 				  	 	} else {
 
 				  	   var result =JSON.parse(body);
-						console.log(result,"res1");
 
 				  	    var newBuy = new BuyToken({
 				  	    	amount:trans.amount,

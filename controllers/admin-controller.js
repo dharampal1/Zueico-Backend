@@ -152,8 +152,9 @@ module.exports = {
            model:User,
            attributes: ['id','username'],
            group: ['user_id']
-       }
-      ]
+}
+      ],
+order: [['createdAt', 'DESC']]
     })
       .then(data => {
       	 if(data.length) {
@@ -628,6 +629,7 @@ module.exports = {
 
     if(req.body.vesting_period_date){
 	 var vesting_period_date = req.body.vesting_period_date,
+	     startTime1 =  new Date(vesting_period_date).getTime(),
 	     startTime  = new Date(vesting_period_date),
   	     vestTime1   = startTime.setDate(startTime.getDate() + 30),
   	     time1  = new Date(vestTime1),
@@ -647,6 +649,14 @@ module.exports = {
     	.then(data => {
 
       if(data){
+
+        	User.update({
+      		vestingStartDate:vesting_period_date
+      	},{
+      		where:{ previlege:'1' }
+      	})
+      	.then(updat => {
+           if(updat) {
     
     			
 		var newVestingTimes = new VestingTimes({
@@ -676,7 +686,8 @@ module.exports = {
 
 	  	    		 vestingUserAddress = user.ethWalletAddress;
 
-	  	    		 const body = {vestingUserAddress, tokenValue, startTime, vestTime1, vestTime2, vestTime3, endTime};	
+	  	    		 const body = {vestingUserAddress, tokenValue, startTime:startTime1, vestTime1, vestTime2, vestTime3, endTime};
+					console.log(body,"body for add vest");	
 
 					 request.post({url:`${url}/setVestingAddressDetails`,form:body},function(err,httpResponse,body ){
 				        if(err){
@@ -742,6 +753,14 @@ module.exports = {
 		  	  		message:err.message
 		         });
 		  	   });
+			 }
+  	 })
+  	.catch(err => {
+    	res.status(500).json({
+  	  		status:false,
+  	  		message:err.message
+  	      });
+  	})
 	    	} else {
 	    		res.status(404).json({
 		  	  		status:false,
