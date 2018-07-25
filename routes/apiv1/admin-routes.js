@@ -3,6 +3,7 @@ import adminController from './../../controllers/admin-controller';
 import tokenController from './../../controllers/token-controller';
 import btcController from './../../controllers/btc-controller';
 import { adminAuthenticate } from './../../helpers/ensure-authenticated';
+import adminPassController from './../../controllers/admin-password-controller';
 
 const router = express.Router();
 
@@ -20,6 +21,9 @@ router.post('/refund', adminAuthenticate, btcController.refund);
 
 // Get all users  
 router.post('/totalUsersCount', adminAuthenticate, adminController.allUsersCount);
+
+// change admin password  
+router.post('/changePassword', adminAuthenticate, adminPassController.changePassword);
 
 // get all users with privilege 
 router.post('/privilageuser', adminAuthenticate, adminController.getUserPreviledge);

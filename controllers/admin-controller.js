@@ -4,7 +4,7 @@ import { User, Admin, Setting, BuyToken,
 	     TokenTransfer, PrivelegeUser ,VestingTimes,Refund} from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
-import { sendEmail} from '../helpers/userHelper';
+import { sendEmail, verifyPassword } from '../helpers/userHelper';
 import config from './../config/environment';
 import { storage, csvFileFilter } from '../helpers/fileUpload';
 const Op = Sequelize.Op;
