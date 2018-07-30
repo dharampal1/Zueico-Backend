@@ -179,10 +179,10 @@ module.exports = {
 	
          var result = JSON.parse(body);
          if(result.status === 1) {
-	console.log(result,"res");
+
          	User.findAll({})
          	  .then(data => {
-		console.log(data,"data");
+	
      	  	  data.map(user => {
  	  	  	   result.data.map(trans => {
 				console.log(user.btcWalletAddress === trans.sent_from,"chek");
@@ -191,15 +191,15 @@ module.exports = {
  	  	  	 	 		where: { hash : trans.hase_of_tx }
  	  	  	 	 	})
  	  	  	 	 	.then(data => {
-					console.log(data,"dat1");
+					
  	  	  	 	 		if(!data) {
  	  	  	 	 		request.get(`${btc_url}`,function(err,httpResponse,body){
 					  	 	if(err){
 					  	 	 console.log(err);
 					  	 	} else {
 
-					   	   console.log(httpResponse,"http");
-						console.log(httpResponse.body,"http");
+					   	  // console.log(httpResponse,"http");
+						//console.log(httpResponse.body,"http");
  						var pasedCoin = JSON.parse(httpResponse.body);
 						console.log(pasedCoin,"con");
 						  var btc = pasedCoin.ETH.BTC,	
@@ -217,7 +217,7 @@ module.exports = {
 				  	 	} else {
 
 				  	   var result =JSON.parse(body);
-						console.log(result,"res1");
+						//console.log(result,"res1");
 
 				  	    var newBuy = new BuyToken({
 				  	    	amount:trans.amount,
@@ -428,7 +428,7 @@ module.exports = {
    	 .then(data => {
    	 	 if(data.length){
    	 	 	data.map(ref => {
-   	 	 		console.log(ref.refStart);
+   	 	 		console.log(ref.refStart,"refund status");
    	 	 		 if(ref.refStart === true){
                     refundCron();
    	 	 		 }
@@ -896,7 +896,7 @@ module.exports = {
      var refuser =  refund_contract.Refunded({}, {fromBlock: "2400000", toBlock: 'latest'});
      console.log(refuser,"refundusers");
 
-      socket.emit("refundData", { data: refund } );  
+      socket.emit("refundData", { data: refuser } );  
 
   });   
 },

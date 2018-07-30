@@ -220,6 +220,7 @@ module.exports = {
                                 userId: data.id,
                                 username:data.username,
                                 email:data.email,
+				previlege:data.previlege,
                                 token
                               });
                                }
@@ -297,6 +298,7 @@ module.exports = {
                       userId: data.id,
                       username:data.username,
                       email:data.email,
+		     previlege:data.previlege,
                       token
                     });
                      }
@@ -336,6 +338,7 @@ module.exports = {
                       userId: result.id,
                       username:data.username,
                       email:data.email,
+		previlege:data.previlege,
                       token
                     });
                   } else {
