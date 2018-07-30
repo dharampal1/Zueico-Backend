@@ -1,4 +1,5 @@
-[{
+[
+  {
   "contractName": "zueTokenRefund",
   "abi": [
     {
@@ -2992,7 +2993,8 @@
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "395:7:12",
-
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
@@ -5311,5 +5313,5 @@
   "networks": {},
   "schemaVersion": "2.0.0",
   "updatedAt": "2018-07-28T04:59:58.780Z"
-}]
-     
+}
+]
