@@ -898,16 +898,17 @@ module.exports = {
 
 
 			    Refund.findOne({
-			    	where:{ refHash:result.transactionHash }
+			    	where: { refHash:result.transactionHash }
 			    })
 			    .then(data1 => {
+			    	console.log(data1);
 			       if(!data1) {
 
 			     	let new_refund = new Refund({
 			    	userAddress:result.address,
 					amountInEther:result.args.value.toNumber(),
 					refHash:result.transactionHash,
-					status:'Pending'
+					refStatus:'Pending'
 			      });
 			    
 		    		 new_refund.save()
@@ -921,7 +922,7 @@ module.exports = {
 					            	userAddress:data3.userAddress,
 					            	amount:data3.amountInEther,
 					            	txHash:data3.refHash,
-					            	status:data3.status
+					            	status:data3.refStatus
 					             }
 					             return new_data;
 				      	   	  })
