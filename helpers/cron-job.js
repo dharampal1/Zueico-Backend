@@ -888,21 +888,21 @@ module.exports = {
     })	  
   },
   getRefund(socket) {
-
-    cron.schedule('*/1 * * * *', function(){
-       console.log("running refund");
-
-      let data = [];
+     let data = [];
 	 var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
 	 var receivedTokensEvent = refund_contract.Refunded({},{fromBlock: "2400000", toBlock: 'latest'});
 	            receivedTokensEvent.watch(function(err, result){
 	            console.log(result);
-	            data.push(result)
-	    });
 
-    socket.emit("refundData", { data } );
+	            let new_data = {
+	            	refundedAddress:result.args.refundedAddress,
+	            	amount:result.args.value,
+	            	transactionHash:result.transactionHash
+	            }
+	            data.push(new_data)
 
-  });   
+	            socket.emit("refundData", { data } );
+	    }); 
 },
 
   setCurrentPrice() {
