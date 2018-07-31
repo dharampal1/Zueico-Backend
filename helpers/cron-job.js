@@ -19,7 +19,7 @@ import token_abi from './../config/token_abi.json'
 var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
 var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
-var veting_ContractAddress = '0x6a9a6922095308854650bb542303c8b6effe8a9c';
+var veting_ContractAddress = '0x147d3e45410dba405072d348d5b7ad0bb63c7c68';
 
 var Web3 = require("web3");
 var web3 = new Web3();
