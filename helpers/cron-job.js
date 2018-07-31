@@ -904,7 +904,7 @@ module.exports = {
 			       if(!data1) {
 
 			     	let new_refund = new Refund({
-			    	userAddress:result.aaddress,
+			    	userAddress:result.address,
 					amountInEther:result.args.value.toNumber(),
 					refHash:result.transactionHash,
 					status:'Pending'
