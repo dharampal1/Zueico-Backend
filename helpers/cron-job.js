@@ -890,42 +890,60 @@ module.exports = {
   getRefund(socket) {
 	  cron.schedule('*/1 * * * *', function(){
 	     console.log("running refund");
-     let data = [];
+
 	 var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
 	 var receivedTokensEvent = refund_contract.Refunded({},{fromBlock: "2400000", toBlock: 'latest'});
 	            receivedTokensEvent.watch(function(err, result){
 	            console.log(result,"res");
 
-			   
-			    let new_refund = new Refund({
-			    	userAddress:result.args.refundedAddress,
-					toAddress:result.address,
-					amountInEther:result.args.value.toNumber(),
-					refHash:result.transactionHash
+
+			    Refund.findOne({
+			    	refHash:result.transactionHash
 			    })
-			    new_refund.save()
-			      .then(refund => {
-			      	console.log(refund,"saved");
+			    .then(data1 => {
+			       if(!data1) {
 
-	            let new_data = {
-	            	refundedAddress:refund.userAddress,
-	            	amount:refund.amountInEther,
-	            	transactionHash:refund.refHash
-	            }
+			     	let new_refund = new Refund({
+			    	userAddress:result.aaddress,
+					amountInEther:result.args.value.toNumber(),
+					refHash:result.transactionHash,
+					status:'Pending'
+			      });
+			    
+		    		 new_refund.save()
+				      .then(refund => {
+				      	console.log(refund,"saved");
+				      	 Refund.findAll()
+				      	   .then(data2 => {
+				      	   	  if(data2.length){
+				      	   	  let refunds = data2.map(data3 => {
+				      	   	  	 let new_data = {
+					            	userAddress:data3.userAddress,
+					            	amount:data3.amountInEther,
+					            	txHash:data3.refHash,
+					            	status:data3.status
+					             }
+					             return new_data;
+				      	   	  })
+				      	   	  	socket.emit("refundData", refunds); 
 
-	             data.push(new_data);
-	             socket.emit("refundData", { data } );	
-	            
-			      })
-			      .catch(err => {
-			      	console.error(err,"error in refund save");
-			      })
+				      	   	  }
+				      	   })
+				      })
+				      .catch(err => {
+				      	console.error(err,"error in refund save");
+				      })
+			    	}
+			    })
+			   
 
 			     
 	    }); 
 	
 	  });
 },
+
+
 
   setCurrentPrice() {
 
