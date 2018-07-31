@@ -894,16 +894,32 @@ module.exports = {
 	 var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
 	 var receivedTokensEvent = refund_contract.Refunded({},{fromBlock: "2400000", toBlock: 'latest'});
 	            receivedTokensEvent.watch(function(err, result){
-	            console.log(result);
+	            console.log(result,"res");
+
+			   
+			    let new_refund = new Refund({
+			    	userAddress:result.args.refundedAddress,
+					toAddress:result.address,
+					amountInEther:result.args.value.toNumber(),
+					refHash:result.transactionHash
+			    })
+			    new_refund.save()
+			      .then(refund => {
+			      	console.log(refund,"saved");
 
 	            let new_data = {
-	            	refundedAddress:result.args.refundedAddress,
-	            	amount:result.args.value,
-	            	transactionHash:result.transactionHash
+	            	refundedAddress:refund.userAddress,
+	            	amount:refund.amountInEther,
+	            	transactionHash:refund.refHash
 	            }
-	            data.push(new_data)
-  socket.emit("refundData", { new_data } );
-			    socket.emit("refundData", { data } );
+
+	             data.push(new_data);
+			      })
+			      .catch(err => {
+			      	console.error(err,"error in refund save");
+			      })
+
+			     socket.emit("refundData", { data } );	
 	            
 	    }); 
 	
