@@ -933,6 +933,24 @@ module.exports = {
 				      .catch(err => {
 				      	console.error(err,"error in refund save");
 				      })
+			    	} else {
+			    		 Refund.findAll()
+				      	   .then(data2 => {
+				      	   	  if(data2.length){
+				      	   	  let refunds = data2.map(data3 => {
+				      	   	  	 let new_data = {
+					            	userAddress:data3.userAddress,
+					            	amount:data3.amountInEther,
+					            	txHash:data3.refHash,
+					            	status:data3.refStatus
+					             }
+					             return new_data;
+				      	   	  })
+				      	   	  console.log(refunds);
+				      	   	  socket.emit("refundData", refunds); 
+
+				      	   	  }
+				      	   })
 			    	}
 			    })
 			   
