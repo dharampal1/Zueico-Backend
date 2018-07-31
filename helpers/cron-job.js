@@ -894,17 +894,15 @@ module.exports = {
 	 var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
 	 var receivedTokensEvent = refund_contract.Refunded({},{fromBlock: "2400000", toBlock: 'latest'});
 	            receivedTokensEvent.watch(function(err, result){
-	            console.log(result,"res");
-
 
 			    Refund.findOne({
 			    	where: { refHash:result.transactionHash }
 			    })
 			    .then(data1 => {
-			    	console.log(data1);
+
 			       if(!data1) {
 
-			     	let new_refund = new Refund({
+			     let new_refund = new Refund({
 			    	userAddress:result.address,
 					amountInEther:result.args.value.toNumber(),
 					refHash:result.transactionHash,
@@ -913,7 +911,7 @@ module.exports = {
 			    
 		    		 new_refund.save()
 				      .then(refund => {
-				      	console.log(refund,"saved");
+
 				      	 Refund.findAll()
 				      	   .then(data2 => {
 				      	   	  if(data2.length){
@@ -926,7 +924,8 @@ module.exports = {
 					             }
 					             return new_data;
 				      	   	  })
-				      	   	  	socket.emit("refundData", refunds); 
+				      	   	  console.log(refunds);
+				      	   	  socket.emit("refundData", refunds); 
 
 				      	   	  }
 				      	   })
