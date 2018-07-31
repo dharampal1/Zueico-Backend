@@ -23,9 +23,6 @@ module.exports = {
       amount: {
         type: Sequelize.INTEGER
       },
-      blocktime: {
-        type: Sequelize.STRING
-      },
       block_hight: {
         type: Sequelize.STRING
       },

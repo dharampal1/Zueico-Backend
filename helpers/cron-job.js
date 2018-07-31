@@ -275,21 +275,110 @@ module.exports = {
 
   USD_Tranctions(){
 	 cron.schedule('*/1 * * * *', function(){
-	     console.log("running USDt");
+	    console.log("running USDt");
 	     let USDTwalletAddress = '1Ed1FXvURwXz4oGiA6yJFgCrmMh1y6aWrv';
 	     const body  = { USDTwalletAddress };
-      request.post({url:`${api_url}/getUSDTtransactions`,form:body },function(err,httpResponse,body ){
+       request.post({url:`${api_url}/getUSDTtransactions`,form:body },function(err,httpResponse,body ){
         if(err){
           console.log(err);
         } else {
 	
-         var result = body;
+         var result = JSON.parse(body);
+
+         console.log(result, "usdt");
          if(result.status === true) {
-         }
-     }
-   });
-  });
-  },
+
+         	User.findAll({})
+         	  .then(data => {
+	
+     	  	  data.map(user => {
+ 	  	  	   result.data[0].transactions.map(trans => {
+				console.log(user.USDTAddress === trans.sendingaddress,"chek");
+ 	  	  	 	 if(user.USDTAddress === trans.sendingaddress){
+ 	  	  	 	 	Usd_transaction.findOne({
+ 	  	  	 	 		where: { usd_hash : trans.txid }
+ 	  	  	 	 	})
+ 	  	  	 	 	.then(data => {
+					
+ 	  	  	 	 		if(!data) {
+ 	  	  	 	 		request.get(`${btc_url}`,function(err,httpResponse,body){
+					  	 	if(err){
+					  	 	 console.log(err);
+					  	 	} else {
+
+					   	  // console.log(httpResponse,"http");
+						//console.log(httpResponse.body,"http");
+ 						var pasedCoin = JSON.parse(httpResponse.body);
+						console.log(pasedCoin,"con");
+						  var btc = pasedCoin.ETH.BTC,	
+				                    usd = pasedCoin.ETH.USD,	
+								ethbtcvalue = (1 / btc) * trans.amount,
+								perTokenvalue= (1 / usd) * 0.60,
+								tokensValue = ethbtcvalue / perTokenvalue,
+								toAddress = user.ethWalletAddress;
+
+						const body = { toAddress , value:tokensValue }		
+
+                        request.post({url:`${api_url}/sendTokensBTCusers`,form:body },function(err,httpResponse,body){
+                       if(err){
+				  	 	 console.log(err);
+				  	 	} else {
+
+				  	   var result =JSON.parse(body);
+						//console.log(result,"res1");
+
+				  	    var newBuy = new BuyToken({
+				  	    	amount:trans.amount,
+				  	    	walletMethod:'USD',
+				  	    	buyHash:result.data,
+				  	    	user_id:user.id,
+				  	    	tokens:tokensValue
+				  	    });
+
+				  	    newBuy.save()
+				  	     .then( buy => { return true })
+				  	     .catch(err => { console.log(err) });
+
+ 	  	  	 	 		var newUSDTrans = new Usd_transaction({
+			         		usd_hash:trans.hase_of_tx,
+							from_address: trans.sendingaddress,
+							to_address: trans.referenceaddress,
+							transaction_date:moment.unix(trans.blocktime).format(),
+							amount: trans.amount,
+							block_hight: trans.block,
+							user_id: user.id
+					   });
+	 	  	  	 	 	newUSDTrans.save()
+	 	  	  	 	 	 .then(data1 => {
+	 	  	  	 	 	 	return true;
+	 	  	  	 	 	 })
+	 	  	  	 	 	 .catch(err => {
+	 	  	  	 	 	 	console.log(err);
+	 	  	  	 	 	 })
+
+	 	  	  	 	 	}
+	 	  	  	 	 });
+ 	  	  	 	 	   }
+ 	  	  	 	 	})
+ 	  	  	 	  }
+ 	  	  	 	  return null
+ 	  	  	    })
+		 	   .catch(err => {
+	  	 	 	 	console.log(err);
+	  	 	 	})
+	         	 }
+	           });
+		      });
+		      return null
+		    })
+		    .catch(err => {
+		 	 	console.log(err);
+		 	});
+	     }   
+	    } 
+	  });
+    });	  
+ },
 
 
    checkTxHashWallet(){

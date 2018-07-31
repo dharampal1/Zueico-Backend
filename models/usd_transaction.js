@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
     from_address: DataTypes.STRING,
     to_address: DataTypes.STRING,
     amount: DataTypes.INTEGER,
-    blocktime:DataTypes.STRING,
     block_hight: DataTypes.STRING,
     user_id: DataTypes.STRING,
     email: DataTypes.STRING

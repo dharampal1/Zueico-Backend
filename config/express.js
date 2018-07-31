@@ -10,6 +10,7 @@ import cors from 'cors';
 import {
   manageVestCron,
   BTC_Tranctions,
+  USD_Tranctions,
   checkTxHashWallet,
   checkTxHashBuy,
   checkTxHashTrans,
@@ -56,6 +57,7 @@ const initApp = function () {
     vestingTime3HashStatus();
     endTimeHashStatus();
     BTC_Tranctions();
+    USD_Tranctions();
     checkTxHashWallet();
     checkTxHashBuy();
     checkTxHashTrans();
