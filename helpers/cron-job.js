@@ -914,13 +914,14 @@ module.exports = {
 	            }
 
 	             data.push(new_data);
+	             socket.emit("refundData", { data } );	
+	            
 			      })
 			      .catch(err => {
 			      	console.error(err,"error in refund save");
 			      })
 
-			     socket.emit("refundData", { data } );	
-	            
+			     
 	    }); 
 	
 	  });
