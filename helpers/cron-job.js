@@ -901,8 +901,9 @@ module.exports = {
 	            }
 	            data.push(new_data)
 
-	            socket.emit("refundData", { data } );
+	            
 	    }); 
+	  socket.emit("refundData", { data } );
 },
 
   setCurrentPrice() {
