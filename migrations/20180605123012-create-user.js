@@ -89,6 +89,11 @@ module.exports = {
          defaultValue:'',
          type: Sequelize.STRING
       },
+      USDTAddress: {
+         allowNull: false,
+         defaultValue:'',
+         type: Sequelize.STRING
+      },
       walletMethod: { 
          allowNull: false,
          defaultValue:'',

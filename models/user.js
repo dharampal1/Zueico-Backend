@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     address: DataTypes.STRING,
     ethWalletAddress: DataTypes.STRING,
     btcWalletAddress: DataTypes.STRING,
+    USDTAddress:DataTypes.STRING,
     walletMethod: DataTypes.STRING,
     currency: DataTypes.STRING,
     emailVerified:{ 
