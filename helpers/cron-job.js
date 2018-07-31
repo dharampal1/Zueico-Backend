@@ -898,7 +898,7 @@ module.exports = {
 
 
 			    Refund.findOne({
-			    	refHash:result.transactionHash
+			    	where:{ refHash:result.transactionHash }
 			    })
 			    .then(data1 => {
 			       if(!data1) {
