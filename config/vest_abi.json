@@ -1,4 +1,23 @@
-[
+ [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "vestingAmount1",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
     {
       "constant": true,
       "inputs": [],
@@ -17,6 +36,25 @@
       "constant": true,
       "inputs": [],
       "name": "vestingDurationPhase3",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "vestingAmount2",
       "outputs": [
         {
           "name": "",
@@ -57,6 +95,20 @@
     },
     {
       "constant": true,
+      "inputs": [],
+      "name": "vestTokensSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
       "inputs": [
         {
           "name": "",
@@ -64,6 +116,25 @@
         }
       ],
       "name": "vestingAmount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "vestingAmount3",
       "outputs": [
         {
           "name": "",
@@ -105,11 +176,11 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "state",
+      "name": "vestingDurationPhase1",
       "outputs": [
         {
           "name": "",
-          "type": "uint8"
+          "type": "uint256"
         }
       ],
       "payable": false,
@@ -118,8 +189,13 @@
     },
     {
       "constant": true,
-      "inputs": [],
-      "name": "vestingDurationPhase1",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "vestingAmount4",
       "outputs": [
         {
           "name": "",
@@ -167,6 +243,10 @@
         {
           "name": "_vestReserveAccount",
           "type": "address"
+        },
+        {
+          "name": "_vestTokensSupply",
+          "type": "uint256"
         }
       ],
       "payable": false,
@@ -178,7 +258,7 @@
       "inputs": [
         {
           "indexed": true,
-          "name": "benefeciary",
+          "name": "vestedTokensAddress",
           "type": "address"
         },
         {
@@ -187,19 +267,58 @@
           "type": "uint256"
         }
       ],
-      "name": "vestedTokens",
+      "name": "VestedTokensPhase1",
       "type": "event"
     },
     {
       "anonymous": false,
-      "inputs": [],
-      "name": "vestingEnabled",
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "vestedTokensAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "VestedTokensPhase2",
       "type": "event"
     },
     {
       "anonymous": false,
-      "inputs": [],
-      "name": "vestingEnded",
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "vestedTokensAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "VestedTokensPhase3",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "vestedTokensAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "VestedTokensPhase4",
       "type": "event"
     },
     {

@@ -14,11 +14,12 @@ const api_url = 'http://13.126.28.220:5000';
 import token_abi from './../config/token_abi.json'
  import sale_abi from './../config/sale_abi.json'
  import refund_abi from './../config/refund_abi.json'
-// import vest_abi from './../config/vest_abi.json'
+ import vest_abi from './../config/vest_abi.json'
 
 var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
 var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
+var veting_ContractAddress = '0x6a9a6922095308854650bb542303c8b6effe8a9c';
 
 var Web3 = require("web3");
 var web3 = new Web3();
@@ -27,6 +28,7 @@ web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0,
 var token_contract = web3.eth.contract(token_abi).at(token_ContractAddress);
 var sale_contract = web3.eth.contract(sale_abi).at(sale_ContractAddress);
 var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
+var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
 
 module.exports = {
 
@@ -699,7 +701,7 @@ module.exports = {
    },
 
    manageVestCron(){
-   	cron.schedule('*/59 * * * *', function(){
+   	cron.schedule('*/1 * * * *', function(){
 	     console.log("running vest times");
 
 	     var date = new Date().getTime();
@@ -707,15 +709,22 @@ module.exports = {
 	     VestingTimes.findAll({})
 	       .then(data => {
 	       	if(data.length){
+
 	       	  data.map(data1 => {
 	       	  	  if(data1.vetingTime1 === date){
 	       	  	  	vestingReleaseToken1(date,3,data1.id);
 	       	  	  } else if(data1.vetingTime2 === date){
+
 	       	  	  	vestingReleaseToken2(date,2,data1.id);
 	       	  	  } else if (data1.vetingTime3 === date){
+
 	       	  	  	vestingReleaseToken3(date,1,data1.id);
-	       	  	  } else {
+	       	  	  } else if (data1.endTime === date){
+
 	       	  	  	vestingReleaseToken4(date,0,data1.id);
+	       	  	  } else {
+
+	       	  	  	return true
 	       	  	  }
 	       	  });
 	       	} else {
@@ -728,165 +737,7 @@ module.exports = {
 	   });
    },
 
-   vestingReleaseToken1(date, VestingPeriod, id ){
-
-    User.findAll({where:{previlege:'1'}})
-	    .then((users,i) => {
-	  	if(users.length){ 
-	  		users.map(user => {
-	  			var vestingAddress = user.ethWalletAddress;
-
-	  			 const body = { vestingAddress };
-
-				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
-			        if(err){
-			          console.log(err);
-			        } else {
-			        	let result = JSON.parse(body);
-			        	if(result.status === true) {
-
-			        	VestingTimes.update({
-			        		vestTime1Hash:result.data,
-			        		VestingPeriod
-			        	},{
-			        		where: { id }
-			        	})
-			        	.then(stat => {
-			        		console.log("updated");
-			        	})
-			        	.catch(err => {
-			        		console.log(err);
-			        	})
-			         }
-			       } 
-			    });
-	  		});
-	      }
-	    })
-	    .catch(err => {
-	   	  console.log(err);
-	    })	  
-  },
-
-   vestingReleaseToken2(date, VestingPeriod, id){
-    
-    User.findAll({where:{previlege:'1'}})
-	    .then((users,i) => {
-	  	if(users.length){ 
-	  		users.map(user => {
-	  			var vestingAddress = user.ethWalletAddress;
-
-	  			 const body = { vestingAddress };
-
-				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
-			        if(err){
-			          console.log(err);
-			        } else {
-			        	let result = JSON.parse(body);
-			        	if(result.status === true) {
-
-			        	VestingTimes.update({
-			        		vestTime2Hash:result.data,
-			        		VestingPeriod
-			        	},{
-			        		where: { id }
-			        	})
-			        	.then(stat => {
-			        		console.log("updated");
-			        	})
-			        	.catch(err => {
-			        		console.log(err);
-			        	})
-			         }
-			       } 
-			    });
-	  		});
-	  	}
-    })
-    .catch(err => {
-   	  console.log(err);
-    })	   
-  },
-
-   vestingReleaseToken3(date, VestingPeriod, id){
-
-    User.findAll({where:{previlege:'1'}})
-	    .then((users,i) => {
-	  	if(users.length){ 
-	  		users.map(user => {
-	  			var vestingAddress = user.ethWalletAddress;
-
-	  			 const body = { vestingAddress };
-
-				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
-			        if(err){
-			          console.log(err);
-			        } else {
-			        	let result = JSON.parse(body);
-			        	if(result.status === true) {
-
-			        	VestingTimes.update({
-			        		vestTime3Hash:result.data,
-			        		VestingPeriod
-			        	},{
-			        		where: { id }
-			        	})
-			        	.then(stat => {
-			        		console.log("updated");
-			        	})
-			        	.catch(err => {
-			        		console.log(err);
-			        	})
-			         }
-			       } 
-			    });
-	  		});
-	  	}
-    })
-    .catch(err => {
-   	  console.log(err);
-    })	  
-  },
-
-   vestingReleaseToken4(date, VestingPeriod, id){
-
-    User.findAll({where:{previlege:'1'}})
-	    .then((users,i) => {
-	  	if(users.length){ 
-	  		users.map(user => {
-	  			var vestingAddress = user.ethWalletAddress;
-
-	  			 const body = { vestingAddress };
-
-				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
-			        if(err){
-			          console.log(err);
-			        } else {
-			        	let result = JSON.parse(body);
-			        	if(result.status === true) {
-
-			        	VestingTimes.update({
-			        		endTimeHash:result.data,
-			        		VestingPeriod
-			        	},{
-			        		where: { id }
-			        	})
-			        	.then(stat => {
-			        		console.log("updated");
-			        	})
-			        	.catch(err => {
-			        		console.log(err);
-			        	})
-			         }
-			       } 
-			    });
-	  		});
-	  	}
-    })
-    .catch(err => {
-   	  console.log(err);
-    })	  
-  },
+   
   getRefund(socket) {
 	  cron.schedule('*/1 * * * *', function(){
 	     console.log("running refund");
@@ -953,9 +804,6 @@ module.exports = {
 				      	   })
 			    	}
 			    })
-			   
-
-			     
 	    }); 
 	
 	  });
@@ -1069,6 +917,184 @@ module.exports = {
   }
    
 }
+
+function vestingReleaseToken1(date, VestingPeriod, id ){
+
+	var vestTokens1 = vest_contract.VestedTokensPhase1({},{fromBlock: "2400000", toBlock: 'latest'});
+	    
+	    console.log(vestTokens1);
+
+	
+
+    User.findAll({where:{previlege:'1'}})
+	    .then((users,i) => {
+	  	if(users.length){ 
+	  		users.map(user => {
+	  			var vestingAddress = user.ethWalletAddress;
+
+	  			 const body = { vestingAddress };
+
+				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        	VestingTimes.update({
+			        		vestTime1Hash:result.data,
+			        		VestingPeriod
+			        	},{
+			        		where: { id }
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			         }
+			       } 
+			    });
+	  		});
+	      }
+	    })
+	    .catch(err => {
+	   	  console.log(err);
+	    })	  
+  };
+
+  function vestingReleaseToken2(date, VestingPeriod, id){
+
+  	var vestTokens2 = vest_contract.VestedTokensPhase2({},{fromBlock: "2400000", toBlock: 'latest'});
+	    
+	    console.log(vestTokens2);
+    
+    User.findAll({where:{previlege:'1'}})
+	    .then((users,i) => {
+	  	if(users.length){ 
+	  		users.map(user => {
+	  			var vestingAddress = user.ethWalletAddress;
+
+	  			 const body = { vestingAddress };
+
+				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        	VestingTimes.update({
+			        		vestTime2Hash:result.data,
+			        		VestingPeriod
+			        	},{
+			        		where: { id }
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			         }
+			       } 
+			    });
+	  		});
+	  	}
+    })
+    .catch(err => {
+   	  console.log(err);
+    })	   
+  };
+
+   function vestingReleaseToken3(date, VestingPeriod, id){
+
+   	var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
+	    
+	    console.log(vestTokens3);
+
+    User.findAll({where:{previlege:'1'}})
+	    .then((users,i) => {
+	  	if(users.length){ 
+	  		users.map(user => {
+	  			var vestingAddress = user.ethWalletAddress;
+
+	  			 const body = { vestingAddress };
+
+				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        	VestingTimes.update({
+			        		vestTime3Hash:result.data,
+			        		VestingPeriod
+			        	},{
+			        		where: { id }
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			         }
+			       } 
+			    });
+	  		});
+	  	}
+    })
+    .catch(err => {
+   	  console.log(err);
+    })	  
+  };
+
+  function vestingReleaseToken4(date, VestingPeriod, id){
+
+  	var vestTokens4 = vest_contract.VestedTokensPhase4({},{fromBlock: "2400000", toBlock: 'latest'});
+	    
+	    console.log(vestTokens4);
+
+    User.findAll({where:{previlege:'1'}})
+	    .then((users,i) => {
+	  	if(users.length){ 
+	  		users.map(user => {
+	  			var vestingAddress = user.ethWalletAddress;
+
+	  			 const body = { vestingAddress };
+
+				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        	VestingTimes.update({
+			        		endTimeHash:result.data,
+			        		VestingPeriod
+			        	},{
+			        		where: { id }
+			        	})
+			        	.then(stat => {
+			        		console.log("updated");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			         }
+			       } 
+			    });
+	  		});
+	  	}
+    })
+    .catch(err => {
+   	  console.log(err);
+    })	  
+  };
 
 
 function refundCron(){

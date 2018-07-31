@@ -13,6 +13,7 @@ import {
   hashPassword
 } from '../helpers/userHelper';
 
+import moment from 'moment';
 import multer from 'multer';
 
 
@@ -635,20 +636,19 @@ order: [['createdAt', 'DESC']]
     addVestingDate(req, res, next) {
     // var user_id = req.body.user_id;
 
+
     if(req.body.vesting_period_date){
-	 var vesting_period_date = req.body.vesting_period_date,
-	     startTime1 =  new Date(vesting_period_date).getTime(),
-	     startTime  = new Date(vesting_period_date),
-  	     vestTime1   = startTime.setDate(startTime.getDate() + 30),
-  	     time1  = new Date(vestTime1),
-         vestTime2   = time1.setDate(time1.getDate() + 30),
-         time2 = new Date(vestTime2),
-  	     vestTime3   = time2.setDate(time2.getDate() + 30),
-         time3 = new Date(vestTime3),
-         endTime = time3.setDate(time3.getDate() + 30),
+	 var vesting_period_date = moment(req.body.vesting_period_date).format('LLLL'),
+	     startTime1 =  moment(vesting_period_date).unix(),
+  	     vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
+         vestTime2   = moment(vesting_period_date).add(20, 'm').unix(),
+  	     vestTime3   = moment(vesting_period_date).add(30, 'm').unix(),
+         endTime = moment(vesting_period_date).add(40, 'm').unix(),
          vestingUserAddress = '',
          tokenValue = '';
 
+       
+     
      PrivelegeUser.update({
     		vesting_period_date
     	},{
@@ -725,6 +725,7 @@ order: [['createdAt', 'DESC']]
 						  	  		message:'NO vest Detail Stored'
 						  	  	});
 				               }
+				               return true;
 				            })
 				            .catch(err => {
 					  	   	 res.status(500).json({
@@ -762,6 +763,7 @@ order: [['createdAt', 'DESC']]
 		         });
 		  	   });
 			 }
+			 return true;
   	 })
   	.catch(err => {
     	res.status(500).json({
@@ -775,6 +777,7 @@ order: [['createdAt', 'DESC']]
 		  	  		message:'No Data Found'
 			  	});
 	    	 }
+	    	 return true;
 	  	   })
 	  	   .catch(err => {
 	  	   	 res.status(500).json({
