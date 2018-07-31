@@ -329,7 +329,7 @@ module.exports = {
 
 				  	    var newBuy = new BuyToken({
 				  	    	amount:trans.amount,
-				  	    	walletMethod:'USD',
+				  	    	walletMethod:'USDT',
 				  	    	buyHash:result.data,
 				  	    	user_id:user.id,
 				  	    	tokens:tokensValue
