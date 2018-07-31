@@ -292,9 +292,11 @@ module.exports = {
          	  .then(data => {
 	
      	  	  data.map(user => {
+
  	  	  	   result.data[0].transactions.map(trans => {
 				console.log(user.USDTAddress === trans.sendingaddress,"chek");
- 	  	  	 	 if(user.USDTAddress === trans.sendingaddress){
+
+ 	  	  	 	 if(user.USDTAddress === trans.sendingaddress && trans.valid === true ){
  	  	  	 	 	Usd_transaction.findOne({
  	  	  	 	 		where: { usd_hash : trans.txid }
  	  	  	 	 	})
