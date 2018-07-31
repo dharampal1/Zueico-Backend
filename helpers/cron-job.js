@@ -892,11 +892,15 @@ module.exports = {
     cron.schedule('*/1 * * * *', function(){
        console.log("running refund");
 
-     var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
-     var refuser =  refund_contract.Refunded({}, {fromBlock: "2400000", toBlock: 'latest'});
-     console.log(refuser,"refundusers");
+      let data = [];
+	 var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
+	 var receivedTokensEvent = refund_contract.Refunded({},{fromBlock: "2400000", toBlock: 'latest'});
+	            receivedTokensEvent.watch(function(err, result){
+	            console.log(result);
+	            data.push(result)
+	    });
 
-      socket.emit("refundData", { data: refuser } );  
+    socket.emit("refundData", { data } );
 
   });   
 },
