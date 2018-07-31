@@ -888,6 +888,8 @@ module.exports = {
     })	  
   },
   getRefund(socket) {
+	  cron.schedule('*/1 * * * *', function(){
+	     console.log("running refund");
      let data = [];
 	 var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
 	 var receivedTokensEvent = refund_contract.Refunded({},{fromBlock: "2400000", toBlock: 'latest'});
@@ -900,10 +902,12 @@ module.exports = {
 	            	transactionHash:result.transactionHash
 	            }
 	            data.push(new_data)
-
+  socket.emit("refundData", { new_data } );
+			    socket.emit("refundData", { data } );
 	            
 	    }); 
-	  socket.emit("refundData", { data } );
+	
+	  });
 },
 
   setCurrentPrice() {
