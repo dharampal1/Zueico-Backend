@@ -1,10 +1,11 @@
 import cron from 'node-cron';
 import request from 'request';
  var schedule = require('node-schedule');
+ import moment from 'moment';
 import {
  User, Btc_price, 
  btc_transaction ,Refund, 
- BuyToken, TokenTransfer, PrivelegeUser,VestingTimes
+ BuyToken, TokenTransfer, PrivelegeUser,VestingTimes, Usd_transaction
   } from '../models';
 
 //const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
@@ -271,6 +272,25 @@ module.exports = {
 	  });
     });	  
   },
+
+  USD_Tranctions(){
+	 cron.schedule('*/1 * * * *', function(){
+	     console.log("running USDt");
+	     let USDTwalletAddress = '1Ed1FXvURwXz4oGiA6yJFgCrmMh1y6aWrv';
+	     const body  = { USDTwalletAddress };
+      request.post({url:`${api_url}/getUSDTtransactions`,form:body },function(err,httpResponse,body ){
+        if(err){
+          console.log(err);
+        } else {
+	
+         var result = body;
+         if(result.status === true) {
+         }
+     }
+   });
+  });
+  },
+
 
    checkTxHashWallet(){
 	cron.schedule('*/1 * * * *', function(){
@@ -704,22 +724,23 @@ module.exports = {
    	cron.schedule('*/1 * * * *', function(){
 	     console.log("running vest times");
 
-	     var date = new Date().getTime();
-
+	     var date = moment().unix();
 	     VestingTimes.findAll({})
 	       .then(data => {
 	       	if(data.length){
 
 	       	  data.map(data1 => {
-	       	  	  if(data1.vetingTime1 === date){
+	       	  	var diff = moment.unix(data1.vestTime1).fromNow()
+	       	  	console.log(diff,data1.vestTime1,date,"sjkdfkj");
+	       	  	  if(moment.unix(data1.vestTime1).fromNow() === 0){
 	       	  	  	vestingReleaseToken1(date,3,data1.id);
-	       	  	  } else if(data1.vetingTime2 === date){
+	       	  	  } else if(moment.unix(data1.vestTime2).fromNow() === 0){
 
 	       	  	  	vestingReleaseToken2(date,2,data1.id);
-	       	  	  } else if (data1.vetingTime3 === date){
+	       	  	  } else if (moment.unix(data1.vestTime3).fromNow() === 0){
 
 	       	  	  	vestingReleaseToken3(date,1,data1.id);
-	       	  	  } else if (data1.endTime === date){
+	       	  	  } else if (moment.unix(data1.endTime).fromNow() === 0){
 
 	       	  	  	vestingReleaseToken4(date,0,data1.id);
 	       	  	  } else {
@@ -744,7 +765,8 @@ module.exports = {
 
 	 var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
 	 var receivedTokensEvent = refund_contract.Refunded({},{fromBlock: "2400000", toBlock: 'latest'});
-	            receivedTokensEvent.watch(function(err, result){
+	          
+	          receivedTokensEvent.watch(function(err, result){
 
 			    Refund.findOne({
 			    	where: { refHash:result.transactionHash }
@@ -922,9 +944,9 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 
 	var vestTokens1 = vest_contract.VestedTokensPhase1({},{fromBlock: "2400000", toBlock: 'latest'});
 	    
-	    console.log(vestTokens1);
-
-	
+	 vestTokens1.watch( (err, result) => {
+	    	 console.log(result,"vest1");
+	    })
 
     User.findAll({where:{previlege:'1'}})
 	    .then((users,i) => {
@@ -968,7 +990,9 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 
   	var vestTokens2 = vest_contract.VestedTokensPhase2({},{fromBlock: "2400000", toBlock: 'latest'});
 	    
-	    console.log(vestTokens2);
+	 vestTokens2.watch( (err, result) => {
+	    	 console.log(result,"vest2");
+	    })
     
     User.findAll({where:{previlege:'1'}})
 	    .then((users,i) => {
@@ -1012,7 +1036,9 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 
    	var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
 	    
-	    console.log(vestTokens3);
+	    vestTokens3.watch( (err, result) => {
+	    	 console.log(result,"vest3");
+	    })
 
     User.findAll({where:{previlege:'1'}})
 	    .then((users,i) => {
@@ -1056,7 +1082,10 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 
   	var vestTokens4 = vest_contract.VestedTokensPhase4({},{fromBlock: "2400000", toBlock: 'latest'});
 	    
-	    console.log(vestTokens4);
+	    vestTokens4.watch( (err, result) => {
+	    	 console.log(result,"vest4");
+	    })
+	   
 
     User.findAll({where:{previlege:'1'}})
 	    .then((users,i) => {
