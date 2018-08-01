@@ -812,7 +812,7 @@ module.exports = {
    },
 
    manageVestCron(){
-   	cron.schedule('*/10 * * * *', function(){
+   	cron.schedule('*/1 * * * *', function(){
 	     console.log("running mange vest");
 
 	    var date = moment().unix();
@@ -930,7 +930,7 @@ module.exports = {
 
   	cron.schedule('*/1 * * * *', function(){
 
-  		console.log("ruuning set price");
+  		console.log("running set price");
 
     const url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
 
@@ -1041,7 +1041,7 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 	  		users.map(user => {
 	  			var vestingAddress = user.ethWalletAddress;
 
-	  			 const body = { vestingAddress };
+	  			 const body = { vestingUserAddress:vestingAddress };
 
 				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
 			        if(err){
@@ -1088,7 +1088,7 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 	  		users.map(user => {
 	  			var vestingAddress = user.ethWalletAddress;
 
-	  			 const body = { vestingAddress };
+	  			 const body = { vestingUserAddress:vestingAddress };
 
 				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
 			        if(err){
@@ -1134,7 +1134,7 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 	  		users.map(user => {
 	  			var vestingAddress = user.ethWalletAddress;
 
-	  			 const body = { vestingAddress };
+	  			 const body = { vestingUserAddress:vestingAddress };
 
 				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
 			        if(err){
@@ -1181,7 +1181,7 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 	  		users.map(user => {
 	  			var vestingAddress = user.ethWalletAddress;
 
-	  			 const body = { vestingAddress };
+	  			 const body = { vestingUserAddress:vestingAddress };
 
 				 request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
 			        if(err){
