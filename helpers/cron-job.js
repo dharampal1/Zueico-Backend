@@ -24,7 +24,9 @@ var veting_ContractAddress = '0x147d3e45410dba405072d348d5b7ad0bb63c7c68';
 
 var Web3 = require("web3");
 var web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
+//web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
+
+web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899"));
 
 var token_contract = web3.eth.contract(token_abi).at(token_ContractAddress);
 var sale_contract = web3.eth.contract(sale_abi).at(sale_ContractAddress);
@@ -149,7 +151,7 @@ module.exports = {
 			purchaseEvent.watch(function(err, result){
 
 			if(err){
-               console.log(err)
+               console.log(err,"jhvj")
 			} else {
 			  var tokens = result.args.tokens.toNumber() / 10**18;
 			   BuyToken.update({
