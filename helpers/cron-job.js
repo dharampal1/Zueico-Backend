@@ -815,6 +815,15 @@ module.exports = {
    	cron.schedule('*/1 * * * *', function(){
 	     console.log("running vest times");
 
+	     var vestTokens1 = vest_contract.VestedTokensPhase1({},{fromBlock: "2400000", toBlock: 'latest'});
+	    
+		vestTokens1.watch(function(err, result) {
+			if(err) {
+				console.error(err,"vest");
+			}
+		   console.log(result,"jshdfgj"); 	
+		});
+
 	    var date = moment().unix();
 
 	     VestingTimes.findAll({})
@@ -856,6 +865,10 @@ module.exports = {
 	 var receivedTokensEvent = refund_contract.Refunded({},{fromBlock: "2400000", toBlock: 'latest'});
 	          
 	          receivedTokensEvent.watch(function(err, result){
+
+	          	if(err) {
+	          		console.error(err,"refund events error");
+	          	} 
 
 			    Refund.findOne({
 			    	where: { refHash:result.transactionHash }
