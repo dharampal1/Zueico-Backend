@@ -812,17 +812,8 @@ module.exports = {
    },
 
    manageVestCron(){
-   	cron.schedule('*/1 * * * *', function(){
-	     console.log("running vest times");
-
-	     var vestTokens1 = vest_contract.VestedTokensPhase1({},{fromBlock: "2400000", toBlock: 'latest'});
-	    
-		vestTokens1.watch(function(err, result) {
-			if(err) {
-				console.error(err,"vest");
-			}
-		   console.log(result,"jshdfgj"); 	
-		});
+   	cron.schedule('*/10 * * * *', function(){
+	     console.log("running mange vest");
 
 	    var date = moment().unix();
 
@@ -858,7 +849,7 @@ module.exports = {
 
    
   getRefund(socket) {
-	  cron.schedule('*/1 * * * *', function(){
+	  cron.schedule('*/5 * * * *', function(){
 	     console.log("running refund");
 
 	 var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
@@ -1059,7 +1050,7 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) { 
 
-			        	var vestTokens1 = vest_contract.VestedTokensPhase1({},{fromBlock: "2400000", toBlock: 'latest'});
+			        	var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
 	    
 						vestTokens1.watch( (err, result) => {
 						   console.log(result); 	
@@ -1231,7 +1222,7 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 
 function refundCron(){
 
-	cron.schedule('*/1 * * * *', function(){
+	cron.schedule('*/2 * * * *', function(){
 	     console.log("running refund");
 
 	   Refund.findAll({
