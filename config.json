@@ -1,0 +1,10 @@
+{
+  "apps": [
+    {
+      "name": "Zue-api",
+      "script": "./server.js",
+      "node_args": "--max_old_space_size=8192",
+      "exec_interpreter":"./node_modules/.bin/babel-node"
+    }
+  ]
+}
