@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node server.js",
+    "start": "nodemon --exec babel-node pm2-config.js",
     "migrate": "node node_modules/.bin/sequelize db:migrate",
     "seed": "node node_modules/.bin/sequelize db:seed:all"
   },
@@ -46,6 +46,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
     "nodemon": "^1.17.5"
   }
 }

@@ -77,3 +77,5 @@ function  getCurrentStats(socket) {
 server.listen(config.PORT, () => {
   console.log(colors.white(`Listening with ${process.env.NODE_ENV} config on port ${config.PORT}`));
 });
+
+export default server;
