@@ -305,25 +305,14 @@ module.exports = {
  	  	  	 	 	.then(data => {
 					
  	  	  	 	 		if(!data) {
- 	  	  	 	 		request.get(`${btc_url}`,function(err,httpResponse,body){
-					  	 	if(err){
-					  	 	 console.log(err);
-					  	 	} else {
+ 	  	  	 	 		
+						
+					 var usdtokenvalue = trans.amount / 0.60,
+ 					     toAddress = user.ethWalletAddress;
 
-					   	  // console.log(httpResponse,"http");
-						//console.log(httpResponse.body,"http");
- 						var pasedCoin = JSON.parse(httpResponse.body);
-						console.log(pasedCoin,"con");
-						  var btc = pasedCoin.ETH.BTC,	
-				                usd = pasedCoin.ETH.USD,	
-								ethbtcvalue = (1 / btc) * trans.amount,
-								perTokenvalue= (1 / usd) * 0.60,
-								tokensValue = ethbtcvalue / perTokenvalue,
-								toAddress = user.ethWalletAddress;
+						const body = { toAddress , value:usdtokenvalue }		
 
-						const body = { toAddress , value:tokensValue }		
-
-                        request.post({url:`${api_url}/sendTokensBTCusers`,form:body },function(err,httpResponse,body){
+                        request.post({url:`${api_url}/sendTokensUSDTusers`,form:body },function(err,httpResponse,body){
                        if(err){
 				  	 	 console.log(err);
 				  	 	} else {
@@ -336,7 +325,7 @@ module.exports = {
 				  	    	walletMethod:'USDT',
 				  	    	buyHash:result.data,
 				  	    	user_id:user.id,
-				  	    	tokens:tokensValue
+				  	    	tokens:usdtokenvalue
 				  	    });
 
 				  	    newBuy.save()
@@ -362,8 +351,6 @@ module.exports = {
 
 	 	  	  	 	 	}
 	 	  	  	 	 });
- 	  	  	 	 	   }
- 	  	  	 	 	})
  	  	  	 	  }
  	  	  	 	  return null
  	  	  	    })
