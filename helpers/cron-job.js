@@ -1040,11 +1040,11 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) { 
 
-			   //      	var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+			        	var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
 	    
-						// vestTokens1.watch( (err, result) => {
-						//    console.log(result); 	
-						// })
+						vestTokens1.watch( (err, result) => {
+						   console.log(result); 	
+						})
 
 			        	VestingTimes.update({
 			        		vestTime1Hash:result.data,
@@ -1087,11 +1087,11 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) {
 
-					 //  	var vestTokens2 = vest_contract.VestedTokensPhase2({},{fromBlock: "2400000", toBlock: 'latest'});
+					  	var vestTokens2 = vest_contract.VestedTokensPhase2({},{fromBlock: "2400000", toBlock: 'latest'});
 						    
-						// vestTokens2.watch( (err, result) => {
-						//      console.log(result,"vest2");
-						// })
+						vestTokens2.watch( (err, result) => {
+						     console.log(result,"vest2");
+						})
 
 			        	VestingTimes.update({
 			        		vestTime2Hash:result.data,
@@ -1133,11 +1133,11 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) { 
 
-			    // var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
+			        var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
 	    
-						 // vestTokens3.watch( (err, result) => {
-						 //    	 console.log(result,"vest3");
-						 // })
+						 vestTokens3.watch( (err, result) => {
+						    	 console.log(result,"vest3");
+						 })
 
 			        	VestingTimes.update({
 			        		vestTime3Hash:result.data,
@@ -1180,11 +1180,11 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) {
 
-	        		  // 	var vestTokens4 = vest_contract.VestedTokensPhase4({},{fromBlock: "2400000", toBlock: 'latest'});
+	        		  	var vestTokens4 = vest_contract.VestedTokensPhase4({},{fromBlock: "2400000", toBlock: 'latest'});
 	        			    
-	        			 //    vestTokens4.watch( (err, result) => {
-	        			 //    	 console.log(result,"vest4");
-	        			 // })
+	        			    vestTokens4.watch( (err, result) => {
+	        			    	 console.log(result,"vest4");
+	        			 })
 
 			        	VestingTimes.update({
 			        		endTimeHash:result.data,
