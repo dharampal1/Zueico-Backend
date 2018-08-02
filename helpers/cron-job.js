@@ -24,14 +24,14 @@ var veting_ContractAddress = '0x147d3e45410dba405072d348d5b7ad0bb63c7c68';
 
 var Web3 = require("web3");
 var web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
+//web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
 
 //web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899"));
 
 //var token_contract = web3.eth.contract(token_abi).at(token_ContractAddress);
-var sale_contract = web3.eth.contract(sale_abi).at(sale_ContractAddress);
-var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
-var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
+//var sale_contract = web3.eth.contract(sale_abi).at(sale_ContractAddress);
+//var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
+//var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
 
 module.exports = {
 
@@ -1052,11 +1052,11 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) { 
 
-			        	var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+			   //      	var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
 	    
-						vestTokens1.watch( (err, result) => {
-						   console.log(result); 	
-						})
+						// vestTokens1.watch( (err, result) => {
+						//    console.log(result); 	
+						// })
 
 			        	VestingTimes.update({
 			        		vestTime1Hash:result.data,
@@ -1099,11 +1099,11 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) {
 
-					  	var vestTokens2 = vest_contract.VestedTokensPhase2({},{fromBlock: "2400000", toBlock: 'latest'});
+					 //  	var vestTokens2 = vest_contract.VestedTokensPhase2({},{fromBlock: "2400000", toBlock: 'latest'});
 						    
-						vestTokens2.watch( (err, result) => {
-						     console.log(result,"vest2");
-						})
+						// vestTokens2.watch( (err, result) => {
+						//      console.log(result,"vest2");
+						// })
 
 			        	VestingTimes.update({
 			        		vestTime2Hash:result.data,
@@ -1145,11 +1145,11 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) { 
 
-			        	var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
+			    //     	var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
 	    
-						 vestTokens3.watch( (err, result) => {
-						    	 console.log(result,"vest3");
-						 })
+						 // vestTokens3.watch( (err, result) => {
+						 //    	 console.log(result,"vest3");
+						 // })
 
 			        	VestingTimes.update({
 			        		vestTime3Hash:result.data,
@@ -1192,11 +1192,11 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) {
 
-	        		  	var vestTokens4 = vest_contract.VestedTokensPhase4({},{fromBlock: "2400000", toBlock: 'latest'});
+	        		  // 	var vestTokens4 = vest_contract.VestedTokensPhase4({},{fromBlock: "2400000", toBlock: 'latest'});
 	        			    
-	        			    vestTokens4.watch( (err, result) => {
-	        			    	 console.log(result,"vest4");
-	        			 })
+	        			 //    vestTokens4.watch( (err, result) => {
+	        			 //    	 console.log(result,"vest4");
+	        			 // })
 
 			        	VestingTimes.update({
 			        		endTimeHash:result.data,

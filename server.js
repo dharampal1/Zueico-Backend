@@ -35,7 +35,7 @@ io.on("connection", (socket) => {
 
   getCurrentStats(socket);
   getCurrentIco(socket);
-  getRefund(socket);
+  //getRefund(socket);
   
   socket.on("disconnect", () => {
     console.log("Client disconnected");
