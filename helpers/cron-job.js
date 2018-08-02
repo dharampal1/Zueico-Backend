@@ -344,7 +344,7 @@ module.exports = {
 				  	     .catch(err => { console.log(err) });
 
  	  	  	 	 		var newUSDTrans = new Usd_transaction({
-			         		usd_hash:trans.hase_of_tx,
+			         		usd_hash:trans.txid,
 							from_address: trans.sendingaddress,
 							to_address: trans.referenceaddress,
 							transaction_date:moment.unix(trans.blocktime).format(),
