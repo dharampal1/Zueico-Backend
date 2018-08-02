@@ -339,7 +339,8 @@ module.exports = {
 							transaction_date:moment.unix(trans.blocktime).format(),
 							amount: trans.amount,
 							block_hight: trans.block,
-							user_id: user.id
+							user_id: user.id,
+							email:user.email
 					   });
 	 	  	  	 	 	newUSDTrans.save()
 	 	  	  	 	 	 .then(data1 => {
