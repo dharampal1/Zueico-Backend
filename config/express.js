@@ -7,7 +7,7 @@ import bodyParser  from 'body-parser';
 import logger  from 'morgan';
 import path   from 'path';
 import cors from 'cors';
-import {
+/* import {
   manageVestCron,
   BTC_Tranctions,
   USD_Tranctions,
@@ -24,7 +24,7 @@ import {
   vestingTime1HashStatus,
   vestingTime2HashStatus,
   vestingTime3HashStatus
-} from '../helpers/cron-job';
+} from '../helpers/cron-job'; */
 
 const initApp = function () {
   // Init
@@ -45,7 +45,7 @@ const initApp = function () {
   // serving static files to the client    
   app.use('/public/uploads', express.static('public/uploads'));
   
-    cronForTransfer(); 
+  /*  cronForTransfer(); 
     manageVestCron();
     refundTxHash();
     setCurrentPrice();
@@ -60,7 +60,7 @@ const initApp = function () {
     USD_Tranctions();
     checkTxHashWallet();
     checkTxHashBuy();
-    checkTxHashTrans();
+    checkTxHashTrans(); */
   
   // Setup routes
   routes(app);
