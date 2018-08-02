@@ -20,7 +20,7 @@ import token_abi from './../config/token_abi.json'
 var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
 var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
-var veting_ContractAddress = '0x147d3e45410dba405072d348d5b7ad0bb63c7c68';
+var veting_ContractAddress = '0xf40dd87626000d74f04ffc6f7bc42e27b70d2d35';
 
 var Web3 = require("web3");
 var web3 = new Web3();
@@ -190,7 +190,7 @@ module.exports = {
 	
      	  	  data.map(user => {
  	  	  	   result.data.map(trans => {
-				console.log(user.btcWalletAddress === trans.sent_from,"chek");
+				console.log(user.btcWalletAddress === trans.sent_from,"chek btc");
  	  	  	 	 if(user.btcWalletAddress === trans.sent_from){
  	  	  	 	 	btc_transaction.findOne({
  	  	  	 	 		where: { hash : trans.hase_of_tx }
@@ -278,7 +278,7 @@ module.exports = {
   USD_Tranctions(){
 	 cron.schedule('*/1 * * * *', function(){
 	    console.log("running USDt");
-	     let USDTwalletAddress = '1Ed1FXvURwXz4oGiA6yJFgCrmMh1y6aWrv';
+	     let USDTwalletAddress = '1QDwS9WwtCSTbSaegUjwnwctehpU4LuCdo';
 	     const body  = { USDTwalletAddress };
        request.post({url:`${api_url}/getUSDTtransactions`,form:body },function(err,httpResponse,body ){
         if(err){
@@ -296,7 +296,7 @@ module.exports = {
      	  	  data.map(user => {
 
  	  	  	   result.data[0].transactions.map(trans => {
-				console.log(user.USDTAddress === trans.sendingaddress,"chek");
+				console.log(user.USDTAddress === trans.sendingaddress,"chek usd");
 
  	  	  	 	 if(user.USDTAddress === trans.sendingaddress && trans.valid === true ){
  	  	  	 	 	Usd_transaction.findOne({
@@ -315,7 +315,7 @@ module.exports = {
  						var pasedCoin = JSON.parse(httpResponse.body);
 						console.log(pasedCoin,"con");
 						  var btc = pasedCoin.ETH.BTC,	
-				                    usd = pasedCoin.ETH.USD,	
+				                usd = pasedCoin.ETH.USD,	
 								ethbtcvalue = (1 / btc) * trans.amount,
 								perTokenvalue= (1 / usd) * 0.60,
 								tokensValue = ethbtcvalue / perTokenvalue,
@@ -1145,7 +1145,7 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) { 
 
-			    //     	var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
+			    // var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
 	    
 						 // vestTokens3.watch( (err, result) => {
 						 //    	 console.log(result,"vest3");

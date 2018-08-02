@@ -16,7 +16,7 @@ var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
 //var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
 //var veting_ContractAddress = '0x224b52bca2224fd4ba14c1a88fb5704d05a1e6b2';
 //var veting_ContractAddress = '0xb408939cc7f65031067b5e2c129d7143baceaf42';
-//var veting_ContractAddress = '0x6a9a6922095308854650bb542303c8b6effe8a9c';
+//var veting_ContractAddress = '0xf40dd87626000d74f04ffc6f7bc42e27b70d2d35';
 
 // Token: 0x6806a1fb780173323ad41902539e12214ed3d994
 // TokenSale: 0x3164afeadb754210c077b723fb2c32106cf0df65
