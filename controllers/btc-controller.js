@@ -11,26 +11,26 @@ import {
 } from '../helpers/requestHelper';
 
 
-var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
+//var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
-var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
+//var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
 //var veting_ContractAddress = '0x224b52bca2224fd4ba14c1a88fb5704d05a1e6b2';
 //var veting_ContractAddress = '0xb408939cc7f65031067b5e2c129d7143baceaf42';
-var veting_ContractAddress = '0x6a9a6922095308854650bb542303c8b6effe8a9c';
+//var veting_ContractAddress = '0x6a9a6922095308854650bb542303c8b6effe8a9c';
 
 // Token: 0x6806a1fb780173323ad41902539e12214ed3d994
 // TokenSale: 0x3164afeadb754210c077b723fb2c32106cf0df65
 // Refund: 0x89306887d540b9b937814ed36c0c315a8908218d
 // TokenVesting: 0xc971e6bbdade0a3e2b85aec31d08697ca845b4e7
-//web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
-web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899"));
+web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
+//web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899"));
 //var web3 = new Web3(new Web3.providers.HttpProvider("http://13.126.28.220:8899"));
 // web3.eth.defaultAccount = '0x8b6091f3e23e6bfbcdf255c2895f12ce58629e64';
 
-var token_contract = web3.eth.contract(token_abi).at(token_ContractAddress);
+//var token_contract = web3.eth.contract(token_abi).at(token_ContractAddress);
 var sale_contract = web3.eth.contract(sale_abi).at(sale_ContractAddress);
-var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
-var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
+// var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
+// var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
 
 
 module.exports = {

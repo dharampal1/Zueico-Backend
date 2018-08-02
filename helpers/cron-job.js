@@ -24,11 +24,11 @@ var veting_ContractAddress = '0x147d3e45410dba405072d348d5b7ad0bb63c7c68';
 
 var Web3 = require("web3");
 var web3 = new Web3();
-//web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
+web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
 
-web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899"));
+//web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899"));
 
-var token_contract = web3.eth.contract(token_abi).at(token_ContractAddress);
+//var token_contract = web3.eth.contract(token_abi).at(token_ContractAddress);
 var sale_contract = web3.eth.contract(sale_abi).at(sale_ContractAddress);
 var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
 var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
