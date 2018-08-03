@@ -909,7 +909,6 @@ module.exports = {
 					             }
 					             return new_data;
 				      	   	  })
-				      	   	  console.log(refunds);
 				      	   	  socket.emit("refundData", refunds); 
 
 				      	   	  }
