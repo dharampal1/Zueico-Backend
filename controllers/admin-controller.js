@@ -639,7 +639,7 @@ order: [['createdAt', 'DESC']]
 
     if(req.body.vesting_period_date){
     	
-	 var vesting_period_date = moment(req.body.vesting_period_date).format('LLLL'),
+	 var vesting_period_date = moment(req.body.vesting_period_date).format(),
 	     startTime1 =  moment(vesting_period_date).unix(),
   	     vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
          vestTime2   = moment(vesting_period_date).add(20, 'm').unix(),
