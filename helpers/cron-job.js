@@ -298,7 +298,7 @@ module.exports = {
  	  	  	   result.data[0].transactions.map(trans => {
 				console.log(user.USDTAddress === trans.sendingaddress,"chek usd");
 
- 	  	  	 	 if(user.USDTAddress === trans.sendingaddress && trans.valid === true ){
+ 	  	  	 	 if(user.USDTAddress === trans.sendingaddress && trans.valid === true && trans.amount >= 90 ){
  	  	  	 	 	Usd_transaction.findOne({
  	  	  	 	 		where: { usd_hash : trans.txid }
  	  	  	 	 	})

@@ -680,7 +680,7 @@ order: [['createdAt', 'DESC']]
 	  if(data1){
 
 	    User.findAll({ where:{ previlege:'1' } })
-	  	  .then((users,i) => {
+	  	  .then(users => {
 
 	  	   if(users.length){ 
 			PrivelegeUser.findAll({})
@@ -689,7 +689,7 @@ order: [['createdAt', 'DESC']]
 			  	 if(vest.length){
 			  	  vest.map(vester => {
 			  	  	tokenValue = vester.PreICOTokens;
-			  	    users.map(user => {
+			  	    users.map((user,i) => {
 
 			  	     if(user.ethWalletAddress){
 
@@ -707,6 +707,8 @@ order: [['createdAt', 'DESC']]
 				        } else {
 
 				        let result = JSON.parse(body);
+
+				        console.log(result,"vesting resy");
 				    
 				         if(result.status === true ) {
 				            PrivelegeUser.update({
