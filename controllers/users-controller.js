@@ -50,8 +50,9 @@ module.exports = {
         airdrop_nric = req.body.airdrop_nric,
         airdrop_telegram = req.body.airdrop_telegram,
         airdrop_code = req.body.airdrop_code,
+        previlege = req.body.previlege,
         mainValues = [firstName, lastName,
-        email, mobileNumber, participationAmount, country,
+        email, mobileNumber, participationAmount,previlege, country,
         password, confirmPassword
       ];
 
@@ -99,6 +100,7 @@ module.exports = {
                   airdrop_nric,
                   airdrop_telegram,
                   airdrop_code,
+                  previlege,
                   emailVerifyToken: token,
                   password: hash
                 };

@@ -184,7 +184,7 @@ module.exports = {
       },
       previlege: { 
          allowNull: false,
-         defaultValue:'0',
+         defaultValue:'2',
          type: Sequelize.ENUM('0','1','2')
       },
       updatedAt: { 
