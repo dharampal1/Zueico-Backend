@@ -176,6 +176,20 @@
     {
       "constant": true,
       "inputs": [],
+      "name": "state",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
       "name": "vestingDurationPhase1",
       "outputs": [
         {
@@ -342,14 +356,6 @@
       "constant": false,
       "inputs": [
         {
-          "name": "vestingAddress",
-          "type": "address"
-        },
-        {
-          "name": "_tokenValue",
-          "type": "uint256"
-        },
-        {
           "name": "startTime",
           "type": "uint256"
         },
@@ -370,7 +376,25 @@
           "type": "uint256"
         }
       ],
-      "name": "setTokensVesting",
+      "name": "setTokensVestingDuration",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "vestingAddress",
+          "type": "address"
+        },
+        {
+          "name": "_tokenValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "setTokensVestingAddressDetails",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",

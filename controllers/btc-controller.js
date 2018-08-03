@@ -14,7 +14,7 @@ import {
 //var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
 // var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
-// var veting_ContractAddress = '0xf40dd87626000d74f04ffc6f7bc42e27b70d2d35';
+// var veting_ContractAddress = '0xc737159c6f20e80f4d79039dd930ac4ca2546916';
 
 //web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
 
