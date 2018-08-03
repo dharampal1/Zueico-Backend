@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import request from 'request';
 import { User, Admin, Setting, BuyToken, 
-	     TokenTransfer, PrivelegeUser ,VestingTimes,Refund} from '../models';
+	     TokenTransfer, PrivelegeUser ,VestingTimes,Refund, Usd_transaction} from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
 import { sendEmail, verifyPassword } from '../helpers/userHelper';
@@ -651,7 +651,7 @@ order: [['createdAt', 'DESC']]
        
      
      PrivelegeUser.update({
-    		vesting_period_date
+    		vesting_period_date:req.body.vesting_period_date
     	},{
     		where:{}
     	})
@@ -717,7 +717,7 @@ order: [['createdAt', 'DESC']]
 				            	  if(i + 1  === users.length ){
 				            	   res.status(200).json({
 						  	  		 status:true,
-						  	  		 message:'vesting Date Stored'
+						  	  		 message:result.message
 						  	  	   });
 				            	 }
 				            	} else {
@@ -820,6 +820,42 @@ order: [['createdAt', 'DESC']]
   	  })
    }
   },
+  
+   usdtContribution(req, res, next) {
+  	 BuyToken.count({ where: { walletMethod :'USDT' } })
+       .then(data => {
+         if(data > 0){
+      BuyToken.sum('tokens',{ where: { walletMethod :'USDT' } })
+      .then(sum => {
+         res.status(200).json({
+              status:true,
+              message:"All USDT contributions",
+              data:sum
+            }); 
+         return true;
+       }) 
+      .catch(err => {
+        res.status(500).json({
+            status:false,
+            message:err.message
+          }); 
+       })
+      } else {
+           res.status(200).json({
+              status:false,
+              message:"No USDT Purchase Found"
+            }); 
+         }
+          return true;
+       }) 
+       .catch(err => {
+        res.status(500).json({
+            status:false,
+            message:err.message
+          }); 
+       })
+  },
+
 
   usdContribution(req, res, next) {
   	 BuyToken.count({ where: { walletMethod :'USD' } })
@@ -832,6 +868,7 @@ order: [['createdAt', 'DESC']]
               message:"All USD contributions",
               data:sum
             }); 
+          return true;
        }) 
       .catch(err => {
         res.status(500).json({
@@ -845,6 +882,7 @@ order: [['createdAt', 'DESC']]
               message:"No USD Purchase Found"
             }); 
          }
+          return true;
        }) 
        .catch(err => {
         res.status(500).json({

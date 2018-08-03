@@ -10,8 +10,11 @@ const router = express.Router();
 // upload privilege Users   
 router.post('/upload/privilegeUsers',adminAuthenticate, adminController.uploadPrivelgeUsers);
 
-// Get all users  
+// Get all usd contributions  
 router.post('/usd/contribution', adminAuthenticate, adminController.usdContribution);
+
+// Get all usdt contribution
+router.post('/usdt/contribution', adminAuthenticate, adminController.usdtContribution);
 
 // Get all users  
 router.post('/users', adminAuthenticate, adminController.allUsers);
