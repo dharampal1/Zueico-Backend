@@ -527,6 +527,9 @@ module.exports = {
 
    refundTxHash(){
 
+   	cron.schedule('*/1 * * * *', function(){
+	     console.log("running refund hash");
+
    	Refund.findAll({})
    	 .then(data => {
    	 	 if(data.length){
@@ -543,6 +546,7 @@ module.exports = {
    	 .catch(err => {
    	 	console.log(err,"refund error");
    	 })
+   	});
   },
 
   vestingHashStatus(){
