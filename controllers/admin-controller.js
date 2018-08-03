@@ -695,10 +695,11 @@ order: [['createdAt', 'DESC']]
 
 	  	    		 vestingUserAddress = user.ethWalletAddress;
 
-	  	    		 const body = {vestingUserAddress, tokenValue, startTime:startTime1, vestTime1, vestTime2, vestTime3, endTime};
+	  	    		const body = { startTime:startTime1, vestTime1, vestTime2, vestTime3, endTime};
+	  	    		const body1 = { vestingUserAddress, tokenValue }
 					console.log(body,"body for add vest");	
 
-					 request.post({url:`${url}/setVestingAddressDetails`,form:body},function(err,httpResponse,body ){
+					 request.post({url:`${url}/setTokensVestingDuration`,form:body},function(err,httpResponse,body ){
 				        if(err){
 				          return res.status(500).json({
 				            status:false,

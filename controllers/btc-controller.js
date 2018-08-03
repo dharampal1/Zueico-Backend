@@ -24,7 +24,6 @@ var web3 = new Web3(new Web3.providers.HttpProvider("http://13.126.28.220:8899")
 var sale_contract = web3.eth.contract(sale_abi).at(sale_ContractAddress);
 
 
-
 module.exports = {
 
    refund(req, res, next){

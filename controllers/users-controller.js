@@ -83,6 +83,7 @@ module.exports = {
               });
           }
           if(previlege !== '2'){
+            
           if (password === confirmPassword) {
 
             var username = firstName + " " + lastName;
@@ -163,9 +164,13 @@ module.exports = {
             });
           }
         } else {
+          console.log("kjd");
             var username = firstName;
-            let token = randtoken.generate(16);
-            let newUser = {
+            let password1 = 'test@123';
+           hashPassword(password1)
+              .then(hash => {
+                let token = randtoken.generate(16);
+                let newUser = {
                   username,
                   mobileNumber,
                   email,
@@ -174,6 +179,7 @@ module.exports = {
                   airdrop_code,
                   previlege,
                   emailVerifyToken: token,
+                  password: hash
                 };
  
                 var transporter = nodemailer.createTransport(config.smtpConfig);
@@ -218,9 +224,16 @@ module.exports = {
                           status: false,
                           message: err.message
                         });
-                    });
-               }
-            });
+                      });
+                  }
+                });
+              })
+              .catch(err => {
+                res.status(500).json({
+                  status: false,
+                  message: err.message
+                });
+              });
           }
         })
         .catch(err => {

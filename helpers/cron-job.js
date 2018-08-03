@@ -35,6 +35,42 @@ var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
 
 module.exports = {
 
+
+	airdropUsers(){
+		// cron.schedule('*/30 * * * *', function(){
+	 //     console.log("running Total Purchase");
+
+     setTimeout(function(){  
+
+	    User.findAll({
+	     	where:{ previlege:'1' }
+	     })
+	      .then(data => {
+	      	  if(data.length) {
+	      	  	 data.map((user,i) => {
+
+	      	  	 if(user.ethWalletAddress){
+
+		      	 var airDropUserAddress = user.ethWalletAddress;
+
+	             const body =  { airDropUserAddress, value:5};
+		        request.post({url:`${api_url}/releaseAirDropTokens`,form:body },function(err,httpResponse,body){
+					  	 	if(err){
+					  	 	 console.log(err);
+					  	 	} else { 
+					  	 	}
+					  	 });
+		              }
+		          });
+			    }
+	 	    })
+	        .catch(err => {
+	        	console.log(err,"error in approve airdrop");
+	        });
+       // });
+       }, 600000);
+	},
+
 	updateTotalPurchase(){
 
 		cron.schedule('*/30 * * * *', function(){
@@ -1031,7 +1067,7 @@ module.exports = {
 
 function vestingReleaseToken1(date, VestingPeriod, id ){
 
-    User.findAll({ where:{previlege:'1' } })
+    User.findAll({ where:{ previlege:'1' } })
 	    .then((users,i) => {
 	  	if(users.length){ 
 	  		users.map(user => {
