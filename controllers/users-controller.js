@@ -51,13 +51,10 @@ module.exports = {
         airdrop_telegram = req.body.airdrop_telegram,
         airdrop_code = req.body.airdrop_code,
         previlege = req.body.previlege,
-        mainValues = [firstName, lastName,
-        email, mobileNumber, participationAmount,previlege, country,
-        password, confirmPassword
+        mainValues = [firstName,
+        email, mobileNumber
       ];
 
-
-  
      if (checkBlank(mainValues) === 0) {
        User.findOne({
           where: {
@@ -85,6 +82,7 @@ module.exports = {
                 message: 'Mobile Number  is not in valid format'
               });
           }
+          if(previlege !== '2'){
           if (password === confirmPassword) {
 
             var username = firstName + " " + lastName;
@@ -164,6 +162,66 @@ module.exports = {
               message: "Passwords are not matched"
             });
           }
+        } else {
+            var username = firstName;
+            let token = randtoken.generate(16);
+            let newUser = {
+                  username,
+                  mobileNumber,
+                  email,
+                  airdrop_nric,
+                  airdrop_telegram,
+                  airdrop_code,
+                  previlege,
+                  emailVerifyToken: token,
+                };
+ 
+                var transporter = nodemailer.createTransport(config.smtpConfig);
+                var handlebarsOptions = {
+                    viewEngine: 'handlebars',
+                    viewPath: path.resolve('./templates/'),
+                    layoutsDir:path.resolve('./templates/'),
+                    extName: '.hbs'
+                  };
+
+                 transporter.use('compile', hbs(handlebarsOptions));
+
+                let link = "https://zuenchain.io/user/login?token=" + token;
+                var data = {
+                  from: `${config.smtpConfig.auth.user}`,
+                  to: `${email}`,
+                  template: 'register',
+                  subject: 'Account Activation Email',
+                  context: {
+                   url: link,
+                   name: username
+                  }
+                };
+
+                transporter.sendMail(data, (error) => {
+
+                  if (error) {
+                    return res.status(500).json({
+                      status: false,
+                      message: error.message
+                    });
+                  } else {
+                    User.create(newUser)
+                      .then(result => {
+                        res.status(201).json({
+                          status: true,
+                          message: "Account created successfully and verification email is sent to your Account."
+                        });
+                      })
+                      .catch(err => {
+                        res.status(500).json({
+                          status: false,
+                          message: err.message
+                        });
+                    });
+               }
+            });
+          }
         })
         .catch(err => {
           res.status(500).json({
@@ -175,7 +233,7 @@ module.exports = {
         res.status(422).json({
            status: false,
            message: "You are not sending valid Request Params",
-           required: "previlege,firstName, lastName, email, mobileNumber, participationAmount ,country, password, confirmPassword"
+           required: "previlege, firstName, email, mobileNumber"
         });
       }
   },
