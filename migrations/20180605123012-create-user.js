@@ -167,10 +167,25 @@ module.exports = {
          defaultValue:'',
          type: Sequelize.STRING
       },
+      airdrop_nric: {
+        allowNull: false,
+         defaultValue:'',
+         type: Sequelize.STRING
+      },
+      airdrop_telegram: {
+        allowNull: false,
+         defaultValue:'',
+         type: Sequelize.STRING
+      },
+      airdrop_code: {
+        allowNull: false,
+         defaultValue:'',
+         type: Sequelize.STRING
+      },
       previlege: { 
          allowNull: false,
          defaultValue:'0',
-         type: Sequelize.ENUM('0','1')
+         type: Sequelize.ENUM('0','1','2')
       },
       updatedAt: { 
          allowNull: false,

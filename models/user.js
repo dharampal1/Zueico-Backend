@@ -36,7 +36,10 @@ module.exports = (sequelize, DataTypes) => {
     vestingToken: DataTypes.STRING,
     vestingRemainingToken: DataTypes.STRING,
     vestingStartDate: DataTypes.STRING,
-    previlege: DataTypes.ENUM('0','1')
+    airdrop_nric:DataTypes.STRING,
+    airdrop_telegram:DataTypes.STRING,
+    airdrop_code:DataTypes.STRING,
+    previlege: DataTypes.ENUM('0','1','2')
    }, {});
    User.associate = function(models) {
         // associations can be defined here

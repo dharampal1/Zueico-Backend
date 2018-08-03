@@ -47,10 +47,15 @@ module.exports = {
         email = req.body.email,
         password = req.body.password,
         confirmPassword = req.body.confirmPassword,
+        airdrop_nric = req.body.airdrop_nric,
+        airdrop_telegram = req.body.airdrop_telegram,
+        airdrop_code = req.body.airdrop_code,
         mainValues = [firstName, lastName,
         email, mobileNumber, participationAmount, country,
         password, confirmPassword
       ];
+
+
   
      if (checkBlank(mainValues) === 0) {
        User.findOne({
@@ -91,6 +96,9 @@ module.exports = {
                   participationAmount,
                   country,
                   email,
+                  airdrop_nric,
+                  airdrop_telegram,
+                  airdrop_code,
                   emailVerifyToken: token,
                   password: hash
                 };
@@ -220,7 +228,7 @@ module.exports = {
                                 userId: data.id,
                                 username:data.username,
                                 email:data.email,
-				previlege:data.previlege,
+				                        previlege:data.previlege,
                                 token
                               });
                                }
