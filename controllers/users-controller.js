@@ -175,7 +175,7 @@ module.exports = {
         res.status(422).json({
            status: false,
            message: "You are not sending valid Request Params",
-           required: "firstName, lastName, email, mobileNumber, participationAmount ,country, password, confirmPassword"
+           required: "previlege,firstName, lastName, email, mobileNumber, participationAmount ,country, password, confirmPassword"
         });
       }
   },
