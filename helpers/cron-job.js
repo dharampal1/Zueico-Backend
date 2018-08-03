@@ -860,7 +860,7 @@ module.exports = {
 
 			     let new_refund = new Refund({
 			    	userAddress:result.address,
-					amountInEther:result.args.value.toNumber(),
+					amountInEther:result.args.value.c[0]toNumber(),
 					refHash:result.transactionHash,
 					refStatus:'Pending'
 			      });
