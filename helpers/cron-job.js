@@ -839,7 +839,7 @@ module.exports = {
 
    
   getRefund(socket) {
-	  cron.schedule('*/5 * * * *', function(){
+	  cron.schedule('*/1 * * * *', function(){
 	     console.log("running refund");
 
 	 var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
@@ -858,9 +858,11 @@ module.exports = {
 
 			       if(!data1) {
 
+			       	console.log(result.args.value.toNumber(),result.args,"args" );
+
 			     let new_refund = new Refund({
 			    	userAddress:result.address,
-					amountInEther:result.args.value.c[0].toNumber(),
+					amountInEther:result.args.value.toNumber(),
 					refHash:result.transactionHash,
 					refStatus:'Pending'
 			      });
