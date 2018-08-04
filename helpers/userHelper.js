@@ -273,6 +273,8 @@ exports.sendEmail = function(username,email,password) {
                                isValid: true,
                              });
                           }
+                        } else {
+                          reject(new Error("Not saved to BuyToken"))
                         }
                        })
                        .catch(err => {
@@ -281,6 +283,8 @@ exports.sendEmail = function(username,email,password) {
                    }
                 }
                });
+             } else {
+              reject(new Error("ethWalletAddress is not Found For the user"))
              }
            });
           }
