@@ -22,7 +22,7 @@ import vest_abi from './../config/vest_abi.json'
 var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
 var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
-var veting_ContractAddress = '0xf6ac8de7a77572eb43439e95313e16554fa1a007';
+var veting_ContractAddress = '0xb5b8d34a0ab3afa2698b37ed6c077f7077e4b3e6';
 
 var Web3 = require("web3");
 var web3 = new Web3();
@@ -552,7 +552,7 @@ module.exports = {
   },
 
   vestingDurationStatus(){
-  	cron.schedule('*/1 * * * *', function(){
+  	cron.schedule('*/2 * * * *', function(){
 	     console.log("running vest Duration");
 
 	   PrivelegeUser.findAll({})
@@ -560,10 +560,7 @@ module.exports = {
 		  if(data.length) {
 	      	  data.map(data1 => {
 
-	      	  if(data1.vestAddressStatus !== "Approved" || data1.vestAddressStatus !== "Failed"){
-
-	      	  
-	          if(data1.vestStatus === 'Approved') {
+	          if(data1.vestStatus === 'Approved' && data.vestAddressStatus === 'Pending' || data.vestAddressStatus === "Failed" ) {
 	          	vestingTokenAddress();
 	          	
 	          } else if(data1.vestStatus === 'Failed' ) {
@@ -571,16 +568,15 @@ module.exports = {
 	          	VestingTimes.findAll({})
 	          	 .then(data2 => {
 	          	 	if(data2.length) {
-	          	 		data2.map(vest => {
-
-          	 			let startTime = vest.startTime,
-          	 			    vestTime1 = vest.vestTime1,
-          	 			    vestTime2 = vest.vestTime2,
-          	 			    vestTime3 = vest.vestTime3,
-          	 			    endTime = vest.endTime;
+	          	 	
+          	 			let startTime = data2.[0].startTime,
+          	 			    vestTime1 = data2.[0].vestTime1,
+          	 			    vestTime2 = data2.[0].vestTime2,
+          	 			    vestTime3 = data2.[0].vestTime3,
+          	 			    endTime = data2.[0].endTime;
 
 	          	 			setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
-	          	 		});
+	          	 		
 	          	 	}
 	          	 })
 	          	 .catch(err => {
@@ -589,7 +585,7 @@ module.exports = {
 	          } else {
 	          	return null;
 	          }
-	         }
+
 	      	});
 		   }
 		})
