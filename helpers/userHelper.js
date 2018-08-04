@@ -251,7 +251,7 @@ exports.sendEmail = function(username,email,password) {
 
               var airDropUserAddress = user.ethWalletAddress;
 
-              const body =  { airDropUserAddress, value:5};
+              const body =  { airDropUserAddress, value:5 };
             request.post({url:`${url}/releaseAirDropTokens`,form:body },function(err,httpResponse,body){
                 if(err){
                  reject(err);
@@ -267,7 +267,7 @@ exports.sendEmail = function(username,email,password) {
                           user_id:user.id,
                           tokens:5
                       });
-                      newBTrans.save()
+                      newBuy.save()
                        .then(data1 => {
                         if(data1) {
                           if(i + 1  === data.length) {
