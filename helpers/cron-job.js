@@ -569,7 +569,7 @@ module.exports = {
 	          	 .then(data2 => {
 	          	 	if(data2.length) {
 	          	 		data2.map(vest => {
-	          	 			
+
           	 			let startTime = vest.startTime,
           	 			    vestTime1 = vest.vestTime1,
           	 			    vestTime2 = vest.vestTime2,
@@ -595,6 +595,57 @@ module.exports = {
 	});
   },
 
+  vestingAddrressStatus(){
+  	cron.schedule('*/1 * * * *', function(){
+	     console.log("running vestingAddrressStatus");
+
+	   PrivelegeUser.findAll({
+	     	where:{ vestAddressStatus:'Pending' }
+	     })
+	    .then(data => {
+		  if(data.length) {
+	      	  	data.map(data1 => {
+	      	  	  var vestAddressHash = data1.vestAddressHash;
+		          const body = { txhash:vestAddressHash };
+				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	if(result.status === true) {
+
+			        		var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
+			        	PrivelegeUser.update({
+			        		vestAddressStatus:new_status
+			        	},{
+			        		where: { id : data1.id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated vestAddressStatus");
+			        	})
+			        	.catch(err => {
+			        		console.log(err);
+			        	})
+			          } else {
+			          	return null
+			          }
+			        }
+	      	    });
+	      	 });
+			}
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	});
+  	    
+   },
+ 
   vestingHashStatus(){
   	cron.schedule('*/1 * * * *', function(){
 	     console.log("running vest");
@@ -645,12 +696,32 @@ module.exports = {
 	});
   	    
    },
+
+   checkVestAddressStatus() {
+   	cron.schedule('*/1 * * * *', function(){
+	     console.log("running vestingAddrressStatus");
+
+	   PrivelegeUser.findAll({
+	     	where:{ vestAddressStatus:'Approved' }
+	     })
+	    .then(data => {
+		  if(data.length > 0) {
+		  		manageVestCron()
+	      	 });
+			}
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	});
+  	    
+   },
    
    vestingTime1HashStatus(){
   	cron.schedule('*/30 * * * *', function(){
 	     console.log("running vest time");
 
-	   VestingTimes.findAll({
+	   PrivelegeUser.findAll({
 	     	where:{ vestTime1Status:'Pending' }
 	     })
 	    .then(data => {
@@ -671,13 +742,15 @@ module.exports = {
 					  	   } else {
 					  	     	new_status = result.data
 					  	   }
-			        	VestingTimes.update({
+			        	PrivelegeUser.update({
 			        		vestTime1Status:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
 			        	.then(stat => {
 			        		console.log("vestTime1Status updated");
+			        		phase1vesting();
+			        		vestingReleaseToken2();
 			        	})
 			        	.catch(err => {
 			        		console.log(err);
@@ -696,11 +769,11 @@ module.exports = {
 	});
   	    
    },
-    vestingTime2HashStatus(){
-  	cron.schedule('*/30 * * * *', function(){
+    vestingTime2HashStatus() {
+  	cron.schedule('*/30 * * * *', function() {
 	     console.log("running vest time");
 
-	   VestingTimes.findAll({
+	   PrivelegeUser.findAll({
 	     	where:{ vestTime2Status:'Pending' }
 	     })
 	    .then(data => {
@@ -721,13 +794,15 @@ module.exports = {
 					  	   } else {
 					  	     	new_status = result.data
 					  	   }
-			        	VestingTimes.update({
+			        	PrivelegeUser.update({
 			        		vestTime2Status:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
 			        	.then(stat => {
 			        		console.log("vestTime2Status updated");
+			        		phase2vesting();
+			        		vestingReleaseToken3();
 			        	})
 			        	.catch(err => {
 			        		console.log(err);
@@ -750,10 +825,10 @@ module.exports = {
 
     vestingTime3HashStatus(){
 
-  	cron.schedule('*/30 * * * *', function(){
+  	 cron.schedule('*/30 * * * *', function(){
 	     console.log("running vest time");
 
-	   VestingTimes.findAll({
+	   PrivelegeUser.findAll({
 	     	where:{ vestTime3Status:'Pending' }
 	     })
 	    .then(data => {
@@ -771,20 +846,21 @@ module.exports = {
 			        		var new_status;
 				          if(result.data == 'Success'){
 					  	   	   new_status = 'Approved'
-					  	   } else {
-					  	     	new_status = result.data
-					  	   }
-			        	VestingTimes.update({
+					  	   
+			        	PrivelegeUser.update({
 			        		vestTime3Status:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
 			        	.then(stat => {
 			        		console.log("vestTime3Status updated");
+			        		phase3vesting();
+			        		vestingReleaseToken4();
 			        	})
 			        	.catch(err => {
 			        		console.log(err);
 			        	})
+			        }
 			           } else {
 			          	return null;
 			          }
@@ -804,7 +880,7 @@ module.exports = {
   	cron.schedule('*/30 * * * *', function(){
 	     console.log("running vest time");
 
-	   VestingTimes.findAll({
+	   PrivelegeUser.findAll({
 	     	where:{ endTimeStatus:'Pending' }
 	     })
 	    .then(data => {
@@ -821,21 +897,22 @@ module.exports = {
 
 			        		var new_status;
 				          if(result.data == 'Success'){
-					  	   	   new_status = 'Approved'
-					  	   } else {
-					  	     	new_status = result.data
-					  	   }
-			        	VestingTimes.update({
+					  	   	 new_status = 'Approved'
+					  	  
+			        	PrivelegeUser.update({
 			        		endTimeStatus:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
 			        	.then(stat => {
 			        		console.log("endTimeStatus updated");
+			        		phase4vesting();
+			        		vestingReleaseToken4();
 			        	})
 			        	.catch(err => {
 			        		console.log(err);
 			        	})
+			          }
 			           } else {
 			          	return null;
 			          }
@@ -851,44 +928,7 @@ module.exports = {
   	    
    },
 
-   manageVestCron(){
-   	cron.schedule('*/1 * * * *', function(){
-	     console.log("running mange vest");
-
-	    var date = moment().unix();
-
-	     VestingTimes.findAll({})
-	       .then(data => {
-	       	if(data.length){
-	       	  data.map(data1 => {
-	       	  	console.log("running mange");
-	       	 
-	       	  	  if(date == data1.vestTime1 ){
-	       	  	  	vestingReleaseToken1(date,3,data1.id);
-	       	  	  } else if(date == data1.vestTime2){
-
-	       	  	  	vestingReleaseToken2(date,2,data1.id);
-	       	  	  } else if (date == data1.vestTime3){
-
-	       	  	  	vestingReleaseToken3(date,1,data1.id);
-	       	  	  } else if (date == data1.endTime){
-
-	       	  	  	vestingReleaseToken4(date,0,data1.id);
-	       	  	  } else {
-
-	       	  	  	return null;
-	       	  	  }
-	       	  });
-	       	} else {
-	       		console.log("no data found");
-	       	}
-	       })
-	       .catch(err => {
-	       	console.log(err);
-	       })
-	   });
-   },
-
+  
    
   getRefund(socket) {
 	  cron.schedule('*/1 * * * *', function(){
@@ -1075,7 +1115,14 @@ module.exports = {
    
 }
 
-function vestingReleaseToken1(date, VestingPeriod, id ){
+function manageVestCron(){
+  	       	  	
+	vestingReleaseToken1();
+
+ };
+
+
+function vestingReleaseToken1(){
 
     User.findAll({ where:{ previlege:'1' } })
 	    .then((users,i) => {
@@ -1092,44 +1139,10 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) { 
 
-			        	var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
-	    
-						vestTokens1.watch( (err, result) => {
-						   console.log(result,"phase1"); 
-						   PrivelegeUser.findAll({})
-						   .then(data => {
-						   	  if(data.length) {
-						   	  	data.map(data1 => {
-
-						   	  	   let RemainingTokens = data1.PreICOTokens - result.args.value;	
-								 
-								   PrivelegeUser.update({
-								   	   VestingPeriod,
-								   	   VestedTokens:result.args.value,
-								   	   RemainingTokens
-								    },{
-						        		where: { id: data1.id }
-						        	})
-								    .then(stat1 => {
-						        		console.log("Pr User updated");
-						        	})
-						        	.catch(err => {
-						        		console.log(err);
-						        	})
-						   	  	});
-						   	  		
-						   	  }
-						   	  return true;
-						   })
-						   .catch(err => {
-				        		console.log(err);
-				        	})
-						})
-			        	VestingTimes.update({
-			        		vestTime1Hash:result.data,
-			        		
+			        	PrivelegeUser.update({
+			        		vestTime1Hash:result.data
 			        	},{
-			        		where: { id }
+			        		where: { user_id : user.id }
 			        	})
 			        	.then(stat => {
 			        		console.log("updated");
@@ -1148,7 +1161,7 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 	    })	  
   };
 
-  function vestingReleaseToken2(date, VestingPeriod, id){
+  function vestingReleaseToken2(){
 
     
     User.findAll({where:{previlege:'1'}})
@@ -1166,45 +1179,10 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) {
 
-					  	var vestTokens2 = vest_contract.VestedTokensPhase2({},{fromBlock: "2400000", toBlock: 'latest'});
-						    
-						vestTokens2.watch( (err, result) => {
-						   console.log(result,"phase2"); 
-						   PrivelegeUser.findAll({})
-						   .then(data => {
-						   	  if(data.length) {
-						   	  	data.map(data1 => {
-
-						   	  	   let RemainingTokens = data1.PreICOTokens - result.args.value;	
-								 
-								   PrivelegeUser.update({
-								   	   VestingPeriod,
-								   	   VestedTokens:result.args.value,
-								   	   RemainingTokens
-								    },{
-						        		where: { id: data1.id }
-						        	})
-								    .then(stat1 => {
-						        		console.log("Pr User updated");
-						        	})
-						        	.catch(err => {
-						        		console.log(err);
-						        	})
-						   	  	});
-						   	  		
-						   	  }
-						   	   return true;
-						   })
-						   .catch(err => {
-				        		console.log(err);
-				        	})
-						   });
-
-			        	VestingTimes.update({
-			        		vestTime2Hash:result.data,
-			        		VestingPeriod
+			        	PrivelegeUser.update({
+			        		vestTime2Hash:result.data
 			        	},{
-			        		where: { id }
+			        		where: { user_id : user.id }
 			        	})
 			        	.then(stat => {
 			        		console.log("updated");
@@ -1223,7 +1201,7 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
     })	   
   };
 
-   function vestingReleaseToken3(date, VestingPeriod, id){
+   function vestingReleaseToken3(){
 
     User.findAll({where:{previlege:'1'}})
 	    .then((users,i) => {
@@ -1240,44 +1218,10 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) { 
 
-			        var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
-	    
-						vestTokens3.watch( (err, result) => {
-						   console.log(result,"phase3"); 
-						   PrivelegeUser.findAll({})
-						   .then(data => {
-						   	  if(data.length) {
-						   	  	data.map(data1 => {
-
-						   	  	   let RemainingTokens = data1.PreICOTokens - result.args.value;	
-								 
-								   PrivelegeUser.update({
-								   	   VestingPeriod,
-								   	   VestedTokens:result.args.value,
-								   	   RemainingTokens
-								    },{
-						        		where: { id: data1.id }
-						        	})
-								    .then(stat1 => {
-						        		console.log("Pr User updated");
-						        	})
-						        	.catch(err => {
-						        		console.log(err);
-						        	})
-						   	  	});	
-						   	  }
-						   	   return true;
-						   })
-						   .catch(err => {
-				        		console.log(err);
-				        	})
-						   });
-
-			        	VestingTimes.update({
-			        		vestTime3Hash:result.data,
-			        		VestingPeriod
+			        	PrivelegeUser.update({
+			        		vestTime3Hash:result.data
 			        	},{
-			        		where: { id }
+			        		where: { user_id : user.id }
 			        	})
 			        	.then(stat => {
 			        		console.log("updated");
@@ -1296,9 +1240,8 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
     })	  
   };
 
-  function vestingReleaseToken4(date, VestingPeriod, id){
-	   
-
+  function vestingReleaseToken4(){
+	
     User.findAll({where:{previlege:'1'}})
 	    .then((users,i) => {
 	  	if(users.length){ 
@@ -1314,44 +1257,10 @@ function vestingReleaseToken1(date, VestingPeriod, id ){
 			        	let result = JSON.parse(body);
 			        	if(result.status === true) {
 
-	        		  	var vestTokens4 = vest_contract.VestedTokensPhase4({},{fromBlock: "2400000", toBlock: 'latest'});
-	        			    
-	        			  vestTokens4.watch( (err, result) => {
-						   console.log(result,"phase4"); 
-						   PrivelegeUser.findAll({})
-						   .then(data => {
-						   	  if(data.length) {
-						   	  	data.map(data1 => {
-
-						   	  	   let RemainingTokens = data1.PreICOTokens - result.args.value;	
-								 
-								   PrivelegeUser.update({
-								   	   VestingPeriod,
-								   	   VestedTokens:result.args.value,
-								   	   RemainingTokens
-								    },{
-						        		where: { id: data1.id }
-						        	})
-								    .then(stat1 => {
-						        		console.log("Pr User updated");
-						        	})
-						        	.catch(err => {
-						        		console.log(err);
-						        	})
-						   	  	});	
-						   	  }
-						   	   return true;
-						   })
-						   .catch(err => {
-				        		console.log(err);
-				        	})
-						   });
-
-			        	VestingTimes.update({
-			        		endTimeHash:result.data,
-			        		VestingPeriod
+			        	PrivelegeUser.update({
+			        		endTimeHash:result.data	
 			        	},{
-			        		where: { id }
+			        		where: { user_id : user.id }
 			        	})
 			        	.then(stat => {
 			        		console.log("updated");
@@ -1421,3 +1330,146 @@ function refundCron(){
 		})
 	});
 };
+
+
+function phase1vesting(){
+
+	var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+	    
+	vestTokens1.watch( (err, result) => {
+	   console.log(result,"phase1"); 
+	   PrivelegeUser.findAll({})
+	   .then(data => {
+	   	  if(data.length) {
+	   	  	data.map(data1 => {
+
+	   	  	   let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber();	
+			 
+			   PrivelegeUser.update({
+			   	   VestingPeriod,
+			   	   VestedTokens:result.args.value.toNumber(),
+			   	   RemainingTokens
+			    },{
+	        		where: { id: data1.id }
+	        	})
+			    .then(stat1 => {
+	        		console.log("Pr User updated");
+	        	})
+	        	.catch(err => {
+	        		console.log(err);
+	        	})
+	   	  	});
+	   	  		
+	   	  }
+	   	  return true;
+	   })
+	   .catch(err => {
+			console.log(err);
+		})
+	});
+}
+function phase2vesting(){
+	var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+	    
+	vestTokens1.watch( (err, result) => {
+	   console.log(result,"phase2"); 
+	   PrivelegeUser.findAll({})
+	   .then(data => {
+	   	  if(data.length) {
+	   	  	data.map(data1 => {
+
+	   	  	   let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber();	
+			 
+			   PrivelegeUser.update({
+			   	   VestingPeriod:data1.VestingPeriod - 1,
+			   	   VestedTokens:result.args.value.toNumber(),
+			   	   RemainingTokens
+			    },{
+	        		where: { id: data1.id }
+	        	})
+			    .then(stat1 => {
+	        		console.log("Pr User updated");
+	        	})
+	        	.catch(err => {
+	        		console.log(err);
+	        	})
+	   	  	});
+	   	  		
+	   	  }
+	   	  return true;
+	   })
+	   .catch(err => {
+			console.log(err);
+		})
+	});
+}
+function phase3vesting(){
+	var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+	    
+	vestTokens1.watch( (err, result) => {
+	   console.log(result,"phase3"); 
+	   PrivelegeUser.findAll({})
+	   .then(data => {
+	   	  if(data.length) {
+	   	  	data.map(data1 => {
+
+	   	  	   let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber();	
+			 
+			   PrivelegeUser.update({
+			   	   VestingPeriod:data1.VestingPeriod - 1,
+			   	   VestedTokens:result.args.value.toNumber(),
+			   	   RemainingTokens
+			    },{
+	        		where: { id: data1.id }
+	        	})
+			    .then(stat1 => {
+	        		console.log("Pr User updated");
+	        	})
+	        	.catch(err => {
+	        		console.log(err);
+	        	})
+	   	  	});
+	   	  		
+	   	  }
+	   	  return true;
+	   })
+	   .catch(err => {
+			console.log(err);
+		})
+	});
+}
+function phase4vesting(){
+	var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+	    
+	vestTokens1.watch( (err, result) => {
+	   console.log(result,"phase4"); 
+	   PrivelegeUser.findAll({})
+	   .then(data => {
+	   	  if(data.length) {
+	   	  	data.map(data1 => {
+
+	   	  	   let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber();	
+			 
+			   PrivelegeUser.update({
+			   	   VestingPeriod:data1.VestingPeriod - 1,
+			   	   VestedTokens:result.args.value.toNumber(),
+			   	   RemainingTokens
+			    },{
+	        		where: { id: data1.id }
+	        	})
+			    .then(stat1 => {
+	        		console.log("Pr User updated");
+	        	})
+	        	.catch(err => {
+	        		console.log(err);
+	        	})
+	   	  	});
+	   	  		
+	   	  }
+	   	  return true;
+	   })
+	   .catch(err => {
+			console.log(err);
+		})
+	});
+}

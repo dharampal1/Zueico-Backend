@@ -58,7 +58,7 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
             return false;
           } else {
             let result = JSON.parse(body);
-            
+
            if(result.status === true ) {
 
               PrivelegeUser.update({
@@ -112,7 +112,23 @@ exports.vestingTokenAddress = function() {
                 console.log(result,"vesting result");
                 if(result.status === true) {
 
-                 return true;
+                   PrivelegeUser.update({
+                      vestAddressHash:result.data
+                    },{
+                      where:{}
+                    })
+                    .then(data => {
+                      if(data){
+                        return true;
+                      } else {
+                        return false;
+                     }
+                       return true;
+                    })
+                    .catch(err => {
+                      console.log(err);
+                      return false;
+                    });
 
                 } else {
                   return false;

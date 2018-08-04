@@ -13,7 +13,18 @@ module.exports = (sequelize, DataTypes) => {
   	VestedTokens:DataTypes.STRING,
   	RemainingTokens:DataTypes.STRING,
     vestHash: DataTypes.STRING,
+    vestAddressHash: DataTypes.STRING,
+    relHash:DataTypes.STRING,
     vestStatus: DataTypes.ENUM('Pending','Approved','Failed'),
+    vestAddressStatus: DataTypes.ENUM('Pending','Approved','Failed'),
+    vestTime1Hash: DataTypes.STRING,
+    vestTime1Status:DataTypes.ENUM('Pending','Approved','Failed'),
+    vestTime2Hash: DataTypes.STRING,
+    vestTime2Status:DataTypes.ENUM('Pending','Approved','Failed'),
+    vestTime3Hash: DataTypes.STRING,
+    vestTime3Status:DataTypes.ENUM('Pending','Approved','Failed'),
+    endTimeHash: DataTypes.STRING,
+    endTimeStatus:DataTypes.ENUM('Pending','Approved','Failed'),
     vesting_period_date: DataTypes.DATE
   }, {});
   PrivelegeUser.associate = function(models) {

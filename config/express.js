@@ -8,9 +8,10 @@ import logger  from 'morgan';
 import path   from 'path';
 import cors from 'cors';
 import {
-  manageVestCron,
   BTC_Tranctions,
   vestingDurationStatus,
+  vestingAddrressStatus,
+  checkVestAddressStatus,
   USD_Tranctions,
   checkTxHashWallet,
   checkTxHashBuy,
@@ -47,11 +48,12 @@ const initApp = function () {
   app.use('/public/uploads', express.static('public/uploads'));
   
     cronForTransfer(); 
-    manageVestCron();
     refundTxHash();
     setCurrentPrice();
     vestingHashStatus();
     vestingDurationStatus();
+    vestingAddrressStatus();
+    checkVestAddressStatus();
     updateTotalPurchase();
     updateApproveAddress();
     vestingTime1HashStatus();

@@ -43,12 +43,55 @@ module.exports = {
       },
       vestHash: {
          type:Sequelize.STRING
-       },
+      },
+      vestAddressHash: {
+        type:Sequelize.STRING
+      },
+      relHash: {
+        type:Sequelize.STRING
+      },
       vestStatus: {
          allowNull: false,
          defaultValue:'Pending',
          type:Sequelize.ENUM('Pending','Approved','Failed')
        },
+       vestAddressStatus: {
+        allowNull: false,
+         defaultValue:'Pending',
+         type:Sequelize.ENUM('Pending','Approved','Failed')
+       },
+       vestTime1Hash:{
+        type: Sequelize.STRING
+      },
+      vestTime1Status:{
+         allowNull: false,
+         defaultValue:'Pending',
+         type:Sequelize.ENUM('Pending','Approved','Failed')
+      },
+      vestTime2Hash:{
+        type: Sequelize.STRING
+      },
+      vestTime2Status:{
+         allowNull: false,
+         defaultValue:'Pending',
+         type:Sequelize.ENUM('Pending','Approved','Failed')
+      },
+      vestTime3Hash:{
+        type: Sequelize.STRING
+      },
+      vestTime3Status:{
+         allowNull: false,
+         defaultValue:'Pending',
+         type:Sequelize.ENUM('Pending','Approved','Failed')
+      },
+      endTimeHash:{
+        type: Sequelize.STRING
+      },
+      endTimeStatus:{
+         allowNull: false,
+         defaultValue:'Pending',
+         type:Sequelize.ENUM('Pending','Approved','Failed')
+      },
       vesting_period_date:{
         type:Sequelize.STRING
       },
