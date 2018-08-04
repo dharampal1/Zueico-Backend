@@ -228,7 +228,7 @@ exports.sendEmail = function(username,email,password) {
                  });
              });
          } else {
-              return null;
+              reject(new Error("No airdrop users Found "));
            }
         })
         .catch(err => {
