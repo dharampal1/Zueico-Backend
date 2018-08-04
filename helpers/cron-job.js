@@ -569,11 +569,11 @@ module.exports = {
 	          	 .then(data2 => {
 	          	 	if(data2.length) {
 	          	 	
-          	 			let startTime = data2.[0].startTime,
-          	 			    vestTime1 = data2.[0].vestTime1,
-          	 			    vestTime2 = data2.[0].vestTime2,
-          	 			    vestTime3 = data2.[0].vestTime3,
-          	 			    endTime = data2.[0].endTime;
+          	 			let startTime = data2[0].startTime,
+          	 			    vestTime1 = data2[0].vestTime1,
+          	 			    vestTime2 = data2[0].vestTime2,
+          	 			    vestTime3 = data2[0].vestTime3,
+          	 			    endTime = data2[0].endTime;
 
 	          	 			setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
 	          	 		
