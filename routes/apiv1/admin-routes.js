@@ -16,6 +16,12 @@ router.post('/usd/contribution', adminAuthenticate, adminController.usdContribut
 // Get all usdt contribution
 router.post('/usdt/contribution', adminAuthenticate, adminController.usdtContribution);
 
+// sendEmailAirdrop
+router.post('/airdrop/sendMail', adminAuthenticate, adminController.sendEmailAirdrop);
+
+// startAirdropTokens
+router.post('/airdrop/startAirdrop', adminAuthenticate, adminController.startAirdropTokens);
+
 // Get all users  
 router.post('/users', adminAuthenticate, adminController.allUsers);
 

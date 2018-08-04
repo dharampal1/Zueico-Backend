@@ -169,7 +169,6 @@ module.exports = {
             let password1 = 'test@123';
            hashPassword(password1)
               .then(hash => {
-                let token = randtoken.generate(16);
                 let newUser = {
                   username,
                   mobileNumber,
@@ -178,70 +177,40 @@ module.exports = {
                   airdrop_telegram,
                   airdrop_code,
                   previlege,
-                  emailVerifyToken: token,
+                  emailVerified: 1,
                   password: hash
                 };
- 
-                var transporter = nodemailer.createTransport(config.smtpConfig);
-                var handlebarsOptions = {
-                    viewEngine: 'handlebars',
-                    viewPath: path.resolve('./templates/'),
-                    layoutsDir:path.resolve('./templates/'),
-                    extName: '.hbs'
-                  };
 
-                 transporter.use('compile', hbs(handlebarsOptions));
-
-                let link = "https://zuenchain.io/user/login?token=" + token;
-                var data = {
-                  from: `${config.smtpConfig.auth.user}`,
-                  to: `${email}`,
-                  template: 'register',
-                  subject: 'Account Activation Email',
-                  context: {
-                   url: link,
-                   name: username
-                  }
-                };
-
-                transporter.sendMail(data, (error) => {
-
-                  if (error) {
-                    return res.status(500).json({
-                      status: false,
-                      message: error.message
-                    });
-                  } else {
-                    User.create(newUser)
-                      .then(result => {
-                        res.status(201).json({
-                          status: true,
-                          message: "Account created successfully and verification email is sent to your Account."
-                        });
-                      })
-                      .catch(err => {
-                        res.status(500).json({
-                          status: false,
-                          message: err.message
-                        });
-                      });
-                  }
-                });
-              })
-              .catch(err => {
-                res.status(500).json({
-                  status: false,
-                  message: err.message
-                });
-              });
-          }
-        })
-        .catch(err => {
-          res.status(500).json({
-            status: false,
-            message: err.message
+             User.create(newUser)
+                .then(result => {
+                  res.status(201).json({
+                    status: true,
+                    message: "Account created successfully for airdrop user"
+                  });
+                })
+                .catch(err => {
+                  res.status(500).json({
+                    status: false,
+                    message: err.message
+                  });
+                }); 
+                 return null;
+          })
+          .catch(err => {
+            res.status(500).json({
+              status: false,
+              message: err.message
+            });
           });
-        });
+        }
+        return null;
+        })
+          .catch(err => {
+            res.status(500).json({
+              status: false,
+              message: err.message
+            });
+         });
        } else {
         res.status(422).json({
            status: false,

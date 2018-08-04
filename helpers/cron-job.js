@@ -8,14 +8,16 @@ import {
  BuyToken, TokenTransfer, PrivelegeUser,VestingTimes, Usd_transaction
   } from '../models';
 
+ import { setVestigDuration, vestingTokenAddress } from '../helpers/socketHelper';
+
 //const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
 const url = 'http://zuenchain.io/user/transaction?Address=31uV49X3CysyAN2q2WDz9j1iAjxZtX6n5F';
 const btc_url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
 const api_url = 'http://13.126.28.220:5000';
 import token_abi from './../config/token_abi.json'
- import sale_abi from './../config/sale_abi.json'
- import refund_abi from './../config/refund_abi.json'
- import vest_abi from './../config/vest_abi.json'
+import sale_abi from './../config/sale_abi.json'
+import refund_abi from './../config/refund_abi.json'
+import vest_abi from './../config/vest_abi.json'
 
 var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
@@ -34,42 +36,6 @@ var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
 var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
 
 module.exports = {
-
-
-	airdropUsers(){
-		// cron.schedule('*/30 * * * *', function(){
-	 //     console.log("running Total Purchase");
-
-     setTimeout(function(){  
-
-	    User.findAll({
-	     	where:{ previlege:'1' }
-	     })
-	      .then(data => {
-	      	  if(data.length) {
-	      	  	 data.map((user,i) => {
-
-	      	  	 if(user.ethWalletAddress){
-
-		      	 var airDropUserAddress = user.ethWalletAddress;
-
-	             const body =  { airDropUserAddress, value:5};
-		        request.post({url:`${api_url}/releaseAirDropTokens`,form:body },function(err,httpResponse,body){
-					  	 	if(err){
-					  	 	 console.log(err);
-					  	 	} else { 
-					  	 	}
-					  	 });
-		              }
-		          });
-			    }
-	 	    })
-	        .catch(err => {
-	        	console.log(err,"error in approve airdrop");
-	        });
-       // });
-       }, 600000);
-	},
 
 	updateTotalPurchase(){
 
@@ -585,6 +551,49 @@ module.exports = {
    	});
   },
 
+  vestingDurationStatus(){
+  	cron.schedule('*/1 * * * *', function(){
+	     console.log("running vest Duration");
+
+	   PrivelegeUser.findAll({})
+	    .then(data => {
+		  if(data.length) {
+	      	  data.map(data1 => {
+
+	        let result = JSON.parse(body);
+	          if(data1.vestStatus === 'Approved') {
+
+	          	VestingTimes.findAll({})
+	          	 .then(data2 => {
+	          	 	if(data2.length) {
+	          	 		data2.map(vest => {
+	          	 			let startTime = vest.startTime,
+	          	 			    vestTime1 = vest.vestTime1,
+	          	 			    vestTime2 = vest.vestTime2,
+	          	 			    vestTime3 = vest.vestTime3,
+	          	 			    endTime = vest.endTime;
+
+	          	 			setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
+	          	 		});
+	          	 	}
+	          	 })
+	          	 .catch(err => {
+	          	 	console.log(err,"error in duration");
+	          	 })
+	          } else if(data1.vestStatus === 'Failed' ) {
+	          	vestingTokenAddress();
+	          } else {
+	          	return null;
+	          }
+	      	});
+		   }
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	});
+  },
+
   vestingHashStatus(){
   	cron.schedule('*/1 * * * *', function(){
 	     console.log("running vest");
@@ -898,9 +907,9 @@ module.exports = {
 			    })
 			    .then(data1 => {
 
-			       if(!data1) {
+			     if(!data1) {
 
-			       	console.log(result.args.value.toNumber(),result.args,"args" );
+			      console.log(result.args.value.toNumber(),result.args,"args" );
 
 			     let new_refund = new Refund({
 			    	userAddress:result.address,

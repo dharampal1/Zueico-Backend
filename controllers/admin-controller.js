@@ -4,7 +4,8 @@ import { User, Admin, Setting, BuyToken,
 	     TokenTransfer, PrivelegeUser ,VestingTimes,Refund, Usd_transaction} from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
-import { sendEmail, verifyPassword } from '../helpers/userHelper';
+import { sendEmail, verifyPassword, sendAirdropEmail, airdropUsersTokens } from '../helpers/userHelper';
+import { setVestigDuration } from '../helpers/socketHelper';
 import config from './../config/environment';
 import { storage, csvFileFilter } from '../helpers/fileUpload';
 const Op = Sequelize.Op;
@@ -12,13 +13,57 @@ const  url = 'http://13.126.28.220:5000';
 import {
   hashPassword
 } from '../helpers/userHelper';
-
 import moment from 'moment';
 import multer from 'multer';
 
-
-
 module.exports = { 
+
+  sendEmailAirdrop(req, res, next) {
+
+  	sendAirdropEmail()
+      .then(data => {
+      	if(data.isValid == true){
+      		res.status(200).json({
+      			status:true,
+      			message:"Account Details Has been sent to Airdrop Users."
+      		});
+      	} else {
+      		res.status(422).json({
+      			status:false,
+      			message:"Email Not sent"
+      		});
+      	}
+      })
+      .catch( err => {
+      	 res.status(500).json({
+      			status:false,
+      			message:err.message
+      	  });
+      })
+  },
+
+  startAirdropTokens(req, res, next) {
+     airdropUsersTokens()
+     .then(data => {
+     	if(data.isValid === true){
+     		res.status(200).json({
+      			status:true,
+      			message:"Token Has been Provided to Airdrop uers"
+      		});
+     	} else {
+     		res.status(422).json({
+      			status:false,
+      			message:"tokens not relesed"
+      		});
+     	}
+     })
+     .catch(err  => {
+     	  res.status(500).json({
+      			status:false,
+      			message:err.message
+      	  });
+     })
+  },
 
   uploadPrivelgeUsers(req, res, next){
 
@@ -633,189 +678,94 @@ order: [['createdAt', 'DESC']]
      });   
     },
 
-    addVestingDate(req, res, next) {
-    // var user_id = req.body.user_id;
-
+   addVestingDate(req, res, next) {
 
     if(req.body.vesting_period_date){
     	
 	 var vesting_period_date = moment(req.body.vesting_period_date).format(),
-	     startTime1 =  moment(vesting_period_date).unix(),
+	     startTime =  moment(vesting_period_date).unix(),
   	     vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
          vestTime2   = moment(vesting_period_date).add(20, 'm').unix(),
   	     vestTime3   = moment(vesting_period_date).add(30, 'm').unix(),
          endTime = moment(vesting_period_date).add(40, 'm').unix(),
          vestingUserAddress = '',
-         tokenValue = '';
-
-       
+         tokenValue = '';  
      
      PrivelegeUser.update({
-    		vesting_period_date:req.body.vesting_period_date
+    		vesting_period_date:vesting_period_date
     	},{
     		where:{}
     	})
-    	.then(data => {
+      .then(data => {
 
       if(data){
-
         	User.update({
       		vestingStartDate:vesting_period_date
       	},{
       		where:{ previlege:'1' }
       	})
       	.then(updat => {
-           if(updat) {
-    
-    			
-		var newVestingTimes = new VestingTimes({
-			vestTime1,
-			vestTime2,
-			vestTime3,
-			endTime
-		});
+         if(updat) {
+			var newVestingTimes = new VestingTimes({
+				startTime,
+				vestTime1,
+				vestTime2,
+				vestTime3,
+				endTime
+			});
 
-	newVestingTimes.save()
-    .then(data1 => {
-	  if(data1){
+		 newVestingTimes.save()
+		   .then(data1 => {
+			 if(data1){
 
-	    User.findAll({ where:{ previlege:'1' } })
-	  	  .then(users => {
-
-	  	   if(users.length){ 
-			PrivelegeUser.findAll({})
-			  .then(vest => {
-
-			  	 if(vest.length){
-			  	  vest.map(vester => {
-			  	  	tokenValue = vester.PreICOTokens;
-			  	    users.map((user,i) => {
-
-			  	     if(user.ethWalletAddress){
-
-	  	    		 vestingUserAddress = user.ethWalletAddress;
-
-	  	    		const body = { startTime:startTime1, vestTime1, vestTime2, vestTime3, endTime};
-	  	    		const body1 = { vestingUserAddress, tokenValue }
-					console.log(body,"body for add vest");	
-
-					 request.post({url:`${url}/setTokensVestingDuration`,form:body},function(err,httpResponse,body ){
-				        if(err){
-				          return res.status(500).json({
-				            status:false,
-				            message:err.message
-				          });
-				        } else {
-
-				        let result = JSON.parse(body);
-
-				        console.log(result,"vesting resy");
-				    
-				         if(result.status === true ) {
-				            PrivelegeUser.update({
-				            	vestHash:result.data
-				            },{ where:{ id : vester.id} })
-				            .then(data => {
-				            	if(data){
-				            	  if(i + 1  === users.length ){
-				            	   res.status(200).json({
-						  	  		 status:true,
-						  	  		 message:result.message
-						  	  	   });
-				            	 }
-				            	} else {
-				            	res.status(404).json({
-						  	  		status:false,
-						  	  		message:'NO vest Detail Stored'
-						  	  	});
-				               }
-				               return true;
-				            })
-				            .catch(err => {
-					  	   	 res.status(500).json({
-					  	  		status:false,
-					  	  		message:err.message
-					         });
-					  	   });
-				        }  else {
-				        	return res.status(422).json({
-						  	  		status:false,
-						  	  		message:result.message
-						  	 });
-				         }
-				        }
-				      });
-					}  else {
-						return res.status(422).json({
-						  	  		status:false,
-						  	  		message:"Create wallet address first"
-						  });
-					}
-	  	    		});
-	  	    	  });
-			  	 } else {
-			  	 	res.status(404).json({
-			  	  		status:false,
-			  	  		message:'No Data Found'
-				  	});
-			  	 }
-			  })
-			  .catch(err => {
-		  	   	 res.status(500).json({
-		  	  		status:false,
-		  	  		message:err.message
-		         });
-		  	   });
-			 }
-			 return true;
-  	 })
-  	.catch(err => {
-    	res.status(500).json({
-  	  		status:false,
-  	  		message:err.message
-  	      });
-  	})
-	    	} else {
-	    		res.status(404).json({
-		  	  		status:false,
-		  	  		message:'No Data Found'
-			  	});
-	    	 }
-	    	 return true;
-	  	   })
-	  	   .catch(err => {
-	  	   	 res.status(500).json({
-	  	  		status:false,
-	  	  		message:err.message
-	         });
-	  	   })
-		 } else {
-		 		res.status(404).json({
-		  	  		status:false,
-		  	  		message:'No Data Found'
-			  	 });
-		 	}
-		 	return true;
-		 })
-		 .catch(err => {
-    		res.status(500).json({
-  	  		status:false,
-  	  		message:err.message
-  	      });
-    	});
-	} else {
-		res.status(404).json({
-  	  		status:false,
-  	  		message:'No Data Found'
-  	  })
-	}
-   })
-	.catch(err => {
-		res.status(500).json({
-	  		status:false,
+	  	  let duration = setVestigDuration(startTime,vestTime1,vestTime2,vestTime3,endTime);
+	  	   if(duration === true) {
+	  	   	res.status(200).josn({
+	  			status:true,
+  	  		    message:'vesting Duration Initiated'
+	  		 })
+	  	   }
+	  	   } else {
+	  		res.status(404).josn({
+	  			status:false,
+  	  		    message:'No data found'
+	  		 })
+		  	}
+		  })
+	     .catch(err => {
+	    	res.status(500).josn({
+	  			status:false,
+		  		message:err.message
+	  		})
+	     })	
+	  } else {
+	  	res.status(404).josn({
+	  			status:false,
+  	  		    message:'No data found'
+	  		 })
+	  }
+	  return null
+	  })
+     .catch(err => {
+    	res.status(500).josn({
+  			status:false,
 	  		message:err.message
-	      });
-	});
+  		})
+     })	
+      } else {
+      	res.status(404).josn({
+  			status:false,
+	  		    message:'No data found'
+  		 })
+	  }
+	  return null
+	  })
+     .catch(err => {
+    	res.status(500).josn({
+  			status:false,
+	  		message:err.message
+  		})
+     })	
    } else {
    	res.status(422).json({
   	  		status:false,

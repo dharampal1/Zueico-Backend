@@ -1,6 +1,6 @@
  import Promise from 'promise';
  import bcrypt from 'bcryptjs';
- import { User } from '../models';
+ import { User, BuyToken } from '../models';
  import request from 'request';
 import config from './../config/environment';
 import nodemailer from 'nodemailer';
@@ -138,8 +138,55 @@ exports.sendEmail = function(username,email,password) {
 
  return new Promise(((resolve, reject) => {
        
- let link = "https://zuenchain.io/user/login";
- var transporter = nodemailer.createTransport(config.smtpConfig);
+     let link = "https://zuenchain.io/user/login";
+      var transporter = nodemailer.createTransport(config.smtpConfig);
+      var handlebarsOptions = {
+          viewEngine: 'handlebars',
+          viewPath: path.resolve('./templates/'),
+          layoutsDir:path.resolve('./templates/'),
+          extName: '.hbs'
+        };
+
+       transporter.use('compile', hbs(handlebarsOptions));
+
+      var data = {
+        from: `${config.smtpConfig.auth.user}`,
+        to: `${email}`,
+        template: 'privelege-user',
+        subject: 'Account Details Email',
+        context: {
+         email: email,
+         name: username,
+         password:password,
+         url:link
+        }
+      };
+
+      transporter.sendMail(data, (error) => {
+
+        if (error) {
+         reject(err);
+        } else {
+         resolve({
+            isValid: true,
+          });
+        }
+       });
+
+    }));
+
+  };
+
+  exports.sendAirdropEmail = function() { 
+
+    return new Promise(((resolve, reject) => {
+
+      User.findAll({ where :{ previlege : '2' }})
+        .then(data => {
+            if(data.length) {
+               data.map((user,i) => {
+
+                var transporter = nodemailer.createTransport(config.smtpConfig);
                 var handlebarsOptions = {
                     viewEngine: 'handlebars',
                     viewPath: path.resolve('./templates/'),
@@ -149,16 +196,21 @@ exports.sendEmail = function(username,email,password) {
 
                  transporter.use('compile', hbs(handlebarsOptions));
 
+                let name = user.username,
+                    email = user.email,
+                    link = "https://zuenchain.io/user/login",
+                    password = "test@123";
+
                 var data = {
                   from: `${config.smtpConfig.auth.user}`,
                   to: `${email}`,
-                  template: 'privelege-user',
-                  subject: 'Account Deatils Email',
+                  template: 'airdrop-register',
+                  subject: 'Account Details Email',
                   context: {
-                   email: email,
-                   name: username,
-                   password:password,
-                   url:link
+                   url: link,
+                   name,
+                   email,
+                   password
                   }
                 };
 
@@ -167,12 +219,72 @@ exports.sendEmail = function(username,email,password) {
                   if (error) {
                    reject(err);
                   } else {
-                   resolve({
-                      isValid: true,
-                    });
+                    if(i + 1  === data.length) {
+                       resolve({
+                         isValid: true,
+                       });
+                    }
                   }
+                 });
              });
+         } else {
+              return null;
+           }
+        })
+        .catch(err => {
+           console.log(err, "send airdrop email");
+        })
+    }));
+ };
 
-          }));
 
-  }
+  exports.airdropUsersTokens = function(){
+   return new Promise(((resolve, reject) => {
+      User.findAll({
+        where:{ previlege:'2' }
+       })
+        .then(data => {
+            if(data.length) {
+               data.map((user,i) => {
+
+               if(user.ethWalletAddress){
+
+              var airDropUserAddress = user.ethWalletAddress;
+
+              const body =  { airDropUserAddress, value:5};
+            request.post({url:`${api_url}/releaseAirDropTokens`,form:body },function(err,httpResponse,body){
+                if(err){
+                 reject(err);
+                } else { 
+                  let result = JSON.parse(body);
+                   if(result.status === true) {
+
+                      var newBuy = new BuyToken({
+                          walletMethod:'ETH',
+                          buyHash:result.data,
+                          user_id:user.id,
+                          tokens:5
+                      });
+                      newBTrans.save()
+                       .then(data1 => {
+                        if(data1) {
+                           resolve({
+                            isValid: true,
+                          });
+                        }
+                       })
+                       .catch(err => {
+                         reject(err);
+                       })
+                   }
+                }
+               });
+             }
+           });
+          }
+        })
+        .catch(err => {
+          reject(err);
+        });
+      }));
+  };
