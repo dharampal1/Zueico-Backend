@@ -82,7 +82,7 @@ module.exports = {
                 message: 'Mobile Number  is not in valid format'
               });
           }
-          if(previlege !== '2'){
+          if(previlege !== 2){
             
           if (password === confirmPassword) {
 
