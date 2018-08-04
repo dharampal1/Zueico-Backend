@@ -57,9 +57,6 @@ const initApp = function () {
     updateTotalPurchase();
     updateApproveAddress();
     vestingTime1HashStatus();
-    vestingTime2HashStatus();
-    vestingTime3HashStatus();
-    endTimeHashStatus();
     BTC_Tranctions();
     USD_Tranctions();
     checkTxHashWallet();
