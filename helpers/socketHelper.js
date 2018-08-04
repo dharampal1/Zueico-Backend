@@ -98,7 +98,7 @@ exports.vestingTokenAddress = function() {
                 let tokenValue = vester.PreICOTokens;
                 users.map((user,i) => {
                if(user.ethWalletAddress){
-               vestingUserAddress = user.ethWalletAddress;
+               let vestingUserAddress = user.ethWalletAddress;
                let body = { vestingUserAddress, tokenValue }
                console.log(body,"body for add vest address");
               request.post({url:`${url}/setTokensVestingAddressDetails`,form:body},function(err,httpResponse,body ){
