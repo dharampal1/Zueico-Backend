@@ -95,7 +95,7 @@ exports.vestingTokenAddress = function() {
             .then(vest => {
             if(vest.length){
               vest.map(vester => {
-                tokenValue = vester.PreICOTokens;
+                let tokenValue = vester.PreICOTokens;
                 users.map((user,i) => {
                if(user.ethWalletAddress){
                vestingUserAddress = user.ethWalletAddress;
