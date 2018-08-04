@@ -201,7 +201,7 @@ exports.sendEmail = function(username,email,password) {
                     link = "https://zuenchain.io/user/login",
                     password = "test@123";
 
-                var data = {
+                var data1 = {
                   from: `${config.smtpConfig.auth.user}`,
                   to: `${email}`,
                   template: 'airdrop-register',
@@ -214,7 +214,7 @@ exports.sendEmail = function(username,email,password) {
                   }
                 };
 
-                transporter.sendMail(data, (error) => {
+                transporter.sendMail(data1, (error) => {
 
                   if (error) {
                    reject(err);
@@ -268,9 +268,11 @@ exports.sendEmail = function(username,email,password) {
                       newBTrans.save()
                        .then(data1 => {
                         if(data1) {
-                           resolve({
-                            isValid: true,
-                          });
+                          if(i + 1  === data.length) {
+                             resolve({
+                               isValid: true,
+                             });
+                          }
                         }
                        })
                        .catch(err => {

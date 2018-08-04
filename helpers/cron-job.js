@@ -559,8 +559,7 @@ module.exports = {
 	    .then(data => {
 		  if(data.length) {
 	      	  data.map(data1 => {
-
-	        let result = JSON.parse(body);
+	      	  	
 	          if(data1.vestStatus === 'Approved') {
 
 	          	VestingTimes.findAll({})
