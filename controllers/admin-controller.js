@@ -682,12 +682,12 @@ order: [['createdAt', 'DESC']]
 
     if(req.body.vesting_period_date){
     	
-	 var vesting_period_date = moment(req.body.vesting_period_date).tz("GMT+0000").format(),
+	 var vesting_period_date = moment(req.body.vesting_period_date).format('LLLL'),
 	     startTime =  moment(vesting_period_date).unix(),
-  	     vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
-         vestTime2   = moment(vesting_period_date).add(20, 'm').unix(),
-  	     vestTime3   = moment(vesting_period_date).add(30, 'm').unix(),
-         endTime = moment(vesting_period_date).add(40, 'm').unix(),
+  	     vestTime1   =  moment(vesting_period_date).add(5, 'm').unix(),
+         vestTime2   = moment(vesting_period_date).add(10, 'm').unix(),
+  	     vestTime3   = moment(vesting_period_date).add(15, 'm').unix(),
+         endTime = moment(vesting_period_date).add(20, 'm').unix(),
          vestingUserAddress = '',
          tokenValue = '';  
      
