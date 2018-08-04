@@ -707,7 +707,6 @@ module.exports = {
 	    .then(data => {
 		  if(data.length > 0) {
 		  		manageVestCron()
-	      	 });
 			}
 		})
 		.catch(err => {
