@@ -1,6 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var VestingTimes = sequelize.define('VestingTimes', {
+    startTime:DataTypes.STRING,
     vestTime1: DataTypes.STRING,
     vestTime1Hash: DataTypes.STRING,
     vestTime1Status:DataTypes.ENUM('Pending','Approved','Failed'),

@@ -57,6 +57,8 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
             console.log(err, 'setTokensVestingDuration');
             return false;
           } else {
+            let result = JSON.parse(body);
+            
            if(result.status === true ) {
 
               PrivelegeUser.update({
