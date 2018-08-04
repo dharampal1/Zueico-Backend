@@ -559,18 +559,22 @@ module.exports = {
 	    .then(data => {
 		  if(data.length) {
 	      	  data.map(data1 => {
-	      	  	
-	          if(data1.vestStatus === 'Approved') {
 
+	          if(data1.vestStatus === 'Approved') {
+	          	vestingTokenAddress();
+	          	
+	          } else if(data1.vestStatus === 'Failed' ) {
+	          
 	          	VestingTimes.findAll({})
 	          	 .then(data2 => {
 	          	 	if(data2.length) {
 	          	 		data2.map(vest => {
-	          	 			let startTime = vest.startTime,
-	          	 			    vestTime1 = vest.vestTime1,
-	          	 			    vestTime2 = vest.vestTime2,
-	          	 			    vestTime3 = vest.vestTime3,
-	          	 			    endTime = vest.endTime;
+	          	 			
+          	 			let startTime = vest.startTime,
+          	 			    vestTime1 = vest.vestTime1,
+          	 			    vestTime2 = vest.vestTime2,
+          	 			    vestTime3 = vest.vestTime3,
+          	 			    endTime = vest.endTime;
 
 	          	 			setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
 	          	 		});
@@ -579,8 +583,6 @@ module.exports = {
 	          	 .catch(err => {
 	          	 	console.log(err,"error in duration");
 	          	 })
-	          } else if(data1.vestStatus === 'Failed' ) {
-	          	vestingTokenAddress();
 	          } else {
 	          	return null;
 	          }
