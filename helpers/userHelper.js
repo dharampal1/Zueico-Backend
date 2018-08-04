@@ -252,7 +252,7 @@ exports.sendEmail = function(username,email,password) {
               var airDropUserAddress = user.ethWalletAddress;
 
               const body =  { airDropUserAddress, value:5};
-            request.post({url:`${api_url}/releaseAirDropTokens`,form:body },function(err,httpResponse,body){
+            request.post({url:`${url}/releaseAirDropTokens`,form:body },function(err,httpResponse,body){
                 if(err){
                  reject(err);
                 } else { 
