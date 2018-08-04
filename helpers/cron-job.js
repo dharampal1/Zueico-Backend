@@ -725,7 +725,7 @@ module.exports = {
 	     console.log("running vest time");
 
 	   PrivelegeUser.findAll({
-	     	where:{ vestTime1Hash:'Pending' }
+	     	where:{ vestTime1Status:'Pending' }
 	     })
 	    .then(data => {
 		  if(data.length) {
