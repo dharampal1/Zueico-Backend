@@ -560,7 +560,7 @@ module.exports = {
 		  if(data.length) {
 	      	  data.map(data1 => {
 
-	      	  if(data1.vestAddressStatus !== "Approved"){
+	      	  if(data1.vestAddressStatus !== "Approved" || data1.vestAddressStatus !== "Failed"){
 
 	      	  
 	          if(data1.vestStatus === 'Approved') {
