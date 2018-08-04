@@ -259,6 +259,8 @@ exports.sendEmail = function(username,email,password) {
                   let result = JSON.parse(body);
                    if(result.status === true) {
 
+                    console.log(result,"relse airdrop");
+
                       var newBuy = new BuyToken({
                           walletMethod:'ETH',
                           buyHash:result.data,
@@ -280,6 +282,8 @@ exports.sendEmail = function(username,email,password) {
                        .catch(err => {
                          reject(err);
                        })
+                   } else {
+                    reject(result);
                    }
                 }
                });
