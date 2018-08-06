@@ -2,6 +2,7 @@ import cron from 'node-cron';
 import request from 'request';
  var schedule = require('node-schedule');
  import moment from 'moment';
+ moment.suppressDeprecationWarnings = true;
 import {
  User, Btc_price, 
  btc_transaction ,Refund, 
@@ -1002,14 +1003,15 @@ module.exports = {
   	cron.schedule('*/7 * * * *', function(){
 
   	console.log("running checkingVestTime");
-
+  	
   	 PrivelegeUser.findAll({
 	     	where:{ relStatus:'Approved' }
 	     })
 	    .then(data => {
 		  if(data.length > 0) {
 
-		  	let date = moment().format('LLLL').unix();
+		  	let curDate = moment().format('LLLL');
+		  	let date = moment(curDate).unix();
 
 		  	VestingTimes.find({})
 			   .then(time => {

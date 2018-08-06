@@ -14,6 +14,7 @@ import {
   hashPassword
 } from '../helpers/userHelper';
 import moment from 'moment';
+ moment.suppressDeprecationWarnings = true;
 import multer from 'multer';
 
 module.exports = { 
