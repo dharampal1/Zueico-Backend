@@ -23,7 +23,8 @@ import {
   endTimeHashStatus,
   updateTotalPurchase,
   updateApproveAddress,
-  relHashHashStatus
+  relHashHashStatus,
+  ReleasedAirDropTokens
 } from '../helpers/cron-job';
 
 const initApp = function () {
@@ -60,6 +61,7 @@ const initApp = function () {
     checkTxHashWallet();
     checkTxHashBuy();
     checkTxHashTrans();
+    ReleasedAirDropTokens();
   
   // Setup routes
   routes(app);
