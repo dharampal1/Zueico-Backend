@@ -136,14 +136,14 @@ module.exports = {
 			    	 	newPrevUser.save()
 			    	 	 .then(data1 => {
 			    	 	   if( i + 1  === jsonObj.length){
-			    	 	 		res.status(200).json({
+			    	 	 	return res.status(200).json({
 					            status:true,
 					            message: 'Privilege Users added and Login Deatails is sent to Email',
 					          });
 			    	 	 	}
 			    	 	 })
 			    	 	  .catch(err => {
-				           res.status(500).json({
+				          return res.status(500).json({
 				             status:false,
 				             message: err.message
 				           });   
@@ -151,14 +151,14 @@ module.exports = {
 		    	 	  }
 		    	   })
 		    	 	.catch(err => {
-			           res.status(500).json({
+			          return res.status(500).json({
 			             status:false,
 			             message: err.message
 			           });   
 					});
 		    	 })
 		    	 .catch(err => {
-		           res.status(500).json({
+		           return res.status(500).json({
 		             status:false,
 		             message: err.message
 		           });   
@@ -166,7 +166,7 @@ module.exports = {
 		       
 		    })
 		    .catch(err => {
-		    	res.status(500).json({
+		    	return res.status(500).json({
 		             status:false,
 		             message: err.message
 		          }); 
@@ -174,7 +174,7 @@ module.exports = {
 		}
 		})
 		.catch(err => {
-			res.status(500).json({
+			return res.status(500).json({
 	             status:false,
 	             message: err.message
 	          });   
@@ -182,7 +182,7 @@ module.exports = {
        });
     })
 	.catch(err => {
-		res.status(500).json({
+	return	res.status(500).json({
 	         status:false,
 	         message: err.message
 	      });   
