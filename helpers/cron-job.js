@@ -1000,7 +1000,7 @@ module.exports = {
 
   checkingVestTime() {
 
-  	cron.schedule('*/7 * * * *', function(){
+  	cron.schedule('*/2 * * * *', function(){
 
   	console.log("running checkingVestTime");
   	
@@ -1054,7 +1054,6 @@ function vestingReleaseToken(){
 	     console.log("running vestingReleaseToken");
 
 	 
-
     User.findAll({ where:{ previlege:'1' } })
 	    .then((users,i) => {
 	  	 if(users.length){ 
