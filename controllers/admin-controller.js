@@ -76,7 +76,7 @@ module.exports = {
       if (err) {
           return res.status(500).json({
           status: false,
-          message: err.message
+          message: err
         });
       }
       if (req.file) {
@@ -145,7 +145,7 @@ module.exports = {
 			    	 	  .catch(err => {
 				          return res.status(500).json({
 				             status:false,
-				             message: err.message
+				             message: err
 				           });   
 						})
 		    	 	  }
@@ -153,14 +153,14 @@ module.exports = {
 		    	 	.catch(err => {
 			          return res.status(500).json({
 			             status:false,
-			             message: err.message
+			             message: err
 			           });   
 					});
 		    	 })
 		    	 .catch(err => {
 		           return res.status(500).json({
 		             status:false,
-		             message: err.message
+		             message: err
 		           });   
 				})
 		       
@@ -168,7 +168,7 @@ module.exports = {
 		    .catch(err => {
 		    	return res.status(500).json({
 		             status:false,
-		             message: err.message
+		             message: err
 		          }); 
 		      });
 		}
@@ -176,7 +176,7 @@ module.exports = {
 		.catch(err => {
 			return res.status(500).json({
 	             status:false,
-	             message: err.message
+	             message: err
 	          });   
 		   })		
        });
@@ -184,7 +184,7 @@ module.exports = {
 	.catch(err => {
 	return	res.status(500).json({
 	         status:false,
-	         message: err.message
+	         message: err
 	      });   
 	 })	
    }
