@@ -560,7 +560,7 @@ module.exports = {
 		  if(data.length) {
 	      	  data.map(data1 => {
 
-	          if(data1.vestStatus === 'Approved' && data.vestAddressStatus === 'Pending' || data.vestAddressStatus === "Failed" ) {
+	          if(data1.vestStatus === 'Approved' && data1.vestAddressStatus === 'Pending' || data1.vestAddressStatus === "Failed" ) {
 	          	vestingTokenAddress();
 	          	
 	          } else if(data1.vestStatus === 'Failed' ) {
@@ -716,18 +716,18 @@ module.exports = {
   	    
    },
    
-   vestingTime1HashStatus(){
+   relHashHashStatus(){
   	cron.schedule('*/2 * * * *', function(){
-	     console.log("running vest time");
+	     console.log("running vest time release");
 
 	   PrivelegeUser.findAll({
-	     	where:{ vestTime1Status:'Pending' }
+	     	where:{ relStatus:'Pending' }
 	     })
 	    .then(data => {
 		  if(data.length) {
 	      	  	data.map(data1 => {
-	      	  	  var vestTime1Hash = data1.vestTime1Hash;
-		          const body = { txhash:vestTime1Hash };
+	      	  	  var relHash = data1.relHash;
+		          const body = { txhash:relHash };
 				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
 			        if(err){
 			          console.log(err);
@@ -742,12 +742,12 @@ module.exports = {
 					  	     	new_status = result.data
 					  	   }
 			        	PrivelegeUser.update({
-			        		vestTime1Status:new_status
+			        		relStatus:new_status
 			        	},{
 			        		where: { id : data1.id}
 			        	})
 			        	.then(stat => {
-			        		console.log("vestTime1Status updated");
+			        		console.log("relStatus updated");
 			        	})
 			        	.catch(err => {
 			        		console.log(err);
@@ -948,15 +948,64 @@ module.exports = {
         }   
       });
     });
+  },
+
+
+  checkingVestTime() {
+
+  	cron.schedule('*/7 * * * *', function(){
+
+  	console.log("running checkingVestTime");
+
+  	 PrivelegeUser.findAll({
+	     	where:{ relStatus:'Approved' }
+	     })
+	    .then(data => {
+		  if(data.length > 0) {
+
+		  	let date = moment().format('LLLL').unix();
+
+		  	VestingTimes.find({})
+			   .then(time => {
+
+			 	let time1 = time[0].vestTime1,
+			 	    time2 = time[0].vestTime2,
+			 	    time3 = time[0].vestTime3,
+			 	    time4 = time[0].endTime;
+
+			 	if(time1 > date && time1 < time2){
+			 		phase1vesting()
+			 	} else if(time2 > date && time2 < time3) {
+			 		phase2vesting()
+			 	} else if(time3 > date && time3 < time4) {
+			 		phase3vesting()
+			 	} else if(time4 > date) {
+			 		phase4vesting()
+			 	} else {
+			 		return null;
+			 	}
+			 })
+			 .catch(err => {
+			 	console.log(err,"error");
+			 })    
+		  } else {
+		  	return null;
+		  }
+		})
+		.catch(err => {
+			console.log(err);
+		})
+  	});
   }
    
 }
 
 
-
 function vestingReleaseToken(){
    	cron.schedule('*/6 * * * *', function(){
 	     console.log("running vestingReleaseToken");
+
+	 
 
     User.findAll({ where:{ previlege:'1' } })
 	    .then((users,i) => {
@@ -974,7 +1023,7 @@ function vestingReleaseToken(){
 			        	if(result.status === true) { 
 
 			        	PrivelegeUser.update({
-			        		vestTime1Hash:result.data
+			        		relHash:result.data
 			        	},{
 			        		where: { user_id : user.id }
 			        	})

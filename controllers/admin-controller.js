@@ -681,8 +681,8 @@ order: [['createdAt', 'DESC']]
    addVestingDate(req, res, next) {
 
     if(req.body.vesting_period_date){
-    	
-	 var vesting_period_date = moment(req.body.vesting_period_date).format('LLLL'),
+
+	 var vesting_period_date = moment().format('LLLL'),
 	     startTime =  moment(vesting_period_date).unix(),
   	     vestTime1   =  moment(vesting_period_date).add(5, 'm').unix(),
          vestTime2   = moment(vesting_period_date).add(10, 'm').unix(),
@@ -690,6 +690,8 @@ order: [['createdAt', 'DESC']]
          endTime = moment(vesting_period_date).add(20, 'm').unix(),
          vestingUserAddress = '',
          tokenValue = '';  
+
+         console.log(vesting_period_date,startTime,"fg");
      
      PrivelegeUser.update({
     		vesting_period_date:vesting_period_date
@@ -706,40 +708,57 @@ order: [['createdAt', 'DESC']]
       	})
       	.then(updat => {
          if(updat) {
-			var newVestingTimes = new VestingTimes({
-				startTime,
+
+         	var newvest = new VestingTimes({
+         		startTime,
 				vestTime1,
 				vestTime2,
 				vestTime3,
 				endTime
-			});
+         	})
 
-		 newVestingTimes.save()
+         	VestingTimes.find({})
+         	.then(vestt => {
+         		if(!vestt) {
+         			newvest.save()
+         		}
+
+         	})
+
+		 VestingTimes.update({
+			 	startTime,
+				vestTime1,
+				vestTime2,
+				vestTime3,
+				endTime
+			 },{
+	    		where:{}
+	    	})
 		   .then(data1 => {
 			 if(data1){
 
 	  	  let duration = setVestigDuration(startTime,vestTime1,vestTime2,vestTime3,endTime);
 	  	   if(duration === true) {
-	  	   	res.status(200).josn({
+	  	   	res.status(200).json({
 	  			status:true,
   	  		    message:'vesting Duration Initiated'
 	  		 })
 	  	   }
 	  	   } else {
-	  		res.status(404).josn({
+	  		res.status(404).json({
 	  			status:false,
   	  		    message:'No data found'
 	  		 })
 		  	}
 		  })
 	     .catch(err => {
-	    	res.status(500).josn({
+	    	res.status(500).json({
 	  			status:false,
 		  		message:err.message
 	  		})
 	     })	
 	  } else {
-	  	res.status(404).josn({
+	  	res.status(404).json({
 	  			status:false,
   	  		    message:'No data found'
 	  		 })
@@ -747,13 +766,13 @@ order: [['createdAt', 'DESC']]
 	  return null
 	  })
      .catch(err => {
-    	res.status(500).josn({
+    	res.status(500).json({
   			status:false,
 	  		message:err.message
   		})
      })	
       } else {
-      	res.status(404).josn({
+      	res.status(404).json({
   			status:false,
 	  		    message:'No data found'
   		 })
@@ -761,7 +780,7 @@ order: [['createdAt', 'DESC']]
 	  return null
 	  })
      .catch(err => {
-    	res.status(500).josn({
+    	res.status(500).json({
   			status:false,
 	  		message:err.message
   		})

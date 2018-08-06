@@ -23,9 +23,7 @@ import {
   endTimeHashStatus,
   updateTotalPurchase,
   updateApproveAddress,
-  vestingTime1HashStatus,
-  vestingTime2HashStatus,
-  vestingTime3HashStatus
+  relHashHashStatus
 } from '../helpers/cron-job';
 
 const initApp = function () {
@@ -56,7 +54,7 @@ const initApp = function () {
     checkVestAddressStatus();
     updateTotalPurchase();
     updateApproveAddress();
-    vestingTime1HashStatus();
+    relHashHashStatus();
     BTC_Tranctions();
     USD_Tranctions();
     checkTxHashWallet();
