@@ -103,11 +103,11 @@ exports.vestingTokenAddress = function() {
       })
       .then(users => {
         if(users.length){ 
-          users.map((user,i) => {
-             if(user.ethWalletAddress){
+        //  users.map((user,i) => {
+             if(users[0].ethWalletAddress){
 
-             let tokenValue = user.PreICOTokens;
-             let vestingUserAddress = user.User.ethWalletAddress;
+             let tokenValue = users[0].PreICOTokens;
+             let vestingUserAddress = users[0].User.ethWalletAddress;
              let body = { vestingUserAddress, tokenValue }
 
              console.log(body,"body for add vest address");
@@ -149,7 +149,7 @@ exports.vestingTokenAddress = function() {
         } else {
           return false;
         }
-      });
+     // });
     } else {
       return false;
     }
