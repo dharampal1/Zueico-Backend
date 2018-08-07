@@ -567,7 +567,7 @@ module.exports = {
 	          if(data1.vestStatus === 'Approved' && data1.vestAddressStatus === 'Pending' || data1.vestAddressStatus === "Failed" ) {
 	          	vestingTokenAddress();
 	          	
-	          } else if(data1.vestStatus === 'Failed' || data1.vestStatus === "Pending") {
+	          } else if(data1.vestStatus === 'Failed') {
 	          
 	          	VestingTimes.findAll({})
 	          	 .then(data2 => {
