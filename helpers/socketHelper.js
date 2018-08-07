@@ -282,7 +282,7 @@ function phase1vesting(){
         if(data.length) {
           data.map(data1 => {
 
-             let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber(); 
+         let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber(); 
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
