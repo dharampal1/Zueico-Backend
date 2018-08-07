@@ -562,7 +562,7 @@ module.exports = {
 	   PrivelegeUser.findAll({})
 	    .then(data => {
 		  if(data.length) {  
-		  	log(data[0].vestStatus,data[0].vestAddressStatus,"call address");
+		  	console.log(data[0].vestStatus,data[0].vestAddressStatus,"call address");
               
           if(data[0].vestStatus === 'Approved' && data[0].vestAddressStatus === 'Pending' || data[0].vestAddressStatus === "Failed" ) {
 		         
