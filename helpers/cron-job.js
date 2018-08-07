@@ -978,16 +978,16 @@ module.exports = {
   },
    vestingReleaseToken(){
 
-	PrivelegeUser.findAll({
-     	where:{ vestAddressStatus:'Approved' }
-     })
-    .then(data => {
-	  if(data.length) {
-
 		let n = 0;
 		let task = cron.schedule('*/5 * * * *', function(){
 
 	  	console.log("running vestingReleaseToken");
+
+	  	PrivelegeUser.findAll({
+     	where:{ vestAddressStatus:'Approved' }
+     })
+    .then(data => {
+	  if(data.length) {
 	 
     User.findAll({ where:{ previlege:'1' } })
 	    .then((users,i) => {
@@ -1038,13 +1038,17 @@ module.exports = {
 	    })
 	    .catch(err => {
 	   	  console.log(err);
-	    })	
-	  });  
-	 if(n >= 4){
-	 	task.stop();
-	 }
-	}
+	    });
+	   }	
+	  })
+	 .catch(err => {
+   	  console.log(err);
+     });
 	});
+
+	if(n >= 4){
+	 	task.stop();
+	 } 
   },
 
 
