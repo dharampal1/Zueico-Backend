@@ -125,7 +125,7 @@ exports.vestingTokenAddress = function() {
                  PrivelegeUser.update({
                     vestAddressHash:result.data
                   },{
-                    where:{}
+                    where:{ id : user.id }
                   })
                   .then(data => {
                     if(data){
