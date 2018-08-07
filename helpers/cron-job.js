@@ -557,20 +557,18 @@ module.exports = {
   },
 
   vestingDurationStatus(){
-  	cron.schedule('*/5 * * * *', function(){
+  	cron.schedule('*/2 * * * *', function(){
 	     console.log("running vest Duration");
 
 	   PrivelegeUser.findAll({})
 	    .then(data => {
-		  if(data.length) {
-	      	  data.map((data1,i) => {
-
-	          if(data1.vestStatus === 'Approved' && data1.vestAddressStatus === 'Pending' || data1.vestAddressStatus === "Failed" ) {
-	          	
-		          if(i + 1 === data.length) {
-		          	vestingTokenAddress();
-		          }
-	          } else if(data1.vestStatus === 'Failed') {
+		  if(data.length) {  
+              
+          if(data[0].vestStatus === 'Approved' && data[0].vestAddressStatus === 'Pending' || data[0].vestAddressStatus === "Failed" ) {
+		          
+		       	vestingTokenAddress();
+		          
+	       } else if(data[0].vestStatus === 'Failed') {
 	          
 	          	VestingTimes.findAll({})
 	          	 .then(data2 => {
@@ -582,10 +580,7 @@ module.exports = {
       	 			    vestTime3 = data2[0].vestTime3,
       	 			    endTime = data2[0].endTime;
 
-      	 			    if(i + 1 === data.length) {
-
-      	 			      setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
-      	 			    }
+      	 			    setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
 	          	 	}
 	          	 })
 	          	 .catch(err => {
@@ -594,8 +589,6 @@ module.exports = {
 	          } else {
 	          	return null;
 	          }
-
-	      	});
 		   }
 		})
 		.catch(err => {
@@ -1034,6 +1027,8 @@ module.exports = {
 			        	.catch(err => {
 			        		console.log(err);
 			        	})
+			         } else {
+			         	console.log(result,"release token vested");
 			         }
 			       } 
 			    });
