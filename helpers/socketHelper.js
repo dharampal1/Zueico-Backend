@@ -62,6 +62,7 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
             let result = JSON.parse(body);
 
            if(result.status === true ) {
+            console.log(result,"vesting duration");
 
               PrivelegeUser.update({
                 vestHash:result.data

@@ -24,7 +24,7 @@ import  airdrop_abi  from './../config/airDrop_abi.json';
 var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
 var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
-var veting_ContractAddress = '0xc3b5424a40208a79a573ea4e42574d9d52367472';
+var veting_ContractAddress = '0x2965098b36392f1d8647b4f805d454fda4a8de6a';
 var airdrop_ContractAddress = '0xeddc650bcba054015810aa93077ef41878b8af3d';
 
 var Web3 = require("web3");
@@ -52,7 +52,7 @@ module.exports = {
 	      	  if(data.length) {
 	      	  	 data.map((user,i) => {
 
-	      	  	  var TotalPurchase = user.ICOTokens + user.PreICOTokens;
+	      	  	  var TotalPurchase = parseInt(user.ICOTokens) + parseInt(user.PreICOTokens);
 
 	  				PrivelegeUser.update({TotalPurchase},{
 	  					where: { id : user.id }
