@@ -11,7 +11,6 @@ import {
   BTC_Tranctions,
   vestingDurationStatus,
   vestingAddrressStatus,
-  checkVestAddressStatus,
   USD_Tranctions,
   checkTxHashWallet,
   checkTxHashBuy,
@@ -25,6 +24,7 @@ import {
   updateApproveAddress,
   relHashHashStatus,
   checkingVestTime,
+  vestingReleaseToken,
   ReleasedAirDropTokens
 } from '../helpers/cron-job';
 
@@ -53,7 +53,6 @@ const initApp = function () {
     vestingHashStatus();
     vestingDurationStatus();
     vestingAddrressStatus();
-    checkVestAddressStatus();
     updateTotalPurchase();
     updateApproveAddress();
     relHashHashStatus();
@@ -62,7 +61,7 @@ const initApp = function () {
     checkTxHashWallet();
     checkTxHashBuy();
     checkTxHashTrans();
-    checkingVestTime();
+    vestingReleaseToken();
     ReleasedAirDropTokens();
   
   // Setup routes
