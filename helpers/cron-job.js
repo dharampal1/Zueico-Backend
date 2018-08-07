@@ -979,17 +979,19 @@ module.exports = {
    vestingReleaseToken(){
 
 		let n = 0;
-		let task = cron.schedule('*/5 * * * *', function(){
+	 cron.schedule('*/5 * * * *', function(){
 
-	  	console.log("running vestingReleaseToken");
+	  console.log("running vestingReleaseToken");
 
-	  	PrivelegeUser.findAll({
+	  if(n <= 4 ) {
+
+	 PrivelegeUser.findAll({
      	where:{ vestAddressStatus:'Approved' }
      })
     .then(data => {
 	  if(data.length) {
 	 
-    User.findAll({ where:{ previlege:'1' } })
+     User.findAll({ where:{ previlege:'1' } })
 	    .then((users,i) => {
 	  	 if(users.length){ 
 	  		users.map(user => {
@@ -1044,11 +1046,9 @@ module.exports = {
 	 .catch(err => {
    	  console.log(err);
      });
+	
+	}
 	});
-
-	if(n >= 4){
-	 	task.stop();
-	 } 
   },
 
 
