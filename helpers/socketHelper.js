@@ -90,74 +90,71 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
 
 exports.vestingTokenAddress = function() {
 
-  User.findAll({ where:{ previlege:'1' } })
+  PrivelegeUser.findAll({
+    include:[
+         {
+           model:User,
+           attributes: ['id','ethWalletAddress'],
+           group: ['user_id']
+         }
+        ]
+      })
       .then(users => {
         if(users.length){ 
-          PrivelegeUser.findAll({})
-            .then(vest => {
-            if(vest.length){
-              vest.map(vester => {
-                let tokenValue = vester.PreICOTokens;
-                users.map((user,i) => {
-               if(user.ethWalletAddress){
-               let vestingUserAddress = user.ethWalletAddress;
-               let body = { vestingUserAddress, tokenValue }
-               console.log(body,"body for add vest address");
-              request.post({url:`${url}/setTokensVestingAddressDetails`,form:body},function(err,httpResponse,body ){
-                if(err){
-                  console.log(err, 'setTokensVestingAddressDetails');
-                  return false;
-                } else {
+          users.map((user,i) => {
+             if(user.ethWalletAddress){
 
-                let result = JSON.parse(body);
+             let tokenValue = user.PreICOTokens;
+             let vestingUserAddress = user.User.ethWalletAddress;
+             let body = { vestingUserAddress, tokenValue }
 
-                console.log(result,"vesting result");
-                if(result.status === true) {
+             console.log(body,"body for add vest address");
 
-                   PrivelegeUser.update({
-                      vestAddressHash:result.data
-                    },{
-                      where:{}
-                    })
-                    .then(data => {
-                      if(data){
-                        return true;
-                      } else {
-                        return false;
-                     }
-                       return true;
-                    })
-                    .catch(err => {
-                      console.log(err);
+            request.post({url:`${url}/setTokensVestingAddressDetails`,form:body},function(err,httpResponse,body ){
+              if(err){
+                console.log(err, 'setTokensVestingAddressDetails');
+                return false;
+              } else {
+
+              let result = JSON.parse(body);
+
+              console.log(result,"vesting result");
+              if(result.status === true) {
+
+                 PrivelegeUser.update({
+                    vestAddressHash:result.data
+                  },{
+                    where:{}
+                  })
+                  .then(data => {
+                    if(data){
+                      return true;
+                    } else {
                       return false;
-                    });
-
-                } else {
-                  return false;
-                 }
-               }
-              });
-             } else {
-               return false;
+                   }
+                     return true;
+                  })
+                .catch(err => {
+                  console.log(err);
+                   return false;
+                });
+              } else {
+                return false
+                console.log(result,"result address");
               }
-            });
-           });
-         } else {
-           return false;
-         }
-         return null;
-        })
-        .catch(err => {
-          console.log(err);
-            return false;
-        });
-      } else {
-        return false;
-       }
-       return null;
-     })
-      .catch(err => {
-        console.log(err);
-         return false;
-    });
+            }
+          });
+        } else {
+          return false;
+        }
+      });
+    } else {
+      return false;
+    }
+  })
+  .catch(err => {
+    console.log(err);
+     return false;
+  });  
+     
 }
