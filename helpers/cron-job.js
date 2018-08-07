@@ -556,7 +556,7 @@ module.exports = {
   },
 
   vestingDurationStatus(){
-  	cron.schedule('*/2 * * * *', function(){
+  	cron.schedule('*/1 * * * *', function(){
 	     console.log("running vest Duration");
 
 	   PrivelegeUser.findAll({})
@@ -567,7 +567,7 @@ module.exports = {
 	          if(data1.vestStatus === 'Approved' && data1.vestAddressStatus === 'Pending' || data1.vestAddressStatus === "Failed" ) {
 	          	vestingTokenAddress();
 	          	
-	          } else if(data1.vestStatus === 'Failed' ) {
+	          } else if(data1.vestStatus === 'Failed' || data1.vestStatus === "Pending") {
 	          
 	          	VestingTimes.findAll({})
 	          	 .then(data2 => {
