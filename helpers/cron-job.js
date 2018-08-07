@@ -556,7 +556,7 @@ module.exports = {
   },
 
   vestingDurationStatus(){
-  	cron.schedule('*/1 * * * *', function(){
+  	cron.schedule('*/2 * * * *', function(){
 	     console.log("running vest Duration");
 
 	   PrivelegeUser.findAll({})
