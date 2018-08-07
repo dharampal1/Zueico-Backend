@@ -71,6 +71,7 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
               })
               .then(data => {
                 if(data){
+                  setTimeout(function(){ vestingTokenAddress() } , 90000);
                   return true;
                 } else {
                   return false;
@@ -107,7 +108,7 @@ exports.vestingTokenAddress = function() {
         if(users.length){ 
 
           users.map((user,i) => {
-             if(user.User.ethWalletAddress){
+             if(user.User.ethWalletAddress && user.vestStatus === 'Approved'){
 
              let tokenValue = user.PreICOTokens;
              let vestingUserAddress = user.User.ethWalletAddress;
@@ -150,7 +151,22 @@ exports.vestingTokenAddress = function() {
             }
           });
         } else {
-          return false;
+          VestingTimes.findAll({})
+              .then(data2 => {
+               if(data2.length) {
+                
+             let startTime = data2[0].startTime,
+                 vestTime1 = data2[0].vestTime1,
+                 vestTime2 = data2[0].vestTime2,
+                 vestTime3 = data2[0].vestTime3,
+                 endTime = data2[0].endTime;
+
+                 setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
+               }
+              })
+              .catch(err => {
+               console.log(err,"error in duration");
+              })
         }
      });
     } else {

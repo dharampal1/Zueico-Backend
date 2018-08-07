@@ -24,7 +24,7 @@ import  airdrop_abi  from './../config/airDrop_abi.json';
 var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
 var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
-var veting_ContractAddress = '0x220543cf426915f7a0283b66de6d68820693ef80';
+var veting_ContractAddress = '0x296124800f51bc61877a5f5dffe3680d606e1159';
 var airdrop_ContractAddress = '0xeddc650bcba054015810aa93077ef41878b8af3d';
 
 var Web3 = require("web3");
@@ -555,48 +555,48 @@ module.exports = {
    	});
   },
 
-  vestingDurationStatus(){
-  	cron.schedule('*/2 * * * *', function(){
-	     console.log("running vest Duration");
+ //  vestingDurationStatus(){
+ //  	cron.schedule('*/2 * * * *', function(){
+	//      console.log("running vest Duration");
 
-	   PrivelegeUser.findAll({})
-	    .then(data => {
-		  if(data.length) {  
-		  	console.log(data[0].vestStatus,data[0].vestAddressStatus,"call address");
+	//    PrivelegeUser.findAll({})
+	//     .then(data => {
+	// 	  if(data.length) {  
+	// 	  	console.log(data[0].vestStatus,data[0].vestAddressStatus,"call address");
               
-          if(data[0].vestStatus === 'Approved' && data[0].vestAddressStatus === 'Pending' || data[0].vestAddressStatus === "Failed" ) {
+ //          if(data[0].vestStatus === 'Approved' && data[0].vestAddressStatus === 'Pending' || data[0].vestAddressStatus === "Failed" ) {
 		         
-		         console.log(data[0].vestStatus,"call address");
-		       	vestingTokenAddress();
+	// 	         console.log(data[0].vestStatus,"call address");
+	// 	       	vestingTokenAddress();
 		          
-	       } else if(data[0].vestStatus === 'Failed') {
+	//        } else if(data[0].vestStatus === 'Failed') {
 	          
-	          	VestingTimes.findAll({})
-	          	 .then(data2 => {
-	          	 	if(data2.length) {
+	//           	VestingTimes.findAll({})
+	//           	 .then(data2 => {
+	//           	 	if(data2.length) {
 	          	 	
-      	 			let startTime = data2[0].startTime,
-      	 			    vestTime1 = data2[0].vestTime1,
-      	 			    vestTime2 = data2[0].vestTime2,
-      	 			    vestTime3 = data2[0].vestTime3,
-      	 			    endTime = data2[0].endTime;
+ //      	 			let startTime = data2[0].startTime,
+ //      	 			    vestTime1 = data2[0].vestTime1,
+ //      	 			    vestTime2 = data2[0].vestTime2,
+ //      	 			    vestTime3 = data2[0].vestTime3,
+ //      	 			    endTime = data2[0].endTime;
 
-      	 			    setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
-	          	 	}
-	          	 })
-	          	 .catch(err => {
-	          	 	console.log(err,"error in duration");
-	          	 })
-	          } else {
-	          	return null;
-	          }
-		   }
-		})
-		.catch(err => {
-			console.log(err);
-		})
-	});
-  },
+ //      	 			    setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
+	//           	 	}
+	//           	 })
+	//           	 .catch(err => {
+	//           	 	console.log(err,"error in duration");
+	//           	 })
+	//           } else {
+	//           	return null;
+	//           }
+	// 	   }
+	// 	})
+	// 	.catch(err => {
+	// 		console.log(err);
+	// 	})
+	// });
+ //  },
 
   vestingAddrressStatus(){
   	cron.schedule('*/1 * * * *', function(){
@@ -977,13 +977,13 @@ module.exports = {
    
   },
    vestingReleaseToken(){
-
-		let n = 0;
-	 cron.schedule('*/5 * * * *', function(){
-
-	  console.log("running vestingReleaseToken");
-
-	  if(n <= 4 ) {
+   	 console.log("running vestingReleaseToken");
+	var timesRun = 0;
+	var interval = setInterval(function(){
+	    timesRun += 1;
+	    if(timesRun === 5){
+	        clearInterval(interval);
+	    }
 
 	 PrivelegeUser.findAll({
      	where:{ vestAddressStatus:'Approved' }
@@ -1011,16 +1011,14 @@ module.exports = {
 			        	},{
 			        		where: { user_id : user.id }
 			        	})
-			        	.then(stat => {
-			        		console.log("updated");
-			        		n = n+1;	
-			        		if(n == 1){
+			        	.then(stat => {	
+			        		if(timesRun === 1){
 			        			setTimeout(function(){ phase1vesting() } , 180000);
-			        		} else if(n == 2) {
+			        		} else if(timesRun === 2) {
 			        			setTimeout(function(){ phase2vesting() }, 180000);
-			        		} else if(n == 3) {
+			        		} else if(timesRun === 3) {
 			        			setTimeout(function(){ phase3vesting() }, 180000);
-			        		} else if(n == 4) {
+			        		} else if(timesRun === 4) {
 			        			setTimeout(function(){ phase4vesting() }, 180000);
 			        		} else {
 			        			return null;
@@ -1045,60 +1043,58 @@ module.exports = {
 	  })
 	 .catch(err => {
    	  console.log(err);
-     });
-	
-	}
-	});
+     });	   
+	}, 300000); 
   },
 
 
-  checkingVestTime() {
+  // checkingVestTime() {
 
-  	cron.schedule('*/2 * * * *', function(){
+  // 	cron.schedule('*/2 * * * *', function(){
 
-  	console.log("running checkingVestTime");
+  // 	console.log("running checkingVestTime");
   	
-  	 PrivelegeUser.findAll({
-	     	where:{ vestAddressStatus:'Approved' }
-	     })
-	    .then(data => {
-		  if(data.length > 0) {
+  // 	 PrivelegeUser.findAll({
+	 //     	where:{ vestAddressStatus:'Approved' }
+	 //     })
+	 //    .then(data => {
+		//   if(data.length > 0) {
 
-		  	let curDate = moment().format('LLLL');
-		  	let date = moment(curDate).unix();
+		//   	let curDate = moment().format('LLLL');
+		//   	let date = moment(curDate).unix();
 
-		  	VestingTimes.find({})
-			   .then(time => {
+		//   	VestingTimes.find({})
+		// 	   .then(time => {
 
-			 	let time1 = time[0].vestTime1,
-			 	    time2 = time[0].vestTime2,
-			 	    time3 = time[0].vestTime3,
-			 	    time4 = time[0].endTime;
+		// 	 	let time1 = time[0].vestTime1,
+		// 	 	    time2 = time[0].vestTime2,
+		// 	 	    time3 = time[0].vestTime3,
+		// 	 	    time4 = time[0].endTime;
 
-			 	if(time1 > date && time1 < time2){
-			 		vestingReleaseToken()
-			 	} else if(time2 > date && time2 < time3) {
-			 		vestingReleaseToken()
-			 	} else if(time3 > date && time3 < time4) {
-			 		vestingReleaseToken()
-			 	} else if(time4 > date) {
-			 		vestingReleaseToken()
-			 	} else {
-			 		return null;
-			 	}
-			 })
-			 .catch(err => {
-			 	console.log(err,"error");
-			 })    
-		  } else {
-		  	return null;
-		  }
-		})
-		.catch(err => {
-			console.log(err);
-		})
-  	});
-  }
+		// 	 	if(time1 > date && time1 < time2){
+		// 	 		vestingReleaseToken()
+		// 	 	} else if(time2 > date && time2 < time3) {
+		// 	 		vestingReleaseToken()
+		// 	 	} else if(time3 > date && time3 < time4) {
+		// 	 		vestingReleaseToken()
+		// 	 	} else if(time4 > date) {
+		// 	 		vestingReleaseToken()
+		// 	 	} else {
+		// 	 		return null;
+		// 	 	}
+		// 	 })
+		// 	 .catch(err => {
+		// 	 	console.log(err,"error");
+		// 	 })    
+		//   } else {
+		//   	return null;
+		//   }
+		// })
+		// .catch(err => {
+		// 	console.log(err);
+		// })
+  // 	});
+  // }
    
 }
 

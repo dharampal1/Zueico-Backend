@@ -9,7 +9,6 @@ import path   from 'path';
 import cors from 'cors';
 import {
   BTC_Tranctions,
-  vestingDurationStatus,
   vestingAddrressStatus,
   USD_Tranctions,
   checkTxHashWallet,
@@ -51,7 +50,7 @@ const initApp = function () {
     refundTxHash();
     setCurrentPrice();
     vestingHashStatus();
-    vestingDurationStatus();
+   // vestingDurationStatus();
     vestingAddrressStatus();
     updateTotalPurchase();
     updateApproveAddress();
