@@ -18,6 +18,20 @@ const Op = Sequelize.Op;
 const  url = 'http://13.126.28.220:5000';
 
 
+ moment.suppressDeprecationWarnings = true;
+
+import vest_abi from './../config/vest_abi.json'
+
+var veting_ContractAddress = '0x45a30545a3ad0847a6dfe76f0c7c394ff41ed76d';
+
+var Web3 = require("web3");
+var web3 = new Web3();
+
+web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899"));
+
+var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
+
+
  exports.getCurrentIco = function(socket) {
 
     cron.schedule('*/15 * * * * *', function(){
@@ -71,7 +85,7 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
               })
               .then(data => {
                 if(data){
-                  setTimeout(function(){ vestingTokenAddress() } , 90000);
+                  setTimeout(function(){ vestingTokenAddress() } , 180000);
                   return true;
                 } else {
                   return false;
@@ -91,7 +105,7 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
 
 }
 
-exports.vestingTokenAddress = function() {
+function vestingTokenAddress() {
 
   console.log("in address");
 
@@ -134,6 +148,8 @@ exports.vestingTokenAddress = function() {
                   })
                   .then(data => {
                     if(data){
+                   setTimeout(function(){ vestingReleaseToken() } , 180000);
+                      
                       return true;
                     } else {
                       return false;
@@ -178,4 +194,221 @@ exports.vestingTokenAddress = function() {
      return false;
   });  
      
+}
+
+
+function vestingReleaseToken(){
+   
+ console.log("running vestingReleaseToken");
+  var timesRun = 0;
+  var interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 5){
+          clearInterval(interval);
+      }
+   PrivelegeUser.findAll({
+      where:{ vestAddressStatus:'Approved' }
+     })
+    .then(data => {
+    if(data.length) {
+      
+   
+     User.findAll({ where:{ previlege:'1' } })
+      .then((users,i) => {
+       if(users.length){ 
+        users.map(user => {
+          var vestingAddress = user.ethWalletAddress;
+
+           const body = { vestingUserAddress:vestingAddress };
+
+         request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+              if(err){
+                console.log(err);
+              } else {
+                let result = JSON.parse(body);
+                if(result.status === true) { 
+
+                PrivelegeUser.update({
+                  relHash:result.data
+                },{
+                  where: { user_id : user.id }
+                })
+                .then(stat => { 
+                  if(timesRun === 1){
+                    setTimeout(function(){ phase1vesting() } , 180000);
+                  } else if(timesRun === 2) {
+                    setTimeout(function(){ phase2vesting() }, 180000);
+                  } else if(timesRun === 3) {
+                    setTimeout(function(){ phase3vesting() }, 180000);
+                  } else if(timesRun === 4) {
+                    setTimeout(function(){ phase4vesting() }, 180000);
+                  } else {
+                    return null;
+                  }
+              
+                })
+                .catch(err => {
+                  console.log(err);
+                })
+               } else {
+                console.log(result,"release token vested");
+               }
+             } 
+          });
+        });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+     }  
+    })
+   .catch(err => {
+      console.log(err);
+     });  
+ 
+   }, 360000);
+  }
+
+
+function phase1vesting(){
+
+  var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+      
+  vestTokens1.watch( (err, result) => {
+     console.log(result,"phase1"); 
+     PrivelegeUser.findAll({})
+     .then(data => {
+        if(data.length) {
+          data.map(data1 => {
+
+             let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber(); 
+       
+         PrivelegeUser.update({
+             VestingPeriod:data1.VestingPeriod - 1,
+             VestedTokens:result.args.value.toNumber(),
+             RemainingTokens
+          },{
+              where: { id: data1.id }
+            })
+          .then(stat1 => {
+              console.log("Pr User updated");
+            })
+            .catch(err => {
+              console.log(err);
+            })
+          });
+            
+        }
+        return true;
+     })
+     .catch(err => {
+      console.log(err);
+    })
+  });
+}
+function phase2vesting(){
+  var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+      
+  vestTokens1.watch( (err, result) => {
+     console.log(result,"phase2"); 
+     PrivelegeUser.findAll({})
+     .then(data => {
+        if(data.length) {
+          data.map(data1 => {
+
+             let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber(); 
+       
+         PrivelegeUser.update({
+             VestingPeriod:data1.VestingPeriod - 1,
+             VestedTokens:result.args.value.toNumber(),
+             RemainingTokens
+          },{
+              where: { id: data1.id }
+            })
+          .then(stat1 => {
+              console.log("Pr User updated");
+            })
+            .catch(err => {
+              console.log(err);
+            })
+          });
+            
+        }
+        return true;
+     })
+     .catch(err => {
+      console.log(err);
+    })
+  });
+}
+function phase3vesting(){
+  var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+      
+  vestTokens1.watch( (err, result) => {
+     console.log(result,"phase3"); 
+     PrivelegeUser.findAll({})
+     .then(data => {
+        if(data.length) {
+          data.map(data1 => {
+
+             let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber(); 
+       
+         PrivelegeUser.update({
+             VestingPeriod:data1.VestingPeriod - 1,
+             VestedTokens:result.args.value.toNumber(),
+             RemainingTokens
+          },{
+              where: { id: data1.id }
+            })
+          .then(stat1 => {
+              console.log("Pr User updated");
+            })
+            .catch(err => {
+              console.log(err);
+            })
+          });
+            
+        }
+        return true;
+     })
+     .catch(err => {
+      console.log(err);
+    })
+  });
+}
+function phase4vesting(){
+  var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+      
+  vestTokens1.watch( (err, result) => {
+     console.log(result,"phase4"); 
+     PrivelegeUser.findAll({})
+     .then(data => {
+        if(data.length) {
+          data.map(data1 => {
+
+             let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber(); 
+       
+         PrivelegeUser.update({
+             VestingPeriod:data1.VestingPeriod - 1,
+             VestedTokens:result.args.value.toNumber(),
+             RemainingTokens
+          },{
+              where: { id: data1.id }
+            })
+          .then(stat1 => {
+              console.log("Pr User updated");
+            })
+            .catch(err => {
+              console.log(err);
+            })
+          });
+            
+        }
+        return true;
+     })
+     .catch(err => {
+      console.log(err);
+    })
+  });
 }
