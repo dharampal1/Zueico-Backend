@@ -1015,13 +1015,13 @@ module.exports = {
 			        		console.log("updated");
 			        		n = n+1;	
 			        		if(n == 1){
-			        			setTimeout(phase1vesting(), 180000);
+			        			setTimeout(function(){ phase1vesting() } , 180000);
 			        		} else if(n == 2) {
-			        			setTimeout(phase2vesting(), 180000);
+			        			setTimeout(function(){ phase2vesting() }, 180000);
 			        		} else if(n == 3) {
-			        			setTimeout(phase3vesting(), 180000);
+			        			setTimeout(function(){ phase3vesting() }, 180000);
 			        		} else if(n == 4) {
-			        			setTimeout(phase4vesting(), 180000);
+			        			setTimeout(function(){ phase4vesting() }, 180000);
 			        		} else {
 			        			return null;
 			        		}
