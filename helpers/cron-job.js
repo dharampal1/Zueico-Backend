@@ -977,19 +977,27 @@ module.exports = {
    
   },
    vestingReleaseToken(){
-   	 console.log("running vestingReleaseToken");
-	var timesRun = 0;
-	var interval = setInterval(function(){
-	    timesRun += 1;
-	    if(timesRun === 5){
-	        clearInterval(interval);
-	    }
 
+
+
+   cron.schedule('*/5 * * * *', function(){
+   
+   console.log("running vestingReleaseToken");
+	// var timesRun = 0;
+	// var interval = setInterval(function(){
+	//     timesRun += 1;
+	//     if(timesRun === 5){
+	//         clearInterval(interval);
+	//     }
+	let n = 0;
+	if(n <= 4 ) {
+     
 	 PrivelegeUser.findAll({
      	where:{ vestAddressStatus:'Approved' }
      })
     .then(data => {
 	  if(data.length) {
+	  	
 	 
      User.findAll({ where:{ previlege:'1' } })
 	    .then((users,i) => {
@@ -1012,13 +1020,14 @@ module.exports = {
 			        		where: { user_id : user.id }
 			        	})
 			        	.then(stat => {	
-			        		if(timesRun === 1){
+			        		n = n + 1;
+			        		if(n === 1){
 			        			setTimeout(function(){ phase1vesting() } , 180000);
-			        		} else if(timesRun === 2) {
+			        		} else if(n === 2) {
 			        			setTimeout(function(){ phase2vesting() }, 180000);
-			        		} else if(timesRun === 3) {
+			        		} else if(n === 3) {
 			        			setTimeout(function(){ phase3vesting() }, 180000);
-			        		} else if(timesRun === 4) {
+			        		} else if(n === 4) {
 			        			setTimeout(function(){ phase4vesting() }, 180000);
 			        		} else {
 			        			return null;
@@ -1043,8 +1052,9 @@ module.exports = {
 	  })
 	 .catch(err => {
    	  console.log(err);
-     });	   
-	}, 300000); 
+     });	
+     }   
+	});
   },
 
 
