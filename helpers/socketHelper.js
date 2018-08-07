@@ -105,6 +105,8 @@ exports.vestingTokenAddress = function() {
       })
       .then(users => {
         if(users.length){ 
+
+          console.log(users[0].ethWalletAddress,users[0],"sfg");
         //  users.map((user,i) => {
              if(users[0].ethWalletAddress){
 
