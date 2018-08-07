@@ -109,6 +109,8 @@ function vestingTokenAddress() {
 
   console.log("in address");
 
+
+
   PrivelegeUser.findAll({
     include:[
          {
@@ -122,7 +124,14 @@ function vestingTokenAddress() {
         if(users.length){ 
 
           users.map((user,i) => {
-             if(user.User.ethWalletAddress && user.vestStatus === 'Approved'){
+             const body = { txhash:user.vestHash };
+         request.post({url:`${url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+              if(err){
+                console.log(err);
+              } else {
+                let result = JSON.parse(body);
+
+             if(user.User.ethWalletAddress && result.data == 'Success'){
 
              let tokenValue = user.PreICOTokens;
              let vestingUserAddress = user.User.ethWalletAddress;
@@ -184,6 +193,8 @@ function vestingTokenAddress() {
                console.log(err,"error in duration");
               })
         }
+      }
+    });
      });
     } else {
       return false;
@@ -212,7 +223,6 @@ function vestingReleaseToken(){
     .then(data => {
     if(data.length) {
       
-   
      User.findAll({ where:{ previlege:'1' } })
       .then((users,i) => {
        if(users.length){ 
@@ -221,7 +231,7 @@ function vestingReleaseToken(){
 
            const body = { vestingUserAddress:vestingAddress };
 
-         request.post({url:`${api_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+         request.post({url:`${url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
               if(err){
                 console.log(err);
               } else {
