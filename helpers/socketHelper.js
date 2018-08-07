@@ -106,9 +106,9 @@ exports.vestingTokenAddress = function() {
       .then(users => {
         if(users.length){ 
 
-          console.log(users[0].ethWalletAddress,users[0],"sfg");
+          console.log(users[0].User.ethWalletAddress,users[0],"sfg");
         //  users.map((user,i) => {
-             if(users[0].ethWalletAddress){
+             if(users[0].User.ethWalletAddress){
 
              let tokenValue = users[0].PreICOTokens;
              let vestingUserAddress = users[0].User.ethWalletAddress;
