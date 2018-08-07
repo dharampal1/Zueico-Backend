@@ -722,9 +722,29 @@ order: [['createdAt', 'DESC']]
          	.then(vestt => {
          		if(!vestt) {
          			newvest.save()
+         			.then(ntime => {
+         				  let duration = setVestigDuration(startTime,vestTime1,vestTime2,vestTime3,endTime);
+					  	   if(duration === true) {
+					  	   	res.status(200).json({
+					  			status:true,
+				  	  		    message:'vesting Duration Initiated'
+					  		 })
+					  	   }
+         			})
+         			.catch(err => {
+         					res.status(500).json({
+				  			status:false,
+					  		message:err.message
+				  		})
+         			})
          		}
-
          	})
+         	.catch(err => {
+ 					res.status(500).json({
+		  			status:false,
+			  		message:err.message
+		  		})
+ 			});
 
 		 VestingTimes.update({
 			 	startTime,

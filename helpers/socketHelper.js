@@ -49,6 +49,8 @@ const  url = 'http://13.126.28.220:5000';
 
 exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3, endTime) {
 
+  console.log("hit duration");
+
   let body = { startTime, vestTime1, vestTime2, vestTime3, endTime};
       console.log(body,"body for add vest Duration");
 
