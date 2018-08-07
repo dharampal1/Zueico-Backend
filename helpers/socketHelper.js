@@ -81,6 +81,7 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
                 return false;
               });
             } else {
+              console.log(result,"result duration");
              return false;
             }
            }
