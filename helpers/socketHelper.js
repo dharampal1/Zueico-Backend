@@ -22,7 +22,7 @@ const  url = 'http://13.126.28.220:5000';
 
 import vest_abi from './../config/vest_abi.json'
 
-var veting_ContractAddress = '0x0058e6ec48c5469ef76542b6c604e2412c7432d5';
+var veting_ContractAddress = '0x42a44e33752b7863d66f5980e2bbac835b7aa2c3';
 
 var Web3 = require("web3");
 var web3 = new Web3();
