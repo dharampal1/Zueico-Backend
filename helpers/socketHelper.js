@@ -92,6 +92,8 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
 
 exports.vestingTokenAddress = function() {
 
+  console.log("in address");
+
   PrivelegeUser.findAll({
     include:[
          {

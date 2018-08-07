@@ -169,7 +169,6 @@ module.exports = {
 			   })
 			   .then(data1 => {
 			   	  if(data1){
-			   	  	console.log("update tokens");
 			   	  	 return true; 
 			   	  }
 			   })
@@ -557,15 +556,17 @@ module.exports = {
   },
 
   vestingDurationStatus(){
-  	cron.schedule('*/2 * * * *', function(){
+  	cron.schedule('*/1 * * * *', function(){
 	     console.log("running vest Duration");
 
 	   PrivelegeUser.findAll({})
 	    .then(data => {
 		  if(data.length) {  
+		  	log(data[0].vestStatus,data[0].vestAddressStatus,"call address");
               
           if(data[0].vestStatus === 'Approved' && data[0].vestAddressStatus === 'Pending' || data[0].vestAddressStatus === "Failed" ) {
-		          
+		         
+		         console.log(data[0].vestStatus,"call address");
 		       	vestingTokenAddress();
 		          
 	       } else if(data[0].vestStatus === 'Failed') {
