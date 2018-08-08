@@ -10,6 +10,7 @@ import cors from 'cors';
 import {
   BTC_Tranctions,
   vestingAddrressStatus,
+  vestingDuration,
   USD_Tranctions,
   checkTxHashWallet,
   checkTxHashBuy,
@@ -57,6 +58,7 @@ const initApp = function () {
     checkTxHashWallet();
     checkTxHashBuy();
     checkTxHashTrans();
+    vestingDuration();
     ReleasedAirDropTokens();
   
   // Setup routes

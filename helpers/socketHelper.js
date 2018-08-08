@@ -85,7 +85,7 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
               })
               .then(data => {
                 if(data){
-                  setTimeout(function(){ vestingTokenAddress() } , 120000);
+                  vestingTokenAddress();
                   return true;
                 } else {
                   return false;
@@ -108,6 +108,13 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
 function vestingTokenAddress() {
 
   console.log("in address");
+
+  var timesRun = 0;
+  var interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+          clearInterval(interval);
+      }
 
   PrivelegeUser.findAll({
     include:[
@@ -160,7 +167,7 @@ function vestingTokenAddress() {
 
                     if(i + 1 === users.length){
 
-                      setTimeout(function(){ vestingReleaseToken() } , 120000);
+                      vestingReleaseToken();
                     }
                       return true;
                     } else {
@@ -184,7 +191,7 @@ function vestingTokenAddress() {
              if(i + 1 === users.length){
 
                   var vesting_period_date = moment().format('LLLL'),
-                     startTime =  moment(vesting_period_date).add(5, 'm').unix(),
+                     startTime   =  moment(vesting_period_date).add(5, 'm').unix(),
                      vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
                      vestTime2   = moment(vesting_period_date).add(15, 'm').unix(),
                      vestTime3   = moment(vesting_period_date).add(20, 'm').unix(),
@@ -206,6 +213,8 @@ function vestingTokenAddress() {
     console.log(err);
      return false;
   });  
+
+}, 120000);
      
 }
 
@@ -213,10 +222,11 @@ function vestingTokenAddress() {
 function vestingReleaseToken(){
    
  console.log("running vestingReleaseToken");
+  var time = 360000;
   var timesRun = 0;
   var interval = setInterval(function(){
       timesRun += 1;
-      if(timesRun === 5){
+      if(timesRun === 4){
           clearInterval(interval);
       }
    PrivelegeUser.findAll({
@@ -250,13 +260,13 @@ function vestingReleaseToken(){
                   if(i + 1 === users.length ) {
 
                     if(timesRun === 1){
-                      setTimeout(function(){ phase1vesting() } , 180000);
+                       phase1vesting();
                     } else if(timesRun === 2) {
-                      setTimeout(function(){ phase2vesting() }, 180000);
+                      phase2vesting();
                     } else if(timesRun === 3) {
-                      setTimeout(function(){ phase3vesting() }, 180000);
+                      phase3vesting();
                     } else if(timesRun === 4) {
-                      setTimeout(function(){ phase4vesting() }, 180000);
+                      phase4vesting();
                     } else {
                       return null;
                     }
@@ -282,12 +292,21 @@ function vestingReleaseToken(){
    .catch(err => {
       console.log(err);
      });  
- 
-   }, 360000);
+
+    time = time + 360000;
+
+   }, time);
   }
 
 
 function phase1vesting(){
+
+   var timesRun = 0;
+   var interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+          clearInterval(interval);
+      }
 
   var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
       
@@ -322,8 +341,17 @@ function phase1vesting(){
       console.log(err);
     })
   });
+ }, 180000);
+
 }
 function phase2vesting(){
+
+   var timesRun = 0;
+   var interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+          clearInterval(interval);
+      }
   var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
       
   vestTokens1.watch( (err, result) => {
@@ -357,8 +385,16 @@ function phase2vesting(){
       console.log(err);
     })
   });
+}, 180000);
 }
 function phase3vesting(){
+
+   var timesRun = 0;
+   var interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+          clearInterval(interval);
+      }
   var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
       
   vestTokens1.watch( (err, result) => {
@@ -392,8 +428,15 @@ function phase3vesting(){
       console.log(err);
     })
   });
+}, 180000);
 }
 function phase4vesting(){
+   var timesRun = 0;
+   var interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+          clearInterval(interval);
+      }
   var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
       
   vestTokens1.watch( (err, result) => {
@@ -427,4 +470,5 @@ function phase4vesting(){
       console.log(err);
     })
   });
+ }, 180000);
 }

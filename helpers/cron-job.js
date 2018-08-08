@@ -555,48 +555,32 @@ module.exports = {
    	});
   },
 
- //  vestingDurationStatus(){
- //  	cron.schedule('*/2 * * * *', function(){
-	//      console.log("running vest Duration");
+  vestingDuration(){
+  	cron.schedule('*/3 * * * *', function(){
+	     console.log("running vest Duration");
 
-	//    PrivelegeUser.findAll({})
-	//     .then(data => {
-	// 	  if(data.length) {  
-	// 	  	console.log(data[0].vestStatus,data[0].vestAddressStatus,"call address");
-              
- //          if(data[0].vestStatus === 'Approved' && data[0].vestAddressStatus === 'Pending' || data[0].vestAddressStatus === "Failed" ) {
-		         
-	// 	         console.log(data[0].vestStatus,"call address");
-	// 	       	vestingTokenAddress();
-		          
-	//        } else if(data[0].vestStatus === 'Failed') {
+	   PrivelegeUser.findAll({})
+	    .then(data => {
+		  if(data.length) {  
+
+            if(data[0].vestStatus === 'Failed') {
 	          
-	//           	VestingTimes.findAll({})
-	//           	 .then(data2 => {
-	//           	 	if(data2.length) {
-	          	 	
- //      	 			let startTime = data2[0].startTime,
- //      	 			    vestTime1 = data2[0].vestTime1,
- //      	 			    vestTime2 = data2[0].vestTime2,
- //      	 			    vestTime3 = data2[0].vestTime3,
- //      	 			    endTime = data2[0].endTime;
+	           var vesting_period_date = moment().format('LLLL'),
+                     startTime   =  moment(vesting_period_date).add(5, 'm').unix(),
+                     vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
+                     vestTime2   = moment(vesting_period_date).add(15, 'm').unix(),
+                     vestTime3   = moment(vesting_period_date).add(20, 'm').unix(),
+                     endTime = moment(vesting_period_date).add(25, 'm').unix();
 
- //      	 			    setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
-	//           	 	}
-	//           	 })
-	//           	 .catch(err => {
-	//           	 	console.log(err,"error in duration");
-	//           	 })
-	//           } else {
-	//           	return null;
-	//           }
-	// 	   }
-	// 	})
-	// 	.catch(err => {
-	// 		console.log(err);
-	// 	})
-	// });
- //  },
+                     setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);   
+	          	}
+	          }
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	});
+  },
 
   vestingAddrressStatus(){
   	cron.schedule('*/1 * * * *', function(){
