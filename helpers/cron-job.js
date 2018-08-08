@@ -24,7 +24,7 @@ import  airdrop_abi  from './../config/airDrop_abi.json';
 var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
 var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
-var veting_ContractAddress = '0x42a44e33752b7863d66f5980e2bbac835b7aa2c3';
+var veting_ContractAddress = '0x7f234e95ec64a0e7bb29f00adde80c2804956bfb';
 var airdrop_ContractAddress = '0xeddc650bcba054015810aa93077ef41878b8af3d';
 
 var Web3 = require("web3");
