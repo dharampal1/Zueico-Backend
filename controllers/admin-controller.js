@@ -691,8 +691,6 @@ order: [['createdAt', 'DESC']]
          endTime = moment(vesting_period_date).add(25, 'm').unix(),
          vestingUserAddress = '',
          tokenValue = '';  
-
-         console.log(vesting_period_date,startTime,"fg");
      
      PrivelegeUser.update({
     		vesting_period_date:vesting_period_date
@@ -709,7 +707,7 @@ order: [['createdAt', 'DESC']]
       	})
       	.then(updat => {
          if(updat) {
-
+         	
          	var newvest = new VestingTimes({
          		startTime,
 				vestTime1,
@@ -743,13 +741,13 @@ order: [['createdAt', 'DESC']]
 		   .then(data1 => {
 			 if(data1){
 
-	  	  let duration = setVestigDuration(startTime,vestTime1,vestTime2,vestTime3,endTime);
-	  	   if(duration === true) {
+	  	    let duration = setVestigDuration(startTime,vestTime1,vestTime2,vestTime3,endTime);
+	  	   
 	  	   	res.status(200).json({
 	  			status:true,
   	  		    message:'vesting Duration Initiated'
-	  		 })
-	  	   }
+	  		 });
+
 	  	   } else {
 	  		res.status(404).json({
 	  			status:false,

@@ -85,7 +85,7 @@ exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3,
               })
               .then(data => {
                 if(data){
-                  setTimeout(function(){ vestingTokenAddress() } , 180000);
+                  setTimeout(function(){ vestingTokenAddress() } , 120000);
                   return true;
                 } else {
                   return false;
@@ -109,8 +109,6 @@ function vestingTokenAddress() {
 
   console.log("in address");
 
-
-
   PrivelegeUser.findAll({
     include:[
          {
@@ -124,14 +122,16 @@ function vestingTokenAddress() {
         if(users.length){ 
 
           users.map((user,i) => {
+
              const body = { txhash:user.vestHash };
+
          request.post({url:`${url}/checkTxHash`, form:body },function(err,httpResponse,body ){
               if(err){
                 console.log(err);
               } else {
                 let result = JSON.parse(body);
 
-             if(user.User.ethWalletAddress && result.data == 'Success'){
+             if(user.User.ethWalletAddress && result.data === 'Success'){
 
              let tokenValue = user.PreICOTokens;
              let vestingUserAddress = user.User.ethWalletAddress;
@@ -157,8 +157,11 @@ function vestingTokenAddress() {
                   })
                   .then(data => {
                     if(data){
-                   setTimeout(function(){ vestingReleaseToken() } , 180000);
-                      
+
+                    if(i + 1 === users.length){
+
+                      setTimeout(function(){ vestingReleaseToken() } , 120000);
+                    }
                       return true;
                     } else {
                       return false;
@@ -176,29 +179,28 @@ function vestingTokenAddress() {
             }
           });
         } else {
-          VestingTimes.findAll({})
-              .then(data2 => {
-               if(data2.length) {
-                
-             let startTime = data2[0].startTime,
-                 vestTime1 = data2[0].vestTime1,
-                 vestTime2 = data2[0].vestTime2,
-                 vestTime3 = data2[0].vestTime3,
-                 endTime = data2[0].endTime;
+          if(user.vestStatus === 'Failed') {
 
-                 setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
+             if(i + 1 === users.length){
+
+                  var vesting_period_date = moment().format('LLLL'),
+                     startTime =  moment(vesting_period_date).add(5, 'm').unix(),
+                     vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
+                     vestTime2   = moment(vesting_period_date).add(15, 'm').unix(),
+                     vestTime3   = moment(vesting_period_date).add(20, 'm').unix(),
+                     endTime = moment(vesting_period_date).add(25, 'm').unix();
+
+                     setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
+                 }
                }
-              })
-              .catch(err => {
-               console.log(err,"error in duration");
-              })
+            }
         }
-      }
+      });
     });
-     });
     } else {
       return false;
     }
+    return null;
   })
   .catch(err => {
     console.log(err);
@@ -224,9 +226,9 @@ function vestingReleaseToken(){
     if(data.length) {
       
      User.findAll({ where:{ previlege:'1' } })
-      .then((users,i) => {
+      .then(users => {
        if(users.length){ 
-        users.map(user => {
+        users.map((user,i) => {
           var vestingAddress = user.ethWalletAddress;
 
            const body = { vestingUserAddress:vestingAddress };
@@ -244,17 +246,21 @@ function vestingReleaseToken(){
                   where: { user_id : user.id }
                 })
                 .then(stat => { 
-                  if(timesRun === 1){
-                    setTimeout(function(){ phase1vesting() } , 180000);
-                  } else if(timesRun === 2) {
-                    setTimeout(function(){ phase2vesting() }, 180000);
-                  } else if(timesRun === 3) {
-                    setTimeout(function(){ phase3vesting() }, 180000);
-                  } else if(timesRun === 4) {
-                    setTimeout(function(){ phase4vesting() }, 180000);
-                  } else {
-                    return null;
-                  }
+
+                  if(i + 1 === users.length ) {
+
+                    if(timesRun === 1){
+                      setTimeout(function(){ phase1vesting() } , 180000);
+                    } else if(timesRun === 2) {
+                      setTimeout(function(){ phase2vesting() }, 180000);
+                    } else if(timesRun === 3) {
+                      setTimeout(function(){ phase3vesting() }, 180000);
+                    } else if(timesRun === 4) {
+                      setTimeout(function(){ phase4vesting() }, 180000);
+                    } else {
+                      return null;
+                    }
+                }
               
                 })
                 .catch(err => {
