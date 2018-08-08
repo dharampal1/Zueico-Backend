@@ -759,7 +759,7 @@ module.exports = {
 
 			     let new_refund = new Refund({
 			    	userAddress:result.address,
-					amountInEther:result.args.value.toNumber(),
+					amountInEther:result.args.value.toNumber() / 10**18,
 					refHash:result.transactionHash,
 					refStatus:'Pending'
 			      });
@@ -939,7 +939,7 @@ module.exports = {
 
                	BuyToken.update({
                		
-                     tokens:result.args.value.toNumber()
+                     tokens:result.args.value.toNumber()/ 10**18
                	},{
                		where: {  user_id:user.id }
                	})

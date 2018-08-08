@@ -317,11 +317,11 @@ function phase1vesting(){
         if(data.length) {
           data.map(data1 => {
 
-         let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber(); 
+         let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber() / 10**18; 
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens:result.args.value.toNumber(),
+             VestedTokens:result.args.value.toNumber() / 10**18,
              RemainingTokens
           },{
               where: { id: data1.id }
@@ -361,11 +361,11 @@ function phase2vesting(){
         if(data.length) {
           data.map(data1 => {
 
-             let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber(); 
+             let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber() / 10**18; 
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens:result.args.value.toNumber(),
+             VestedTokens:result.args.value.toNumber() / 10**18,
              RemainingTokens
           },{
               where: { id: data1.id }
@@ -404,11 +404,11 @@ function phase3vesting(){
         if(data.length) {
           data.map(data1 => {
 
-             let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber(); 
+         let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber() / 10**18; 
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens:result.args.value.toNumber(),
+             VestedTokens:result.args.value.toNumber() / 10**18,
              RemainingTokens
           },{
               where: { id: data1.id }
@@ -446,11 +446,11 @@ function phase4vesting(){
         if(data.length) {
           data.map(data1 => {
 
-             let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber(); 
+             let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber() / 10**18; 
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens:result.args.value.toNumber(),
+             VestedTokens:result.args.value.toNumber() / 10**18,
              RemainingTokens
           },{
               where: { id: data1.id }
