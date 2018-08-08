@@ -8,7 +8,9 @@ import {
  btc_transaction ,Refund, 
  BuyToken, TokenTransfer, PrivelegeUser,VestingTimes, Usd_transaction
   } from '../models';
+import Sequelize from 'sequelize';
 
+const Op = Sequelize.Op;
  //import { setVestigDuration } from '../helpers/socketHelper';
 
 //const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
@@ -135,6 +137,7 @@ module.exports = {
 
 	cron.schedule('*/1 * * * *', function(){
 	  console.log("running cron for  event"); 
+
 
  BuyToken.findAll({
 	 where: { tokenUpdateStatus:false },
@@ -638,7 +641,7 @@ module.exports = {
 	     console.log("running vest");
 
 	   PrivelegeUser.findAll({
-	     	where:{ vestStatus:'Pending' }
+	     	where: { [Op.or]: [{ vestStatus:"Pending" }, { vestStatus : "Failed"}] }
 	     })
 	    .then(data => {
 		  if(data.length) {
@@ -689,7 +692,7 @@ module.exports = {
 	     console.log("running vest time release");
 
 	   PrivelegeUser.findAll({
-	     	where:{ relStatus:'Pending' }
+	     	 where: { [Op.or]: [{ relStatus:"Pending" }, { relStatus : "Failed"}] }
 	     })
 	    .then(data => {
 		  if(data.length) {

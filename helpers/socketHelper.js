@@ -308,7 +308,7 @@ function phase1vesting(){
           clearInterval(interval);
       }
 
-  var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+  var vestTokens1 = vest_contract.VestedTokensPhase1({},{fromBlock: "2400000", toBlock: 'latest'});
       
   vestTokens1.watch( (err, result) => {
      console.log(result,"phase1"); 
@@ -341,9 +341,10 @@ function phase1vesting(){
       console.log(err);
     })
   });
- }, 240000);
+ }, 150000);
 
 }
+
 function phase2vesting(){
 
    var timesRun = 0;
@@ -352,9 +353,9 @@ function phase2vesting(){
       if(timesRun === 1){
           clearInterval(interval);
       }
-  var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+  var vestTokens2 = vest_contract.VestedTokensPhase2({},{fromBlock: "2400000", toBlock: 'latest'});
       
-  vestTokens1.watch( (err, result) => {
+  vestTokens2.watch( (err, result) => {
      console.log(result,"phase2"); 
      PrivelegeUser.findAll({})
      .then(data => {
@@ -385,8 +386,9 @@ function phase2vesting(){
       console.log(err);
     })
   });
-}, 240000);
+}, 150000);
 }
+
 function phase3vesting(){
 
    var timesRun = 0;
@@ -395,9 +397,9 @@ function phase3vesting(){
       if(timesRun === 1){
           clearInterval(interval);
       }
-  var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+  var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
       
-  vestTokens1.watch( (err, result) => {
+  vestTokens3.watch( (err, result) => {
      console.log(result,"phase3"); 
      PrivelegeUser.findAll({})
      .then(data => {
@@ -428,7 +430,7 @@ function phase3vesting(){
       console.log(err);
     })
   });
-}, 240000);
+}, 150000);
 }
 function phase4vesting(){
    var timesRun = 0;
@@ -437,9 +439,9 @@ function phase4vesting(){
       if(timesRun === 1){
           clearInterval(interval);
       }
-  var vestTokens1 = vest_contract.VestedTokensPhase1({fromBlock: "2400000", toBlock: 'latest'});
+  var vestTokens4 = vest_contract.VestedTokensPhase4({},{fromBlock: "2400000", toBlock: 'latest'});
       
-  vestTokens1.watch( (err, result) => {
+  vestTokens4.watch( (err, result) => {
      console.log(result,"phase4"); 
      PrivelegeUser.findAll({})
      .then(data => {
@@ -470,5 +472,5 @@ function phase4vesting(){
       console.log(err);
     })
   });
- }, 240000);
+ }, 150000);
 }
