@@ -22,7 +22,7 @@ const  url = 'http://13.126.28.220:5000';
 
 import vest_abi from './../config/vest_abi.json'
 
-var veting_ContractAddress = '0xdd1d98c7b3f93df69675302009798173f68c4b21';
+var veting_ContractAddress = '0xe74d70a1d5584a9dcdada150a02dc0fabfa0f9ee';
 
 var Web3 = require("web3");
 var web3 = new Web3();
@@ -222,7 +222,7 @@ function vestingTokenAddress() {
 function vestingReleaseToken(){
    
  console.log("running vestingReleaseToken");
-  var time = 360000;
+  var time = 420000;
   var timesRun = 0;
   var interval = setInterval(function(){
       timesRun += 1;
@@ -304,7 +304,7 @@ function phase1vesting(){
    var timesRun = 0;
    var interval = setInterval(function(){
       timesRun += 1;
-      if(timesRun === 2){
+      if(timesRun === 1){
           clearInterval(interval);
       }
 
@@ -317,7 +317,7 @@ function phase1vesting(){
         if(data.length) {
           data.map(data1 => {
 
-         let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber() / 10**18; 
+         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
@@ -350,7 +350,7 @@ function phase2vesting(){
    var timesRun = 0;
    var interval = setInterval(function(){
       timesRun += 1;
-      if(timesRun === 2){
+      if(timesRun === 1){
           clearInterval(interval);
       }
   var vestTokens2 = vest_contract.VestedTokensPhase2({},{fromBlock: "2400000", toBlock: 'latest'});
@@ -362,7 +362,7 @@ function phase2vesting(){
         if(data.length) {
           data.map(data1 => {
 
-             let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber() / 10**18; 
+             let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
@@ -394,7 +394,7 @@ function phase3vesting(){
    var timesRun = 0;
    var interval = setInterval(function(){
       timesRun += 1;
-      if(timesRun === 2){
+      if(timesRun === 1){
           clearInterval(interval);
       }
   var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
@@ -406,7 +406,7 @@ function phase3vesting(){
         if(data.length) {
           data.map(data1 => {
 
-         let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber() / 10**18; 
+         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
@@ -436,7 +436,7 @@ function phase4vesting(){
    var timesRun = 0;
    var interval = setInterval(function(){
       timesRun += 1;
-      if(timesRun === 2){
+      if(timesRun === 1){
           clearInterval(interval);
       }
   var vestTokens4 = vest_contract.VestedTokensPhase4({},{fromBlock: "2400000", toBlock: 'latest'});
@@ -448,7 +448,8 @@ function phase4vesting(){
         if(data.length) {
           data.map(data1 => {
 
-         let RemainingTokens = data1.PreICOTokens - result.args.value.toNumber() / 10**18; 
+
+         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
