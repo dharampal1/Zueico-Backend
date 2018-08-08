@@ -22,7 +22,7 @@ const  url = 'http://13.126.28.220:5000';
 
 import vest_abi from './../config/vest_abi.json'
 
-var veting_ContractAddress = '0xe74d70a1d5584a9dcdada150a02dc0fabfa0f9ee';
+var veting_ContractAddress = '0x14cf5905742a1f28186a1a540ea8e5156df50672';
 
 var Web3 = require("web3");
 var web3 = new Web3();
@@ -312,19 +312,30 @@ function phase1vesting(){
       
   vestTokens1.watch( (err, result) => {
      console.log(result,"phase1"); 
-     PrivelegeUser.findAll({})
+    PrivelegeUser.findAll({
+     include:[
+         {
+           model:User,
+           attributes: ['id','ethWalletAddress'],
+           group: ['user_id']
+         }
+        ]
+      })
      .then(data => {
         if(data.length) {
           data.map(data1 => {
 
+        if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
+
          let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
+         let VestedTokens = data1.VestedTokens + result.args.value.toNumber() / 10**18;
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens:result.args.value.toNumber() / 10**18,
+             VestedTokens,
              RemainingTokens
           },{
-              where: { id: data1.id }
+              where: { user_id: data1.User.id }
             })
           .then(stat1 => {
               console.log("Pr User updated");
@@ -332,8 +343,8 @@ function phase1vesting(){
             .catch(err => {
               console.log(err);
             })
-          });
-            
+           }
+          });   
         }
         return true;
      })
@@ -362,14 +373,17 @@ function phase2vesting(){
         if(data.length) {
           data.map(data1 => {
 
-             let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
+         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
+
+         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
+         let VestedTokens = data1.VestedTokens + result.args.value.toNumber() / 10**18;
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens:result.args.value.toNumber() / 10**18,
+             VestedTokens,
              RemainingTokens
           },{
-              where: { id: data1.id }
+              where: { user_id: data1.User.id }
             })
           .then(stat1 => {
               console.log("Pr User updated");
@@ -377,6 +391,7 @@ function phase2vesting(){
             .catch(err => {
               console.log(err);
             })
+           }
           });
             
         }
@@ -406,14 +421,17 @@ function phase3vesting(){
         if(data.length) {
           data.map(data1 => {
 
+         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
+
          let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
+         let VestedTokens = data1.VestedTokens + result.args.value.toNumber() / 10**18;
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens:result.args.value.toNumber() / 10**18,
+             VestedTokens,
              RemainingTokens
           },{
-              where: { id: data1.id }
+              where: { user_id: data1.User.id }
             })
           .then(stat1 => {
               console.log("Pr User updated");
@@ -421,6 +439,7 @@ function phase3vesting(){
             .catch(err => {
               console.log(err);
             })
+           }
           });
             
         }
@@ -448,15 +467,17 @@ function phase4vesting(){
         if(data.length) {
           data.map(data1 => {
 
+         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
 
          let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
+         let VestedTokens = data1.VestedTokens + result.args.value.toNumber() / 10**18;
        
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens:result.args.value.toNumber() / 10**18,
+             VestedTokens,
              RemainingTokens
           },{
-              where: { id: data1.id }
+              where: { user_id: data1.User.id }
             })
           .then(stat1 => {
               console.log("Pr User updated");
@@ -464,6 +485,7 @@ function phase4vesting(){
             .catch(err => {
               console.log(err);
             })
+           }
           });
             
         }
