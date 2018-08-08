@@ -9,7 +9,7 @@ import {
  BuyToken, TokenTransfer, PrivelegeUser,VestingTimes, Usd_transaction
   } from '../models';
 
- import { setVestigDuration } from '../helpers/socketHelper';
+ //import { setVestigDuration } from '../helpers/socketHelper';
 
 //const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
 const url = 'http://zuenchain.io/user/transaction?Address=31uV49X3CysyAN2q2WDz9j1iAjxZtX6n5F';
@@ -24,7 +24,7 @@ import  airdrop_abi  from './../config/airDrop_abi.json';
 var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
 var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
 var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
-var veting_ContractAddress = '0x7f234e95ec64a0e7bb29f00adde80c2804956bfb';
+var veting_ContractAddress = '0xdb92acbab421246a5942544ad7062e1bb8ca8842';
 var airdrop_ContractAddress = '0xeddc650bcba054015810aa93077ef41878b8af3d';
 
 var Web3 = require("web3");
@@ -555,32 +555,32 @@ module.exports = {
    	});
   },
 
-  vestingDuration(){
-  	cron.schedule('*/4 * * * *', function(){
-	     console.log("running vest Duration");
+ //  vestingDuration(){
+ //  	cron.schedule('*/4 * * * *', function(){
+	//      console.log("running vest Duration");
 
-	   PrivelegeUser.findAll({})
-	    .then(data => {
-		  if(data.length) {  
+	//    PrivelegeUser.findAll({})
+	//     .then(data => {
+	// 	  if(data.length) {  
 
-            if(data[0].vestStatus === 'Failed') {
+ //            if(data[0].vestStatus === 'Failed') {
 	          
-	           var vesting_period_date = moment().format('LLLL'),
-                     startTime   =  moment(vesting_period_date).add(5, 'm').unix(),
-                     vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
-                     vestTime2   = moment(vesting_period_date).add(15, 'm').unix(),
-                     vestTime3   = moment(vesting_period_date).add(20, 'm').unix(),
-                     endTime = moment(vesting_period_date).add(25, 'm').unix();
+	//            var vesting_period_date = moment().format('LLLL'),
+ //                     startTime   =  moment(vesting_period_date).add(5, 'm').unix(),
+ //                     vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
+ //                     vestTime2   = moment(vesting_period_date).add(15, 'm').unix(),
+ //                     vestTime3   = moment(vesting_period_date).add(20, 'm').unix(),
+ //                     endTime = moment(vesting_period_date).add(25, 'm').unix();
 
-                     setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);   
-	          	}
-	          }
-		})
-		.catch(err => {
-			console.log(err);
-		})
-	});
-  },
+ //                     setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);   
+	//           	}
+	//           }
+	// 	})
+	// 	.catch(err => {
+	// 		console.log(err);
+	// 	})
+	// });
+ //  },
 
   vestingAddrressStatus(){
   	cron.schedule('*/1 * * * *', function(){

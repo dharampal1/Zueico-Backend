@@ -22,7 +22,7 @@ const  url = 'http://13.126.28.220:5000';
 
 import vest_abi from './../config/vest_abi.json'
 
-var veting_ContractAddress = '0x7f234e95ec64a0e7bb29f00adde80c2804956bfb';
+var veting_ContractAddress = '0xdb92acbab421246a5942544ad7062e1bb8ca8842';
 
 var Web3 = require("web3");
 var web3 = new Web3();
@@ -214,7 +214,7 @@ function vestingTokenAddress() {
      return false;
   });  
 
-}, 120000);
+}, 150000);
      
 }
 
@@ -341,7 +341,7 @@ function phase1vesting(){
       console.log(err);
     })
   });
- }, 180000);
+ }, 240000);
 
 }
 function phase2vesting(){
@@ -385,7 +385,7 @@ function phase2vesting(){
       console.log(err);
     })
   });
-}, 180000);
+}, 240000);
 }
 function phase3vesting(){
 
@@ -428,7 +428,7 @@ function phase3vesting(){
       console.log(err);
     })
   });
-}, 180000);
+}, 240000);
 }
 function phase4vesting(){
    var timesRun = 0;
@@ -470,5 +470,5 @@ function phase4vesting(){
       console.log(err);
     })
   });
- }, 180000);
+ }, 240000);
 }
