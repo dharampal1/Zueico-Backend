@@ -9,37 +9,29 @@ import {
  BuyToken, TokenTransfer, PrivelegeUser,VestingTimes, Usd_transaction
   } from '../models';
 import Sequelize from 'sequelize';
-
+import config from './../config/environment';
 const Op = Sequelize.Op;
- //import { setVestigDuration } from '../helpers/socketHelper';
 
-//const url = 'http://zuenchain.io/user/transaction?Address=15GUHDtq1NhnJQaaKXMt9uehZ8CRnvgBpc';
 const url = 'http://zuenchain.io/user/transaction?Address=31uV49X3CysyAN2q2WDz9j1iAjxZtX6n5F';
 const btc_url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD';
-const api_url = 'http://13.126.28.220:5000';
+const api_url = config.gapi_url;
 import token_abi from './../config/token_abi.json'
 import sale_abi from './../config/sale_abi.json'
 import refund_abi from './../config/refund_abi.json'
 import vest_abi from './../config/vest_abi.json'
 import  airdrop_abi  from './../config/airDrop_abi.json';
 
-var refund_ContractAddress = '0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2';
-var sale_ContractAddress = '0x3164afeadb754210c077b723fb2c32106cf0df65';
-var token_ContractAddress = '0x6806a1fb780173323ad41902539e12214ed3d994';
-var veting_ContractAddress = '0xfff8465c2fe60749de6ebdb87a8fe09c7106e133';
-var airdrop_ContractAddress = '0xeddc650bcba054015810aa93077ef41878b8af3d';
 
 var Web3 = require("web3");
 var web3 = new Web3();
-//web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899", 0, "shamuser", "shamtest@123"));
 
-web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899"));
+web3.setProvider(new web3.providers.HttpProvider(config.http_provider));
 
-var token_contract = web3.eth.contract(token_abi).at(token_ContractAddress);
-var sale_contract = web3.eth.contract(sale_abi).at(sale_ContractAddress);
-var refund_contract = web3.eth.contract(refund_abi).at(refund_ContractAddress);
-var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
-var airdrop_contract = web3.eth.contract(airdrop_abi).at(airdrop_ContractAddress);
+var token_contract = web3.eth.contract(token_abi).at(config.token_ContractAddress);
+var sale_contract = web3.eth.contract(sale_abi).at(config.sale_ContractAddress);
+var refund_contract = web3.eth.contract(refund_abi).at(config.refund_ContractAddress);
+var vest_contract = web3.eth.contract(vest_abi).at(config.veting_ContractAddress);
+var airdrop_contract = web3.eth.contract(airdrop_abi).at(config.airdrop_ContractAddress);
 
 module.exports = {
 

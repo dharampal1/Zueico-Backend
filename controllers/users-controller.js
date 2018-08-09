@@ -31,7 +31,7 @@ import stripePackage from 'stripe';
 // const stripe = stripePackage('sk_test_umWqt35opoHjlW2FOT9ML8yK');
 
 
-const  url = 'http://13.126.28.220:5000';
+const  url = 'http://localhost:5000';
 
 const Op = Sequelize.Op;
 

@@ -9,7 +9,7 @@ import { setVestigDuration } from '../helpers/socketHelper';
 import config from './../config/environment';
 import { storage, csvFileFilter } from '../helpers/fileUpload';
 const Op = Sequelize.Op;
-const  url = 'http://13.126.28.220:5000';
+const  url = config.gapi_url;
 import {
   hashPassword
 } from '../helpers/userHelper';

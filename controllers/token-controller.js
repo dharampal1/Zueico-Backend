@@ -8,10 +8,10 @@ import {
   PrivelegeUser
 } from '../models';
 import Sequelize from 'sequelize';
-
+import config from './../config/environment';
 import mdEncrypt from 'md5';
 
-const  url = 'http://13.126.28.220:5000';
+const  url = config.gapi_url;
 
 
 module.exports = {

@@ -15,19 +15,19 @@ import config from './../config/environment';
 
 const Op = Sequelize.Op;
 
-const  url = 'http://13.126.28.220:5000';
+const  url = config.gapi_url;
 
 
  moment.suppressDeprecationWarnings = true;
 
 import vest_abi from './../config/vest_abi.json'
 
-var veting_ContractAddress = '0xfff8465c2fe60749de6ebdb87a8fe09c7106e133';
+var veting_ContractAddress = config.veting_ContractAddress;
 
 var Web3 = require("web3");
 var web3 = new Web3();
 
-web3.setProvider(new web3.providers.HttpProvider("http://13.126.28.220:8899"));
+web3.setProvider(new web3.providers.HttpProvider(config.http_provider));
 
 var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
 

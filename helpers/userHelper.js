@@ -8,7 +8,7 @@ import path from 'path';
 import  hbs from 'nodemailer-express-handlebars';
 import mdEncrypt from 'md5';
 
-const  url = 'http://13.126.28.220:5000';
+const  url = config.gapi_url;
 
 
  exports.verifyToken = function(token, user) {
