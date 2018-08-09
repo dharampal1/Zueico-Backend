@@ -19,7 +19,7 @@ import token_abi from './../config/token_abi.json'
 import sale_abi from './../config/sale_abi.json'
 import refund_abi from './../config/refund_abi.json'
 import vest_abi from './../config/vest_abi.json'
-import  airdrop_abi  from './../config/airDrop_abi.json';
+import airdrop_abi  from './../config/airDrop_abi.json';
 
 
 var Web3 = require("web3");
@@ -27,10 +27,8 @@ var web3 = new Web3();
 
 web3.setProvider(new web3.providers.HttpProvider(config.http_provider));
 
-var token_contract = web3.eth.contract(token_abi).at(config.token_ContractAddress);
 var sale_contract = web3.eth.contract(sale_abi).at(config.sale_ContractAddress);
 var refund_contract = web3.eth.contract(refund_abi).at(config.refund_ContractAddress);
-var vest_contract = web3.eth.contract(vest_abi).at(config.veting_ContractAddress);
 var airdrop_contract = web3.eth.contract(airdrop_abi).at(config.airdrop_ContractAddress);
 
 module.exports = {
@@ -954,64 +952,11 @@ module.exports = {
 
    });
    
-  },
-  
-
-
-  // checkingVestTime() {
-
-  // 	cron.schedule('*/2 * * * *', function(){
-
-  // 	console.log("running checkingVestTime");
-  	
-  // 	 PrivelegeUser.findAll({
-	 //     	where:{ vestAddressStatus:'Approved' }
-	 //     })
-	 //    .then(data => {
-		//   if(data.length > 0) {
-
-		//   	let curDate = moment().format('LLLL');
-		//   	let date = moment(curDate).unix();
-
-		//   	VestingTimes.find({})
-		// 	   .then(time => {
-
-		// 	 	let time1 = time[0].vestTime1,
-		// 	 	    time2 = time[0].vestTime2,
-		// 	 	    time3 = time[0].vestTime3,
-		// 	 	    time4 = time[0].endTime;
-
-		// 	 	if(time1 > date && time1 < time2){
-		// 	 		vestingReleaseToken()
-		// 	 	} else if(time2 > date && time2 < time3) {
-		// 	 		vestingReleaseToken()
-		// 	 	} else if(time3 > date && time3 < time4) {
-		// 	 		vestingReleaseToken()
-		// 	 	} else if(time4 > date) {
-		// 	 		vestingReleaseToken()
-		// 	 	} else {
-		// 	 		return null;
-		// 	 	}
-		// 	 })
-		// 	 .catch(err => {
-		// 	 	console.log(err,"error");
-		// 	 })    
-		//   } else {
-		//   	return null;
-		//   }
-		// })
-		// .catch(err => {
-		// 	console.log(err);
-		// })
-  // 	});
-  // }
+  }
    
 }
 
-
-
  
-
 function refundCron(){
 
 	cron.schedule('*/2 * * * *', function(){
