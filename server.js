@@ -16,7 +16,7 @@ import { getRefund } from './helpers/cron-job'
 const app = express();
 
 // var server = require('https').Server(app);
-var io = require('socket.io')(server);
+var io = require('socket.io')(app);
 
 app.use(session({
   secret: config.SECRET,
