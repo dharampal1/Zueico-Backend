@@ -9,7 +9,7 @@ const maxSize = 10000000 ;
 
 const Op = Sequelize.Op;
 
-const  url = config.api_url;
+//const  url = config.api_url;
 
 module.exports = {
 
@@ -45,7 +45,7 @@ module.exports = {
           .then(data => {
             if (data) {
               User.update({
-                  passport: `${url}${req.file.path}`
+                  passport: `${req.file.path}`
                 },{
                   where: {id : user_id}
                 },{
@@ -112,7 +112,7 @@ module.exports = {
           .then(data => {
             if (data) {
               User.update({
-                  drivingLicenceFront: `${url}${req.file.path}`
+                  drivingLicenceFront: `${req.file.path}`
                 },{
                   where: {id : user_id}
                 },{
@@ -177,7 +177,7 @@ module.exports = {
           .then(data => {
             if (data) {
               User.update({
-                  drivingLicenceBack: `${url}${req.file.path}`
+                  drivingLicenceBack: `${req.file.path}`
                 },{
                   where: {id : user_id}
                 },{
@@ -243,7 +243,7 @@ module.exports = {
           .then(data => {
             if (data) {
               User.update({
-                  addressProof: `${url}${req.file.path}`
+                  addressProof: `${req.file.path}`
                 },{
                   where: {id : user_id}
                 },{
