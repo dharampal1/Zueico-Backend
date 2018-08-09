@@ -15,7 +15,7 @@ import { getRefund } from './helpers/cron-job'
 // Create server
 const app = express();
 
-var server = require('https').Server(app);
+// var server = require('https').Server(app);
 var io = require('socket.io')(server);
 
 app.use(session({
@@ -74,8 +74,7 @@ function  getCurrentStats(socket) {
 };
 
 // Start listening
-server.listen(config.PORT, () => {
+app.listen(config.PORT, () => {
   console.log(colors.white(`Listening with ${process.env.NODE_ENV} config on port ${config.PORT}`));
 });
 
-export default server;
