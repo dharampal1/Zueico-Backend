@@ -15,7 +15,14 @@ import { getRefund } from './helpers/cron-job'
 // Create server
 const app = express();
 
-var server = require('http').Server(app);
+var fs = require('fs');
+server
+var options = {
+    key: fs.readFileSync('/etc/ssl/certs/zuenchain.net.key'),
+    cert: fs.readFileSync('/etc/ssl/certs/ssl-bundle.crt'),
+};
+
+var server = require('https').createServer(options);
 var io = require('socket.io')(server);
 
 app.use(session({
