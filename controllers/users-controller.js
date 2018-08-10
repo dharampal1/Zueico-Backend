@@ -53,7 +53,7 @@ module.exports = {
             .then(result => {
               if (result.isValid === true) {
                   res.status(200).json({
-                   status:false,
+                   status:true,
                   message:"Authenticated user"
                 })
               } else {
