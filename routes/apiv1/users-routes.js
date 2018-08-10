@@ -30,6 +30,9 @@ router.post('/chargeCard', authenticate, usersController.chargeCard);
 router.post('/', authenticate, usersController.updateUser);
 
 // update user password 
+router.post('/verifyPassword', authenticate, usersController.verifyPassword);
+
+// update user password 
 router.post('/password', authenticate, usersController.changePassword);
 
 // upload user passport  

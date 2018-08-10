@@ -37,6 +37,61 @@ const Op = Sequelize.Op;
 
 module.exports = {
 
+  verifyPassword(req, res, next) {
+
+     var user_id = req.userId,
+         password = req.body.password;
+
+     if(password) {
+
+      User.findOne({
+        where : { id : user_id }
+      })
+      .then(data => {
+         if(data) {
+           verifyPassword(password, data)
+            .then(result => {
+              if (result.isValid === true) {
+                  res.status(200).json({
+                   status:false,
+                  message:"Authenticated user"
+                })
+              } else {
+                 res.status(400).json({
+                   status:false,
+                  message:"Password is not matched"
+                })
+              }
+          })
+          .catch(err => {
+              res.status(500).json({
+                  status: false,
+                  message: err.message
+                });
+          })
+         } else {
+          res.status(404).json({
+            status:false,
+            message:"No user Found"
+          })
+         }
+      })
+      .catch(err => {
+              res.status(500).json({
+                  status: false,
+                  message: err.message
+                });
+     });
+
+     } else {
+       res.status(422).json({
+          status:false,
+          message:"password is required"
+       })
+     }
+
+  },
+
   createUser(req, res, next) {
     let mob = /^[1-9]{1}[0-9]{9}$/;
     var firstName = req.body.firstName,
