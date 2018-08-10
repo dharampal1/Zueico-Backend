@@ -12,8 +12,7 @@ module.exports = {
           pass: 'technical@123'
        }
     },
-    api_url:'http://13.126.36.117:4000/',
-    gapi_url:'http://localhost:5000',
+    gapi_url:'https://zuenchain.net:5000',
     refund_ContractAddress :'0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2',
     sale_ContractAddress: '0x3164afeadb754210c077b723fb2c32106cf0df65',
     token_ContractAddress :'0x6806a1fb780173323ad41902539e12214ed3d994',
