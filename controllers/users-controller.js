@@ -62,6 +62,7 @@ module.exports = {
                message:"No user Found"
             });
          }
+       })
       .catch(err => {
          res.status(500).json({
                status:false,
