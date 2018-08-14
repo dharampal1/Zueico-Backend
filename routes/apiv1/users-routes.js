@@ -29,8 +29,10 @@ router.post('/chargeCard', authenticate, usersController.chargeCard);
 // update user profile 
 router.post('/', authenticate, usersController.updateUser);
 
-
 // update Session
+router.post('/checkSession', authenticate, usersController.checkSession);
+
+// clear Session
 router.post('/clearSession', authenticate, usersController.clearSession);
 
 // update user password 

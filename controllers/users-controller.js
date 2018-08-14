@@ -37,6 +37,34 @@ const Op = Sequelize.Op;
 
 module.exports = {
 
+  checkSession(req, res, next) { 
+
+    var user_id = req.userId,
+        security_session = req.body.security_session;
+
+    User.findOne({
+        where: { [Op.and]: [{ security_session }, { id : user_id }] }
+    })
+      .then(data => {
+         if(data) {
+           res.status(200).json({
+               status:false,
+               message:"security session is Matched"
+            });
+         } else {
+           res.status(404).json({
+               status:false,
+               message:"security session is not Matched"
+            });
+         }
+       })
+      .catch(err => {
+         res.status(500).json({
+               status:false,
+               message:err.message
+          });
+      });
+  },
 
   clearSession(req, res, next) {
 
@@ -54,7 +82,7 @@ module.exports = {
          if(data) {
            res.status(200).json({
                status:false,
-               message:"security session Removed"
+               message:"security session is Removed"
             });
          } else {
            res.status(404).json({
