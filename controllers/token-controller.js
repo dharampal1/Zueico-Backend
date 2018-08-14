@@ -271,12 +271,12 @@ module.exports = {
 	    	   .then(trans => {
                 if(trans == 0){
                	 toToken = value;
-	   	   	  	  totalTokens = total;
+	   	   	  	  totalTokens = total - trans;
 	   	   	  	  fromToken = totalTokens - toToken;
 	   	   	  	  transHash = result.data;
                 } else {
                 	 toToken = value;
-	   	   	  	  totalTokens = total;
+	   	   	  	  totalTokens = total - trans;
 	   	   	  	  fromToken = totalTokens - trans;
 	   	   	  	  transHash = result.data;
 
