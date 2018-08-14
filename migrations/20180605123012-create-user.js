@@ -34,6 +34,11 @@ module.exports = {
         unique:true,
         type: Sequelize.STRING
       },
+      security_session: { 
+        allowNull: false,
+        defaultValue:'',
+        type: Sequelize.STRING
+      },
       walletHash:{
          allowNull: false,
         defaultValue:'',

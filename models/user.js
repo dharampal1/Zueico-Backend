@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
          type: DataTypes.BOOLEAN,
          defaultValue:false
     },
+    security_session:DataTypes.STRING,
     walletHash:DataTypes.STRING,
     purchaseToken: DataTypes.STRING,
     tokenPassword:DataTypes.STRING,

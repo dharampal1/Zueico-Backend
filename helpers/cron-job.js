@@ -125,7 +125,7 @@ module.exports = {
 
 	cronForTransfer(){
 
-	cron.schedule('*/1 * * * *', function(){
+	cron.schedule('*/2 * * * *', function(){
 	  console.log("running cron for  event"); 
 
 
@@ -729,7 +729,7 @@ module.exports = {
    },
 
   getRefund(socket) {
-	  cron.schedule('*/1 * * * *', function(){
+	  cron.schedule('*/2 * * * *', function(){
 	     console.log("running refund");
 
 	 var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});

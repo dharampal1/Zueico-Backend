@@ -31,11 +31,45 @@ import stripePackage from 'stripe';
 // const stripe = stripePackage('sk_test_umWqt35opoHjlW2FOT9ML8yK');
 
 
-const  url = 'http://localhost:5000';
+const  url = config.gapi_url;
 
 const Op = Sequelize.Op;
 
 module.exports = {
+
+
+  clearSession(req, res, next) {
+
+      var user_id = req.userId;
+
+      User.update({
+        security_session:""
+      },
+      {
+        where : { id : user_id }
+      },{
+        returning:true
+      })
+      .then(data => {
+         if(data) {
+           res.status(200).json({
+               status:false,
+               message:"security session Removed"
+            });
+         } else {
+           res.status(404).json({
+               status:false,
+               message:"No user Found"
+            });
+         }
+      .catch(err => {
+         res.status(500).json({
+               status:false,
+               message:err.message
+          });
+      });
+
+  },
 
   verifyPassword(req, res, next) {
 
@@ -52,10 +86,35 @@ module.exports = {
            verifyPassword(password, data)
             .then(result => {
               if (result.isValid === true) {
-                  res.status(200).json({
-                   status:true,
-                  message:"Authenticated user"
-                })
+
+                 let security_session = randtoken.generate(16);
+
+                  User.update({ security_session
+                  },{
+                    where: { id : data.id }
+                  },{
+                    returning:true
+                  })
+                  .then(sec => {
+                    if(sec) {
+                    res.status(200).json({
+                         status:true,
+                         message:"Authenticated user",
+                         security_session
+                    });
+                  } else {
+                     res.status(400).json({
+                       status:false,
+                      message:"Not updated"
+                    });
+                  }
+                  })
+                  .catch(err => {
+                     res.status(500).json({
+                        status:false,
+                        message: err.message
+                      });
+                  });
               } else {
                  res.status(400).json({
                    status:false,

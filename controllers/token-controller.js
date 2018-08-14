@@ -493,8 +493,6 @@ module.exports = {
 		  	 	   });
 		  	 	} else {
 
-
-
 	  	 		var result = JSON.parse(body);
 
 	  	 		if(result.status === true){ 
