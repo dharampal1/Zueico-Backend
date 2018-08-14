@@ -277,7 +277,7 @@ module.exports = {
                 } else {
                 	 toToken = value;
 	   	   	  	  totalTokens = total - trans;
-	   	   	  	  fromToken = totalTokens - trans;
+	   	   	  	  fromToken = totalTokens - toToken;
 	   	   	  	  transHash = result.data;
 
                 }
