@@ -15,6 +15,7 @@ module.exports = {
         jwt.verify(token, config.SECRET, (err, decoded) => {
           if (err) {
             return res.status(500).json({
+                status:false,
                 message: err
               });
           }
@@ -26,12 +27,14 @@ module.exports = {
                  return null;
                } else {
                 return res.status(401).json({
+                  status:false,
                   message: 'Authentication Failed'
                 });
               }
             })
             .catch(err => {
               return res.status(500).json({
+                status:false,
                 message: err
               });
 
@@ -40,6 +43,7 @@ module.exports = {
         });
       } else {
          return res.status(401).json({
+          status:false,
           message: 'failed authentication: No Token Provided.'
         });
       }
@@ -55,7 +59,8 @@ module.exports = {
         jwt.verify(token, config.SECRET, (err, decoded) => {
           if (err) {
             return res.status(500).json({
-                message: err
+                status:false,
+                message: err.message
               });
           }
           Admin.findOne({ where: { id: decoded.id } })
@@ -66,12 +71,14 @@ module.exports = {
                  return null;
                } else {
                 return res.status(401).json({
+                  status:false,
                   message: 'Authentication Failed'
                 });
               }
             })
             .catch(err => {
               return res.status(500).json({
+                status:false,
                 message: err
               });
 
@@ -80,6 +87,7 @@ module.exports = {
         });
       } else {
          return res.status(401).json({
+          status:false,
           message: 'failed authentication: No Token Provided.'
         });
       }

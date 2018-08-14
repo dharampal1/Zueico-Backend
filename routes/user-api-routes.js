@@ -18,6 +18,7 @@ router.use(userRoutes) ;
 // API Error routes
 router.use((req, res) => {
   return res.status(404).json({
+  	status:false,
     message: 'No Route found'
   });
 });
