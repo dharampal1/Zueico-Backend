@@ -48,11 +48,11 @@ module.exports = {
       .then(data => {
          if(data) {
            res.status(200).json({
-               status:false,
+               status:true,
                message:"security session is Matched"
             });
          } else {
-           res.status(404).json({
+           res.status(422).json({
                status:false,
                message:"security session is not Matched"
             });
@@ -81,7 +81,7 @@ module.exports = {
       .then(data => {
          if(data) {
            res.status(200).json({
-               status:false,
+               status:true,
                message:"security session is Removed"
             });
          } else {

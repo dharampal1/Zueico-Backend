@@ -548,33 +548,6 @@ module.exports = {
    	});
   },
 
- //  vestingDuration(){
- //  	cron.schedule('*/4 * * * *', function(){
-	//      console.log("running vest Duration");
-
-	//    PrivelegeUser.findAll({})
-	//     .then(data => {
-	// 	  if(data.length) {  
-
- //            if(data[0].vestStatus === 'Failed') {
-	          
-	//            var vesting_period_date = moment().format('LLLL'),
- //                     startTime   =  moment(vesting_period_date).add(5, 'm').unix(),
- //                     vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
- //                     vestTime2   = moment(vesting_period_date).add(15, 'm').unix(),
- //                     vestTime3   = moment(vesting_period_date).add(20, 'm').unix(),
- //                     endTime = moment(vesting_period_date).add(25, 'm').unix();
-
- //                     setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);   
-	//           	}
-	//           }
-	// 	})
-	// 	.catch(err => {
-	// 		console.log(err);
-	// 	})
-	// });
- //  },
-
   vestingAddrressStatus(){
   	cron.schedule('*/1 * * * *', function(){
 	     console.log("running vestingAddrressStatus");
