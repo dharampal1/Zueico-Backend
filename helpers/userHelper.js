@@ -243,8 +243,8 @@ exports.sendEmail = function(username,email,password) {
                  });
              });
          } else {
-              reject(new Error("No airdrop users Found "));
-           }
+              reject(new Error("No airdrop users Found or emails are sent"));
+          }
         })
         .catch(err => {
             reject(err);
@@ -256,7 +256,7 @@ exports.sendEmail = function(username,email,password) {
   exports.airdropUsersTokens = function(){
    return new Promise(((resolve, reject) => {
       User.findAll({
-        where:{ previlege:'2' }
+          where: { [Op.and]: [{ previlege : '2' }, { airdrop_token_sent : 0 }] }})
        })
         .then(data => {
             if(data.length) {
@@ -284,11 +284,23 @@ exports.sendEmail = function(username,email,password) {
                       newBuy.save()
                        .then(data1 => {
                         if(data1) {
-                          if(i + 1  === data.length) {
-                             resolve({
-                               isValid: true,
-                             });
-                          }
+                           User.update({
+                              airdrop_token_sent:1
+                            }, { 
+                              where : { id : user.id }
+                            })
+                           .then(sent => {
+                              if(sent) {
+                                  if(i + 1  === data.length) {
+                                     resolve({
+                                       isValid: true,
+                                     });
+                                  }
+                              }
+                           })
+                            .catch(err => {
+                              reject(err);
+                           })
                         } else {
                           reject(new Error("Not saved to BuyToken"))
                         }
@@ -305,6 +317,8 @@ exports.sendEmail = function(username,email,password) {
               reject(new Error("ethWalletAddress is not Found For the user"))
              }
            });
+          } else {
+            reject(new Error("Tokens Already sent or no user found"))
           }
         })
         .catch(err => {

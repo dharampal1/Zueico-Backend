@@ -192,6 +192,11 @@ module.exports = {
          type: Sequelize.BOOLEAN,
          defaultValue:false
       },
+      airdrop_token_sent: {
+         allowNull: false,
+         type: Sequelize.BOOLEAN,
+         defaultValue:false
+      },
       previlege: { 
          allowNull: false,
          defaultValue:'0',
