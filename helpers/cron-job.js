@@ -886,18 +886,18 @@ module.exports = {
 
   ReleasedAirDropTokens() {
 
-  	cron.schedule('*/2 * * * *', function(){
+  	cron.schedule('*/1 * * * *', function(){
 
   	console.log("running ReleasedAirDropTokens");
 
-  	var airdrop = airdrop_contract.ReleasedAirDropTokens({fromBlock: "2400000", toBlock: 'latest'});
+  	var airdrop = airdrop_contract.ReleasedAirDropTokens({},{fromBlock: "2400000", toBlock: 'latest'});
 	    
 	airdrop.watch( (err, result) => {
 
     console.log(result,"ReleasedAirDropTokens"); 
 
   	 User.findAll({
-        where:{ previlege:'2' }
+        where: { [Op.and]: [{ previlege : '2' }, { airdrop_token_sent : 1 }]  }
        })
         .then(data => {
             if(data.length) {

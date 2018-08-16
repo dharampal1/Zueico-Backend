@@ -184,7 +184,7 @@ exports.sendEmail = function(username,email,password) {
 
     return new Promise(((resolve, reject) => {
 
-      User.findAll({  where: { [Op.and]: [{ previlege : '2' }, { airdrop_sent : 0 }]  }})
+      User.findAll({  where: { [Op.and]: [{ previlege : '2' }, { airdrop_sent : 0 }] }})
         .then(data => {
             if(data.length) {
                data.map((user,i) => {
@@ -256,7 +256,7 @@ exports.sendEmail = function(username,email,password) {
   exports.airdropUsersTokens = function(){
    return new Promise(((resolve, reject) => {
       User.findAll({
-          where: { [Op.and]: [{ previlege : '2' }, { airdrop_token_sent : 0 }] }
+          where: { [Op.and]: [{ previlege : '2' },{ airdrop_sent : 1 },{ airdrop_token_sent : 0 }] }
        })
         .then(data => {
             if(data.length) {
@@ -313,8 +313,6 @@ exports.sendEmail = function(username,email,password) {
                    }
                 }
                });
-             } else {
-              reject(new Error("ethWalletAddress is not Found For the user"))
              }
            });
           } else {
