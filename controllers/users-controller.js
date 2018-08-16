@@ -37,6 +37,22 @@ const Op = Sequelize.Op;
 
 module.exports = {
 
+  checktoken(req, res, next) {
+      var user_id = req.userId;
+
+      if(user_id) {
+          res.status(200).json({
+              status:true,
+              message:"Token is valid"
+          });
+      } else {
+        res.status(422).json({
+            status:false,
+            message:"Token is not valid"
+        });
+      }    
+  },
+
   checkSession(req, res, next) { 
 
     var user_id = req.userId,

@@ -29,6 +29,9 @@ router.post('/chargeCard', authenticate, usersController.chargeCard);
 // update user profile 
 router.post('/', authenticate, usersController.updateUser);
 
+// checktoken
+router.post('/checktoken', authenticate, usersController.checktoken);
+
 // update Session
 router.post('/checkSession', authenticate, usersController.checkSession);
 
