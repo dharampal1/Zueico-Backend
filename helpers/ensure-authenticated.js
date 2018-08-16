@@ -1,6 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { User, Admin } from '../models';
 import config from '../config/environment';
+import Sequelize from 'sequelize';
+
+const Op = Sequelize.Op;
 
 module.exports = {
 
@@ -19,7 +22,7 @@ module.exports = {
                 message: err.message
               });
           }
-          User.findOne({ where: { id: decoded.id } })
+          User.findOne({  where: { [Op.and]: [{ email:decoded.email }, { id : decoded.id }] } })
             .then(user => {           
               if (user) {
                  req.userId = decoded.id;
@@ -63,7 +66,7 @@ module.exports = {
                 message: err.message
               });
           }
-          Admin.findOne({ where: { id: decoded.id } })
+          Admin.findOne({ where: { [Op.and]: [{ email:decoded.email }, { id : decoded.id }] } })
             .then(admin => {           
               if (admin) {
                  req.id = decoded.id;

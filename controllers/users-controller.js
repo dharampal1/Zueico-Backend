@@ -415,10 +415,9 @@ module.exports = {
                             createWallet(email,data)
                               .then(add => {
                             if(add.isValid === true){
-
-                              console.log(add,"afer created");
                               var token = jwt.sign({
-                                id: data.id
+                                id: data.id,
+                                email
                               }, config.SECRET, {
                                 expiresIn: config.JWT_EXPIRATION
                               });
@@ -497,7 +496,8 @@ module.exports = {
                   if(add.isValid === true){
 
                     var token = jwt.sign({
-                      id: data.id
+                      id: data.id,
+                      email
                     }, config.SECRET, {
                       expiresIn: config.JWT_EXPIRATION
                     });
@@ -536,7 +536,8 @@ module.exports = {
                 .then(result => {
                   if (result.isValid === true) {
                     var token = jwt.sign({
-                      id: result.id
+                      id: result.id,
+                      email
                     }, config.SECRET, {
                       expiresIn: config.JWT_EXPIRATION
                     });

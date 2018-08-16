@@ -262,7 +262,8 @@ order: [['createdAt', 'DESC']]
               .then(result => {
                 if (result.isValid === true) {
             		 var token = jwt.sign({
-		                id: data.id
+		                id: data.id,
+		                email
 		              }, config.SECRET, {
 		                expiresIn: config.JWT_EXPIRATION
 		              });
