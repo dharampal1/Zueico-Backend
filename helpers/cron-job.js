@@ -889,7 +889,7 @@ module.exports = {
 
   ReleasedAirDropTokens() {
 
-  	cron.schedule('*/1 * * * *', function(){
+  	cron.schedule('*/2 * * * *', function(){
 
   	console.log("running ReleasedAirDropTokens");
 
