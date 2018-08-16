@@ -256,7 +256,7 @@ exports.sendEmail = function(username,email,password) {
   exports.airdropUsersTokens = function(){
    return new Promise(((resolve, reject) => {
       User.findAll({
-          where: { [Op.and]: [{ previlege : '2' }, { airdrop_token_sent : 0 }] }})
+          where: { [Op.and]: [{ previlege : '2' }, { airdrop_token_sent : 0 }] }
        })
         .then(data => {
             if(data.length) {
