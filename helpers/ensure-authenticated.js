@@ -44,7 +44,7 @@ module.exports = {
       } else {
          return res.status(401).json({
           status:false,
-          message: 'failed authentication: No Token Provided.'
+          message: 'Failed authentication: No Token Provided.'
         });
       }
   },

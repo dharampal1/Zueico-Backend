@@ -4,9 +4,10 @@ module.exports = {
   SECRET: (process.env.SECRET || 'h3sqq%pb#dHh^XcU8&Uj8brVS_*$LGHW'),
   JWT_EXPIRATION: (process.env.JWT_EXPIRATION || 600),
   smtpConfig: {
-       host: 'smtp.gmail.com',
-       port: 465,
-       secure: true, // use SSL
+       // host: 'smtp.gmail.com',
+       // port: 465,
+       // secure: true, // use SSL
+       service:'gmail',
        auth: {
           user: 'test@shamlatech.com',
           pass: 'technical@123'
