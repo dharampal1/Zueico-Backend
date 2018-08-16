@@ -19,6 +19,22 @@ import multer from 'multer';
 
 module.exports = { 
 
+  checktoken(req, res, next) {
+      let id = req.id;
+
+      if(id) {
+          res.status(200).json({
+              status:true,
+              message:"Token is valid"
+          });
+      } else {
+        res.status(422).json({
+            status:false,
+            message:"Token is not valid"
+        });
+      }    
+  },
+
   sendEmailAirdrop(req, res, next) {
 
   	sendAirdropEmail()

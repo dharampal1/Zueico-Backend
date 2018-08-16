@@ -654,8 +654,7 @@ module.exports = {
     		} else {
     			res.status(404).json({
 	    		status:false,
-	    		message:'No Token is Transfered Yet.',
-	    		data
+	    		message:'No Token is Transfered Yet'
 	    	 });
     		}
     	})

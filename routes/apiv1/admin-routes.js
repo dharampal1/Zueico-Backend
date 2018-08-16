@@ -7,6 +7,10 @@ import adminPassController from './../../controllers/admin-password-controller';
 
 const router = express.Router();
 
+
+// checktoken
+router.post('/checktoken', adminAuthenticate, adminController.checktoken);
+
 // upload privilege Users   
 router.post('/upload/privilegeUsers',adminAuthenticate, adminController.uploadPrivelgeUsers);
 
