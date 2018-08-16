@@ -18,6 +18,6 @@ module.exports = {
     sale_ContractAddress: '0x3164afeadb754210c077b723fb2c32106cf0df65',
     token_ContractAddress :'0x6806a1fb780173323ad41902539e12214ed3d994',
     veting_ContractAddress: '0x5dc86ae96b456b1887bae090ff27f48cbd008b0f',
-    airdrop_ContractAddress :'0xeddc650bcba054015810aa93077ef41878b8af3d',
+    airdrop_ContractAddress :'0x35b9cbb21d60a823570bb16fd7bf67f4b74e7ac9',
     http_provider:"https://zuenchain.net:8899"
 };
