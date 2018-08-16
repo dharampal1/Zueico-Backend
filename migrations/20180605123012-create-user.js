@@ -187,6 +187,11 @@ module.exports = {
          defaultValue:'',
          type: Sequelize.STRING
       },
+      airdrop_sent: {
+         allowNull: false,
+         type: Sequelize.BOOLEAN,
+         defaultValue:false
+      },
       previlege: { 
          allowNull: false,
          defaultValue:'0',

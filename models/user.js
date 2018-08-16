@@ -40,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     airdrop_nric:DataTypes.STRING,
     airdrop_telegram:DataTypes.STRING,
     airdrop_code:DataTypes.STRING,
+    airdrop_sent: DataTypes.BOOLEAN,
     previlege: DataTypes.ENUM('0','1','2')
    }, {});
    User.associate = function(models) {

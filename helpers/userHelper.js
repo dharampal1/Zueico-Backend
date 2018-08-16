@@ -8,6 +8,9 @@ import path from 'path';
 import  hbs from 'nodemailer-express-handlebars';
 import mdEncrypt from 'md5';
 
+import Sequelize from 'sequelize';
+
+const Op = Sequelize.Op;
 const  url = config.gapi_url;
 
 
@@ -181,7 +184,7 @@ exports.sendEmail = function(username,email,password) {
 
     return new Promise(((resolve, reject) => {
 
-      User.findAll({ where :{ previlege : '2' }})
+      User.findAll({  where: { [Op.and]: [{ previlege : '2' }, { airdrop_sent : 0 }]  }})
         .then(data => {
             if(data.length) {
                data.map((user,i) => {
@@ -194,7 +197,7 @@ exports.sendEmail = function(username,email,password) {
                     extName: '.hbs'
                   };
 
-                 transporter.use('compile', hbs(handlebarsOptions));
+                transporter.use('compile', hbs(handlebarsOptions));
 
                 let name = user.username,
                     email = user.email,
@@ -219,11 +222,23 @@ exports.sendEmail = function(username,email,password) {
                   if (error) {
                    reject(err);
                   } else {
-                    if(i + 1  === data.length) {
-                       resolve({
-                         isValid: true,
-                       });
-                    }
+                     User.update({
+                        airdrop_sent:1
+                      }, { 
+                        where : { id : user.id }
+                      })
+                     .then(sent => {
+                        if(sent) {
+                            if(i + 1  === data.length) {
+                               resolve({
+                                 isValid: true,
+                               });
+                            }
+                        }
+                     })
+                      .catch(err => {
+                        reject(err);
+                     })
                   }
                  });
              });
@@ -232,7 +247,7 @@ exports.sendEmail = function(username,email,password) {
            }
         })
         .catch(err => {
-           console.log(err, "send airdrop email");
+            reject(err);
         })
     }));
  };
