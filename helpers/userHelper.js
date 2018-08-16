@@ -299,17 +299,17 @@ exports.sendEmail = function(username,email,password) {
                               }
                            })
                             .catch(err => {
-                              reject(err);
-                           })
+                              reject(err)
+                           });
                         } else {
                           reject(new Error("Not saved to BuyToken"))
                         }
                        })
                        .catch(err => {
-                         reject(err);
+                         reject(err)
                        })
                    } else {
-                    reject(result);
+                    reject(result)
                    }
                 }
                });
@@ -322,7 +322,7 @@ exports.sendEmail = function(username,email,password) {
           }
         })
         .catch(err => {
-          reject(err);
-        });
+          reject(err)
+        })
       }));
   };
