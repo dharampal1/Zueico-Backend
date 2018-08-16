@@ -16,7 +16,7 @@ module.exports = {
           if (err) {
             return res.status(500).json({
                 status:false,
-                message: err
+                message: err.message
               });
           }
           User.findOne({ where: { id: decoded.id } })
