@@ -906,11 +906,13 @@ module.exports = {
             if(data.length) {
                data.map((user,i) => { 
 
+               if(result.args.releasedAirDropAddress === user.ethWalletAddress) {
+
                	BuyToken.update({
                		
                      tokens:result.args.value.toNumber()/ 10**18
                	},{
-               		where: {  user_id:user.id }
+               		where: { user_id:user.id }
                	})
                	.then(buto => {
                		console.log("airdrop update");
@@ -918,8 +920,10 @@ module.exports = {
                	.catch(err => {
                		console.log(err,"error in airdrop");
                	})
-               });
+               }
+             });
            }
+           return true;
        })
        .catch(err => {
        	console.log(err,"relairdrop");
