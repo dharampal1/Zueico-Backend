@@ -264,8 +264,7 @@ exports.sendEmail = function(username,email,password) {
                       var newBuy = new BuyToken({
                           walletMethod:'ETH',
                           buyHash:result.data,
-                          user_id:user.id,
-                          tokens:5
+                          user_id:user.id
                       });
                       newBuy.save()
                        .then(data1 => {
