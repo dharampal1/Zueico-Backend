@@ -660,7 +660,7 @@ module.exports = {
 
     			res.status(404).json({
 	    		status:false,
-	    		message:'No Token is Transfered Yet'
+	    		message:'No Token is Transfered Yet',
 	    		data:result
 	    	 });
     		}
