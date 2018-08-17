@@ -652,9 +652,16 @@ module.exports = {
 		    		data:result
 		    	 });
     		} else {
+
+    			const result = { 
+    				Purchased : data,
+    				Remaining:0
+    			};
+
     			res.status(404).json({
 	    		status:false,
 	    		message:'No Token is Transfered Yet'
+	    		data:result
 	    	 });
     		}
     	})
@@ -665,6 +672,7 @@ module.exports = {
     	   });
     	  }) 
     		} else {
+				
     		 res.status(404).json({
 	    		status:false,
 	    		message:'No Token is Purchased Yet',
