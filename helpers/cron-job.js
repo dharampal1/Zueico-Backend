@@ -141,7 +141,7 @@ module.exports = {
    })
     .then(data => {
   	  if(data.length){
-
+     console.log(data,"data buytoken");
   	  	data.map(hash => {
 
   	  	var blockNumber = "2400000";
@@ -912,7 +912,7 @@ module.exports = {
                		 tokenUpdateStatus:1,
                      tokens:result.args.value.toNumber()/ 10**18
                	},{
-               		where: { [Op.and]: [{ user_id:user.id },{ buyHash: result.args.transactionHash }] } 
+               		where: {  buyHash: result.transactionHash  } 
                	})
                	.then(buto => {
                		console.log("airdrop update");
