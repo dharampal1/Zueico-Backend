@@ -141,9 +141,10 @@ module.exports = {
    })
     .then(data => {
   	  if(data.length){
-     console.log(data,"data buytoken");
   	  	data.map(hash => {
-  	  		console.log(hash,"data buyfdsftoken");
+
+  	  	if(hash.User) {
+
   	  	var blockNumber = "2400000";
 	    var buyerAddress = hash.User.ethWalletAddress;
 
@@ -166,7 +167,8 @@ module.exports = {
 			   	  }
 			   })
               }
-		   })
+		   });
+		  }
 		});
       }
 	})
