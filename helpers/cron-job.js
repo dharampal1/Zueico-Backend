@@ -134,7 +134,7 @@ module.exports = {
      include:[
        {
            model:User,
-           attributes: ['id','ethWalletAddress'],
+           attributes: ['ethWalletAddress'],
            group: ['user_id']
        }
       ]
@@ -143,7 +143,7 @@ module.exports = {
   	  if(data.length){
      console.log(data,"data buytoken");
   	  	data.map(hash => {
-
+  	  		console.log(hash,"data buyfdsftoken");
   	  	var blockNumber = "2400000";
 	    var buyerAddress = hash.User.ethWalletAddress;
 
