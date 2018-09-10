@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import request from 'request';
-import { User, Admin, Setting, BuyToken, 
+import { Bonus,User, Admin, Setting, BuyToken, 
 	     TokenTransfer, PrivelegeUser ,VestingTimes,Refund, Usd_transaction} from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
@@ -18,6 +18,112 @@ import moment from 'moment';
 import multer from 'multer';
 
 module.exports = { 
+
+  getBonusUsers(req, res, next) {
+  	 Bonus.findAll({})
+		  .then(data => {
+		  	  if(data.length){
+		  	  	res.status(200).json({
+		  	  		status:true,
+		  	  		message:"All Bonus users",
+		  	  		data
+		  	  	});
+		  	  } else {
+		  	  	res.status(404).json({
+		  	  		status:false,
+		  	  		message:"No user Found"
+		  	  	});
+		  	  }
+		  })
+		  .catch(err => {
+		  	res.status(500).json({
+		  	  		status:false,
+		  	  		message:err.message
+		  	  	})
+		  });
+  },
+
+  uploadBonus(req, res, next) {
+    var upload = multer({
+      fileFilter: csvFileFilter,
+      storage: storage
+    }).single('bonus_Users');
+
+    upload(req, res, function(err) {
+          if (err) {
+            return res.status(500).json({
+              status: false,
+              message: err
+            });
+          }
+          if (req.file) {
+            const csvFilePath = req.file.path;
+            const csv = require('csvtojson');
+            csv()
+              .fromFile(csvFilePath)
+              .then(jsonObj => {
+
+                jsonObj.map((data, i) => {
+
+                  Bonus.findOne({
+                      where: {
+                        Email: data.Email
+                      }
+                    })
+                    .then(puser => {
+                      if (puser) {
+                        if (i + 1 === jsonObj.length) {
+                          return res.send("ok")
+                        }
+                      } else {
+                        var new_user = new Bonus({
+                          Name: data.Name,
+                          Email: data.Email,
+                          Phone: data.Phone,
+                          BonusTokens: data.BonusTokens,
+                          EthAddress: data.EthAddress
+                        });
+
+                        new_user.save()
+                          .then(user => {
+                            console.log(user);
+
+                            if (i + 1 === jsonObj.length) {
+                              return res.status(200).json({
+                                status: true,
+                                message: 'Bonus Users added Successfully',
+                              });
+                            }
+                          })
+                          .catch(err => {
+                            return res.status(500).json({
+                              status: false,
+                              message: err
+                            });
+                          })
+                      }
+                    })
+                    .catch(err => {
+                      return res.status(500).json({
+                        status: false,
+                        message: err
+                      });
+                    });
+                });
+              })
+              .catch(err => {
+                return res.status(500).json({
+                  status: false,
+                  message: err
+                });
+              });
+          } else {
+            return res.status(422).json({
+              status: false,
+              message: "No file is sent"
+            });
+         }
+   },
 
   checktoken(req, res, next) {
       let id = req.id;

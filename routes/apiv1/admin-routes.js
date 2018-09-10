@@ -11,6 +11,12 @@ const router = express.Router();
 // checktoken
 router.post('/checktoken', adminAuthenticate, adminController.checktoken);
 
+// get bonus users
+router.post('/bonusUsers', adminAuthenticate, adminController.getBonusUsers);
+
+// upload bonus users
+router.post('/upload/bonus', adminAuthenticate, adminController.uploadBonus);
+
 // upload privilege Users   
 router.post('/upload/privilegeUsers',adminAuthenticate, adminController.uploadPrivelgeUsers);
 
