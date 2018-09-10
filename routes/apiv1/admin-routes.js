@@ -15,7 +15,7 @@ router.post('/checktoken', adminAuthenticate, adminController.checktoken);
 router.post('/bonusUsers', adminAuthenticate, adminController.getBonusUsers);
 
 // upload bonus users
-router.post('/upload/bonus', adminAuthenticate, adminController.uploadBonus);
+router.post('/upload/bonusUsers', adminAuthenticate, adminController.uploadBonus);
 
 // upload privilege Users   
 router.post('/upload/privilegeUsers',adminAuthenticate, adminController.uploadPrivelgeUsers);
