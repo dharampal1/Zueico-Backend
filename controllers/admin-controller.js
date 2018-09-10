@@ -21,8 +21,8 @@ module.exports = {
 
   AddReferralBonus(req, res, next) { 
 
-     var Refwalletaddress
-		 tokens
+     var Refwalletaddress= req.body.Refwalletaddress,
+		 tokens= req.body.tokens,
          mainValues = [Refwalletaddress,tokens];
 
      if (checkBlank(mainValues) === 0) {
@@ -46,15 +46,13 @@ module.exports = {
           status: false,
           message: err.message
         });
-      })
+      });
 	  } else {
 	    res.status(422).json({
 	      status: false,
 	      message: "Refwalletaddress, tokens are required"
 	    });
 	  }
-	}
-  });
 },
 
 getReferralBonus(req, res, next) { 
