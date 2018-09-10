@@ -73,7 +73,10 @@ module.exports = {
                     .then(puser => {
                       if (puser) {
                         if (i + 1 === jsonObj.length) {
-                          return res.send("ok")
+                          return res.status(200).json({
+                                status: false,
+                                message: 'Email is Already added',
+                           });
                         }
                       } else {
                         var new_user = new Bonus({
