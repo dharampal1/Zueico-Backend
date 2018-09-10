@@ -1,30 +1,23 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Bonus', {
+    return queryInterface.createTable('Referral_Bonus', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Name: {
+      Refwalletaddress: {
         type: Sequelize.STRING
       },
-      Email: {
+      tokens: {
         type: Sequelize.STRING
       },
-      Phone: {
-        type: Sequelize.STRING
-      },
-      BonusTokens: {
-        type: Sequelize.STRING
-      },
-      Country: {
-        type: Sequelize.STRING
-      },
-      EthAddress: {
-        type: Sequelize.STRING
+      BonusStatus: {
+         allowNull: false,
+         defaultValue:'Pending',
+         type:Sequelize.ENUM('Pending','Approved','Failed')
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +30,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Bonus');
+    return queryInterface.dropTable('Referral_Bonus');
   }
 };

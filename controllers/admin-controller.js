@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import request from 'request';
-import { Bonus,User, Admin, Setting, BuyToken, 
+import { Referral_Bonus,Bonus,User, Admin, Setting, BuyToken, 
 	     TokenTransfer, PrivelegeUser ,VestingTimes,Refund, Usd_transaction} from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
@@ -18,6 +18,69 @@ import moment from 'moment';
 import multer from 'multer';
 
 module.exports = { 
+
+  AddReferralBonus(req, res, next) { 
+
+     var Refwalletaddress
+		 tokens
+         mainValues = [Refwalletaddress,tokens];
+
+     if (checkBlank(mainValues) === 0) {
+    var new_Referral_Bonus = new Referral_Bonus({
+      Refwalletaddress,
+      tokens
+    });
+
+    new_Referral_Bonus.save()
+      .then(data => {
+        if (data) {
+          res.status(200).json({
+            status: true,
+            message: "Referral Bonus is saved",
+            data
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).json({
+          status: false,
+          message: err.message
+        });
+      })
+	  } else {
+	    res.status(422).json({
+	      status: false,
+	      message: "Refwalletaddress, tokens are required"
+	    });
+	  }
+	}
+  });
+},
+
+getReferralBonus(req, res, next) { 
+
+    Referral_Bonus.findAll({})
+      .then(data => {
+	  	  if(data.length){
+	  	  	res.status(200).json({
+	  	  		status:true,
+	  	  		message:"All ReferralBonus",
+	  	  		data
+	  	  	});
+	  	  } else {
+	  	  	res.status(404).json({
+	  	  		status:false,
+	  	  		message:"No ReferralBonus Found"
+	  	  	});
+	  	  }
+	  })
+	  .catch(err => {
+	  	res.status(500).json({
+	  	  		status:false,
+	  	  		message:err.message
+	  	  	})
+	  });
+},
 
   getBonusUsers(req, res, next) {
   	 Bonus.findAll({})

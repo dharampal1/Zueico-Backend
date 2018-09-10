@@ -11,6 +11,12 @@ const router = express.Router();
 // checktoken
 router.post('/checktoken', adminAuthenticate, adminController.checktoken);
 
+// add Referral Bonus
+router.post('/getReferralBonus', adminAuthenticate, adminController.getReferralBonus);
+
+// add Referral Bonus
+router.post('/addReferralBonus', adminAuthenticate, adminController.AddReferralBonus);
+
 // get bonus users
 router.post('/bonusUsers', adminAuthenticate, adminController.getBonusUsers);
 
