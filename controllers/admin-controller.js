@@ -123,6 +123,7 @@ module.exports = {
               message: "No file is sent"
             });
          }
+     });
    },
 
   checktoken(req, res, next) {
