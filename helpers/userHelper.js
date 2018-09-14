@@ -332,10 +332,10 @@ exports.sendEmail = function(username,email,password) {
         })
         .then(data => {
             if (data) {
-              var referralUserAddress = data.refeWalletAddress,
+              var referralBonusUserAddress = data.refeWalletAddress,
                   value = data.refeTokens;
               const body = {
-                referralUserAddress,
+                referralBonusUserAddress,
                 value
               };
               request.post({
