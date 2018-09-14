@@ -1,6 +1,6 @@
  import Promise from 'promise';
  import bcrypt from 'bcryptjs';
- import { User, BuyToken } from '../models';
+ import { User, BuyToken, Referral_Bonus, Bonus } from '../models';
  import request from 'request';
 import config from './../config/environment';
 import nodemailer from 'nodemailer';
