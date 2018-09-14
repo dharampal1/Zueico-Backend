@@ -332,6 +332,7 @@ exports.sendEmail = function(username,email,password) {
         })
         .then(data => {
             if (data) {
+              console.log(data);
               var referralBonusUserAddress = data.refeWalletAddress,
                   value = data.refeTokens;
               const body = {
@@ -346,6 +347,8 @@ exports.sendEmail = function(username,email,password) {
                    reject(err)
                   } else {
                     let result = JSON.parse(body);
+
+                    console.log(result);
 
                     Referral_Bonus.update({
                         refeHash: result.data
