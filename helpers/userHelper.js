@@ -325,7 +325,7 @@ exports.sendEmail = function(username,email,password) {
       }));
   };
 
-releaseReferralBonusTokens(id) {
+  exports.releaseReferralBonusTokens = function(id) {
   return new Promise(((resolve, reject) => {
       Referral_Bonus.findOne({
           where: { id }
