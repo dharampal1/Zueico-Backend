@@ -340,7 +340,7 @@ exports.sendEmail = function(username,email,password) {
                 value
               };
               request.post({
-                  url: `${api_url}/releaseReferralBonusTokens`,
+                  url: `${url}/releaseReferralBonusTokens`,
                   form: body
                 }, function(err, httpResponse, body) {
                   if (err) {

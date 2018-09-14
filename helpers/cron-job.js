@@ -7,8 +7,7 @@ import {
  User, Btc_price, 
  btc_transaction ,Refund, 
  BuyToken, TokenTransfer, PrivelegeUser,VestingTimes, Usd_transaction, 
- Referral_Bonus, Bonus
-  } from '../models';
+ Referral_Bonus, Bonus } from '../models';
 import Sequelize from 'sequelize';
 import config from './../config/environment';
 const Op = Sequelize.Op;
