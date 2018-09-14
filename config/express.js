@@ -22,7 +22,10 @@ import {
   updateTotalPurchase,
   updateApproveAddress,
   relHashHashStatus,
-  ReleasedAirDropTokens
+  ReleasedAirDropTokens,
+  checkTxHashReferralBonus,
+  checkTxHashBonus,
+  releaseBonusTokens
 } from '../helpers/cron-job';
 
 const initApp = function () {
@@ -58,6 +61,9 @@ const initApp = function () {
     checkTxHashBuy();
     checkTxHashTrans();
     ReleasedAirDropTokens();
+    checkTxHashReferralBonus();
+    checkTxHashBonus();
+    releaseBonusTokens();
   
   // Setup routes
   routes(app);
