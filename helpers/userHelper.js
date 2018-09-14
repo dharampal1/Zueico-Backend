@@ -324,3 +324,52 @@ exports.sendEmail = function(username,email,password) {
         })
       }));
   };
+
+releaseReferralBonusTokens(id) {
+  return new Promise(((resolve, reject) => {
+      Referral_Bonus.findOne({
+          where: { id }
+        })
+        .then(data => {
+            if (data) {
+              var referralUserAddress = data.refeWalletAddress,
+                  value = data.refeTokens;
+              const body = {
+                referralUserAddress,
+                value
+              };
+              request.post({
+                  url: `${api_url}/releaseReferralBonusTokens`,
+                  form: body
+                }, function(err, httpResponse, body) {
+                  if (err) {
+                   reject(err)
+                  } else {
+                    let result = JSON.parse(body);
+
+                    Referral_Bonus.update({
+                        refeHash: result.data
+                      }, {
+                        where: {
+                          id: data.id
+                        }
+                      })
+                      .then(stat => {
+                         resolve({
+                           isValid: true
+                         });
+                      })
+                      .catch(err => {
+                       reject(err)
+                    });
+                  } 
+              });
+          } else {
+            reject(new Error("No Data found"))
+        }
+     })
+    .catch(err => {
+      reject(err)
+    })
+  }));
+}

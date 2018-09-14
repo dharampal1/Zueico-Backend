@@ -6,7 +6,10 @@ module.exports = (sequelize, DataTypes) => {
     Phone: DataTypes.STRING,
     Country:DataTypes.STRING,
     BonusTokens: DataTypes.STRING,
-    EthAddress: DataTypes.STRING
+    BonusEthAddress: DataTypes.STRING,
+    BonusHash: DataTypes.STRING,
+    BonusTokenSent: DataTypes.BOOLEAN,
+    BonusStatus: DataTypes.ENUM('Pending','Approved','Failed')
   }, {});
   Bonus.associate = function(models) {
     // associations can be defined here

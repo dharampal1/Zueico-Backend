@@ -1,9 +1,10 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Referral_Bonus = sequelize.define('Referral_Bonus', {
-    Refwalletaddress: DataTypes.STRING,
-    tokens: DataTypes.STRING,
-    BonusStatus: DataTypes.ENUM('Pending','Approved','Failed')
+    refeWalletAddress: DataTypes.STRING,
+    refeTokens: DataTypes.STRING,
+    refeHash: DataTypes.STRING,
+    refeStatus: DataTypes.ENUM('Pending','Approved','Failed')
   }, {});
   Referral_Bonus.associate = function(models) {
     // associations can be defined here

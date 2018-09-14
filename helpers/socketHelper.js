@@ -222,11 +222,11 @@ function vestingTokenAddress() {
 function vestingReleaseToken(){
    
  console.log("running vestingReleaseToken");
-  var time = 420000;
+  var time = 420000; //2592000000 milisecod = 30 days
   var timesRun = 0;
   var interval = setInterval(function(){
       timesRun += 1;
-      if(timesRun === 4){
+      if(timesRun === 8){
           clearInterval(interval);
       }
    PrivelegeUser.findAll({
@@ -267,6 +267,14 @@ function vestingReleaseToken(){
                       phase3vesting();
                     } else if(timesRun === 4) {
                       phase4vesting();
+                    } else if(timesRun === 5) {
+                      phase5vesting();
+                    } else if(timesRun === 6) {
+                      phase6vesting();
+                    } else if(timesRun === 7) {
+                      phase7vesting();
+                    } else if(timesRun === 8) {
+                      phase8vesting();
                     } else {
                       return null;
                     }
@@ -293,7 +301,7 @@ function vestingReleaseToken(){
       console.log(err);
      });  
 
-    time = time + 360000;
+    time = time + 360000; 
 
    }, time);
   }
@@ -478,6 +486,222 @@ function phase4vesting(){
       
   vestTokens4.watch( (err, result) => {
      console.log(result,"phase4"); 
+    PrivelegeUser.findAll({
+     include:[
+         {
+           model:User,
+           attributes: ['id','ethWalletAddress'],
+           group: ['user_id']
+         }
+        ]
+      })
+     .then(data => {
+        if(data.length) {
+          data.map(data1 => {
+
+         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
+
+         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
+         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
+       
+         PrivelegeUser.update({
+             VestingPeriod:data1.VestingPeriod - 1,
+             VestedTokens,
+             RemainingTokens
+          },{
+              where: { user_id: data1.User.id }
+            })
+          .then(stat1 => {
+              console.log("Pr User updated");
+            })
+            .catch(err => {
+              console.log(err);
+            })
+           }
+          });
+            
+        }
+        return true;
+     })
+     .catch(err => {
+      console.log(err);
+    })
+  });
+ }, 150000);
+}
+function phase5vesting(){
+   var timesRun = 0;
+   var interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+          clearInterval(interval);
+      }
+  var vestTokens5 = vest_contract.VestedTokensPhase5({},{fromBlock: "2400000", toBlock: 'latest'});
+      
+  vestTokens5.watch( (err, result) => {
+     console.log(result,"phase5"); 
+    PrivelegeUser.findAll({
+     include:[
+         {
+           model:User,
+           attributes: ['id','ethWalletAddress'],
+           group: ['user_id']
+         }
+        ]
+      })
+     .then(data => {
+        if(data.length) {
+          data.map(data1 => {
+
+         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
+
+         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
+         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
+       
+         PrivelegeUser.update({
+             VestingPeriod:data1.VestingPeriod - 1,
+             VestedTokens,
+             RemainingTokens
+          },{
+              where: { user_id: data1.User.id }
+            })
+          .then(stat1 => {
+              console.log("Pr User updated");
+            })
+            .catch(err => {
+              console.log(err);
+            })
+           }
+          });
+            
+        }
+        return true;
+     })
+     .catch(err => {
+      console.log(err);
+    })
+  });
+ }, 150000);
+}
+function phase6vesting(){
+   var timesRun = 0;
+   var interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+          clearInterval(interval);
+      }
+  var vestTokens6 = vest_contract.VestedTokensPhase6({},{fromBlock: "2400000", toBlock: 'latest'});
+      
+  vestTokens6.watch( (err, result) => {
+     console.log(result,"phase6"); 
+    PrivelegeUser.findAll({
+     include:[
+         {
+           model:User,
+           attributes: ['id','ethWalletAddress'],
+           group: ['user_id']
+         }
+        ]
+      })
+     .then(data => {
+        if(data.length) {
+          data.map(data1 => {
+
+         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
+
+         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
+         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
+       
+         PrivelegeUser.update({
+             VestingPeriod:data1.VestingPeriod - 1,
+             VestedTokens,
+             RemainingTokens
+          },{
+              where: { user_id: data1.User.id }
+            })
+          .then(stat1 => {
+              console.log("Pr User updated");
+            })
+            .catch(err => {
+              console.log(err);
+            })
+           }
+          });
+            
+        }
+        return true;
+     })
+     .catch(err => {
+      console.log(err);
+    })
+  });
+ }, 150000);
+}
+function phase7vesting(){
+   var timesRun = 0;
+   var interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+          clearInterval(interval);
+      }
+  var vestTokens7 = vest_contract.VestedTokensPhase7({},{fromBlock: "2400000", toBlock: 'latest'});
+      
+  vestTokens7.watch( (err, result) => {
+     console.log(result,"phase7"); 
+    PrivelegeUser.findAll({
+     include:[
+         {
+           model:User,
+           attributes: ['id','ethWalletAddress'],
+           group: ['user_id']
+         }
+        ]
+      })
+     .then(data => {
+        if(data.length) {
+          data.map(data1 => {
+
+         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
+
+         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
+         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
+       
+         PrivelegeUser.update({
+             VestingPeriod:data1.VestingPeriod - 1,
+             VestedTokens,
+             RemainingTokens
+          },{
+              where: { user_id: data1.User.id }
+            })
+          .then(stat1 => {
+              console.log("Pr User updated");
+            })
+            .catch(err => {
+              console.log(err);
+            })
+           }
+          });
+            
+        }
+        return true;
+     })
+     .catch(err => {
+      console.log(err);
+    })
+  });
+ }, 150000);
+}
+function phase8vesting(){
+   var timesRun = 0;
+   var interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+          clearInterval(interval);
+      }
+  var vestTokens8 = vest_contract.VestedTokensPhase8({},{fromBlock: "2400000", toBlock: 'latest'});
+      
+  vestTokens8.watch( (err, result) => {
+     console.log(result,"phase8"); 
     PrivelegeUser.findAll({
      include:[
          {

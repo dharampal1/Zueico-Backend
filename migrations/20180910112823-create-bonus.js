@@ -23,8 +23,21 @@ module.exports = {
       Country: {
         type: Sequelize.STRING
       },
-      EthAddress: {
+      BonusEthAddress: {
         type: Sequelize.STRING
+      },
+      BonusHash: {
+        type:Sequelize.STRING
+      },
+      BonusTokenSent: {
+        allowNull: false,
+         type: Sequelize.BOOLEAN,
+         defaultValue:false
+      }
+      BonusStatus: {
+         allowNull: false,
+         defaultValue:'Pending',
+         type:Sequelize.ENUM('Pending','Approved','Failed')
       },
       createdAt: {
         allowNull: false,

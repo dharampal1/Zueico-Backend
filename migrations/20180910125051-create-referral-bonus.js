@@ -8,13 +8,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Refwalletaddress: {
+      refeWalletAddress: {
         type: Sequelize.STRING
       },
-      tokens: {
+      refeTokens: {
         type: Sequelize.STRING
       },
-      BonusStatus: {
+      refeHash: {
+        type:Sequelize.STRING
+      },
+      refeStatus: {
          allowNull: false,
          defaultValue:'Pending',
          type:Sequelize.ENUM('Pending','Approved','Failed')

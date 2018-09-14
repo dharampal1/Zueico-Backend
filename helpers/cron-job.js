@@ -33,11 +33,160 @@ var airdrop_contract = web3.eth.contract(airdrop_abi).at(config.airdrop_Contract
 
 module.exports = {
 
+	
+   checkTxHashReferralBonus(){
+	cron.schedule('*/1 * * * *', function(){
+	     console.log("running refeStatus");
+
+	    Referral_Bonus.findAll({
+	     	where:{ refeStatus:'Pending' }
+	     })
+	      .then(data => {
+	      	  if(data.length) {
+	      	  	data.map(data1 => {
+	      	  	 var refeHash = data1.refeHash;
+	      	  	 const body = { txhash:refeHash };
+				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	console.log(result);
+			        	if(result.status === true) {
+
+			             var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
+
+			        	Referral_Bonus.update({
+			        		refeStatus:new_status
+			        	},{
+			        		where: { id : data1.id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated refeStatus");
+			        	})
+			        	.catch(err => {
+			        		console.log(err,"refeStatus");
+			        	})
+			          }
+			        }
+	      	    });
+	      	 });
+			}
+	      })
+	      .catch(err => {
+	      	console.log(err);
+	      })
+	});
+  },
+
+  checkTxHashBonus(){
+	cron.schedule('*/1 * * * *', function(){
+	     console.log("running BonusStatus");
+
+	    Bonus.findAll({
+	     	where:{ BonusStatus:'Pending' }
+	     })
+	      .then(data => {
+	      	  if(data.length) {
+	      	  	data.map(data1 => {
+	      	  	 var BonusHash = data1.BonusHash;
+	      	  	 const body = { txhash:BonusHash };
+				 request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+			        if(err){
+			          console.log(err);
+			        } else {
+			        	let result = JSON.parse(body);
+			        	console.log(result);
+			        	if(result.status === true) {
+
+			             var new_status;
+				          if(result.data == 'Success'){
+					  	   	   new_status = 'Approved'
+					  	   } else {
+					  	     	new_status = result.data
+					  	   }
+
+			        	User.update({
+			        		BonusStatus:new_status
+			        	},{
+			        		where: { id : data1.id}
+			        	})
+			        	.then(stat => {
+			        		console.log("updated BonusStatus");
+			        	})
+			        	.catch(err => {
+			        		console.log(err,"wallet");
+			        	})
+			          }
+			        }
+	      	    });
+	      	 });
+			}
+	      })
+	      .catch(err => {
+	      	console.log(err);
+	      })
+	});
+  },
+
+ releaseBonusTokens() {
+ cron.schedule('*/2 * * * *', function(){
+	     console.log("running releaseBonusTokens");
+      Bonus.findAll({
+          where: { BonusTokenSent : 0 }
+        })
+        .then(data => {
+            if (data.length) {
+            data.map(data1 => {
+              var bonusUserAddress = data1.BonusEthAddress,
+                  value = data1.BonusTokens;
+              const body = {
+                bonusUserAddress,
+                value
+              };
+              request.post({
+                  url: `${api_url}/releaseBonusTokens`,
+                  form: body
+                }, function(err, httpResponse, body) {
+                  if (err) {
+                   reject(err)
+                  } else {
+                    let result = JSON.parse(body);
+
+                    Referral_Bonus.update({
+                        BonusHash: result.data,
+                        BonusTokenSent:1
+                      }, {
+                        where: {
+                          id: data1.id
+                        }
+                      })
+                      .then(stat => {
+                         console.log("bonus Released");
+                      })
+                      .catch(err => {
+                      console.log(err,"bonus release");
+                    });
+                  } 
+              });
+           });
+          }
+     })
+    .catch(err => {
+      console.log(err,"bonus release");
+    })
+  });
+},
+
 	updateTotalPurchase(){
 
 		cron.schedule('*/30 * * * *', function(){
 	     console.log("running Total Purchase");
-
 
 	    PrivelegeUser.findAll({})
 	      .then(data => {

@@ -4,7 +4,7 @@ import { Referral_Bonus,Bonus,User, Admin, Setting, BuyToken,
 	     TokenTransfer, PrivelegeUser ,VestingTimes,Refund, Usd_transaction} from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
-import { sendEmail, verifyPassword, sendAirdropEmail, airdropUsersTokens } from '../helpers/userHelper';
+import { releaseReferralBonusTokens, sendEmail, verifyPassword, sendAirdropEmail, airdropUsersTokens } from '../helpers/userHelper';
 import { setVestigDuration } from '../helpers/socketHelper';
 import config from './../config/environment';
 import { storage, csvFileFilter } from '../helpers/fileUpload';
@@ -21,24 +21,27 @@ module.exports = {
 
   AddReferralBonus(req, res, next) { 
 
-     var Refwalletaddress= req.body.Refwalletaddress,
-		 tokens= req.body.tokens,
-         mainValues = [Refwalletaddress,tokens];
+     var refeWalletAddress= req.body.refeWalletAddress,
+		 refeTokens= req.body.refeTokens,
+         mainValues = [refeWalletAddress,refeTokens];
 
-     if (checkBlank(mainValues) === 0) {
+    if (checkBlank(mainValues) === 0) {
     var new_Referral_Bonus = new Referral_Bonus({
-      Refwalletaddress,
-      tokens
+      refeWalletAddress,
+      refeTokens
     });
-
     new_Referral_Bonus.save()
       .then(data => {
         if (data) {
-          res.status(200).json({
-            status: true,
-            message: "Referral Bonus is saved",
-            data
-          });
+          releaseReferralBonusTokens(data.id)
+          .then(valid => {
+          	 if(valid.isValid === true) {
+          	 	 res.status(200).json({
+		            status: true,
+		            message: "Referral Bonus is saved and Released"
+		        });
+          	 }
+          })
         }
       })
       .catch(err => {
@@ -50,7 +53,7 @@ module.exports = {
 	  } else {
 	    res.status(422).json({
 	      status: false,
-	      message: "Refwalletaddress, tokens are required"
+	      message: "refeWalletAddress, refeTokens are required"
 	    });
 	  }
 },
@@ -145,13 +148,11 @@ getReferralBonus(req, res, next) {
                           Email: data.Email,
                           Phone: data.Phone,
                           BonusTokens: data.BonusTokens,
-                          EthAddress: data.EthAddress
+                          BonusEthAddress: data.EthAddress
                         });
 
                         new_user.save()
                           .then(user => {
-                            console.log(user);
-
                             if (i + 1 === jsonObj.length) {
                               return res.status(200).json({
                                 status: true,
