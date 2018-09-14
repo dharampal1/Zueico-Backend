@@ -33,7 +33,7 @@ module.exports = {
         allowNull: false,
          type: Sequelize.BOOLEAN,
          defaultValue:false
-      }
+      },
       BonusStatus: {
          allowNull: false,
          defaultValue:'Pending',
