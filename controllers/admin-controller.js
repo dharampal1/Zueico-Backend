@@ -901,7 +901,7 @@ order: [['createdAt', 'DESC']]
         cliff = moment(vesting_period_date).unix(),
         startTime = moment(vesting_period_date).unix(),
         vestingDuration = 8, // 8 months 
-        interval = '420'; // 420sec = 7 min 2592000 seconds = 30 days
+        interval = 420; // 420sec = 7 min 2592000 seconds = 30 days
 
       PrivelegeUser.update({
           vesting_period_date: vesting_period_date

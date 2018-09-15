@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     startTime:DataTypes.STRING,
     cliff: DataTypes.STRING,
     vestingDuration: DataTypes.INTEGER,
-    interval: DataTypes.STRING,
+    interval: DataTypes.INTEGER,
     vestTime1: DataTypes.STRING,
     vestTime2: DataTypes.STRING,
     vestTime3: DataTypes.STRING,

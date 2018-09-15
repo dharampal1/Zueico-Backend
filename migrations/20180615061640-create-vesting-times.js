@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       interval: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       vestTime1: {
         type: Sequelize.STRING
