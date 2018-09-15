@@ -1,14 +1,36 @@
-
- [
+[
     {
       "constant": true,
-      "inputs": [
+      "inputs": [],
+      "name": "cliff",
+      "outputs": [
         {
           "name": "",
-          "type": "address"
+          "type": "uint256"
         }
       ],
-      "name": "vestingAmount1",
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "vestingDuration",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "vestingDurationPhase",
       "outputs": [
         {
           "name": "",
@@ -35,8 +57,13 @@
     },
     {
       "constant": true,
-      "inputs": [],
-      "name": "vestingDurationPhase3",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "vestingAmountMonthlyCap",
       "outputs": [
         {
           "name": "",
@@ -55,7 +82,7 @@
           "type": "address"
         }
       ],
-      "name": "vestingAmount2",
+      "name": "vestedAmount",
       "outputs": [
         {
           "name": "",
@@ -68,8 +95,32 @@
     },
     {
       "constant": true,
-      "inputs": [],
-      "name": "vestingEndTime",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "vestingUsers",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "vestingPhase",
       "outputs": [
         {
           "name": "",
@@ -129,13 +180,8 @@
     },
     {
       "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "vestingAmount3",
+      "inputs": [],
+      "name": "vestingStartTime",
       "outputs": [
         {
           "name": "",
@@ -149,7 +195,7 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "vestingStartTime",
+      "name": "vestingInterval",
       "outputs": [
         {
           "name": "",
@@ -177,40 +223,7 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "state",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint8"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "vestingDurationPhase1",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "vestingAmount4",
+      "name": "vestingNextRelease",
       "outputs": [
         {
           "name": "",
@@ -233,20 +246,6 @@
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "vestingDurationPhase2",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -282,58 +281,7 @@
           "type": "uint256"
         }
       ],
-      "name": "VestedTokensPhase1",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "vestedTokensAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "value",
-          "type": "uint256"
-        }
-      ],
-      "name": "VestedTokensPhase2",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "vestedTokensAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "value",
-          "type": "uint256"
-        }
-      ],
-      "name": "VestedTokensPhase3",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "vestedTokensAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "value",
-          "type": "uint256"
-        }
-      ],
-      "name": "VestedTokensPhase4",
+      "name": "VestedTokens",
       "type": "event"
     },
     {
@@ -357,23 +305,19 @@
       "constant": false,
       "inputs": [
         {
+          "name": "_cliff",
+          "type": "uint256"
+        },
+        {
           "name": "startTime",
           "type": "uint256"
         },
         {
-          "name": "vestTime1",
+          "name": "_vestingDuration",
           "type": "uint256"
         },
         {
-          "name": "vestTime2",
-          "type": "uint256"
-        },
-        {
-          "name": "vestTime3",
-          "type": "uint256"
-        },
-        {
-          "name": "endTime",
+          "name": "_interval",
           "type": "uint256"
         }
       ],
@@ -396,6 +340,20 @@
         }
       ],
       "name": "setTokensVestingAddressDetails",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "vestingAddress",
+          "type": "address"
+        }
+      ],
+      "name": "removeVestingUser",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
