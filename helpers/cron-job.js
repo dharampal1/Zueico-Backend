@@ -111,7 +111,7 @@ module.exports = {
 					  	     	new_status = result.data
 					  	   }
 
-			        	User.update({
+			        	Bonus.update({
 			        		BonusStatus:new_status
 			        	},{
 			        		where: { id : data1.id}
