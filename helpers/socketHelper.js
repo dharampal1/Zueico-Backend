@@ -259,21 +259,21 @@ function vestingReleaseToken(){
                   if(i + 1 === users.length ) {
 
                     if(timesRun === 1){
-                       phase1vesting();
+                      phasevesting();
                     } else if(timesRun === 2) {
-                      phase2vesting();
+                      phasevesting();
                     } else if(timesRun === 3) {
-                      phase3vesting();
+                      phasevesting();
                     } else if(timesRun === 4) {
-                      phase4vesting();
+                      phasevesting();
                     } else if(timesRun === 5) {
-                      phase5vesting();
+                      phasevesting();
                     } else if(timesRun === 6) {
-                      phase6vesting();
+                      phasevesting();
                     } else if(timesRun === 7) {
-                      phase7vesting();
+                      phasevesting();
                     } else if(timesRun === 8) {
-                      phase8vesting();
+                      phasevesting();
                     } else {
                       return null;
                     }
@@ -306,7 +306,7 @@ function vestingReleaseToken(){
   }
 
 
-function phase1vesting(){
+function phasevesting(){
 
    var timesRun = 0;
    var interval = setInterval(function(){
@@ -315,10 +315,10 @@ function phase1vesting(){
           clearInterval(interval);
       }
 
-  var vestTokens1 = vest_contract.VestedTokensPhase1({},{fromBlock: "2400000", toBlock: 'latest'});
+  var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
       
   vestTokens1.watch( (err, result) => {
-     console.log(result,"phase1"); 
+     console.log(result,"phase release vested token contract"); 
     PrivelegeUser.findAll({
      include:[
          {
@@ -361,386 +361,5 @@ function phase1vesting(){
   });
  }, 180000); //180000ms = 3 min
 
-}
+};
 
-function phase2vesting(){
-
-   var timesRun = 0;
-   var interval = setInterval(function(){
-      timesRun += 1;
-      if(timesRun === 1){
-          clearInterval(interval);
-      }
-  var vestTokens2 = vest_contract.VestedTokensPhase2({},{fromBlock: "2400000", toBlock: 'latest'});
-      
-  vestTokens2.watch( (err, result) => {
-     console.log(result,"phase2"); 
-    PrivelegeUser.findAll({
-     include:[
-         {
-           model:User,
-           attributes: ['id','ethWalletAddress'],
-           group: ['user_id']
-         }
-        ]
-      })
-     .then(data => {
-        if(data.length) {
-          data.map(data1 => {
-
-         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
-
-         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
-         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
-       
-         PrivelegeUser.update({
-             VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens,
-             RemainingTokens
-          },{
-              where: { user_id: data1.User.id }
-            })
-          .then(stat1 => {
-              console.log("Pr User updated");
-            })
-            .catch(err => {
-              console.log(err);
-            })
-           }
-          });
-            
-        }
-        return true;
-     })
-     .catch(err => {
-      console.log(err);
-    })
-  });
-}, 180000);
-}
-
-function phase3vesting(){
-
-   var timesRun = 0;
-   var interval = setInterval(function(){
-      timesRun += 1;
-      if(timesRun === 1){
-          clearInterval(interval);
-      }
-  var vestTokens3 = vest_contract.VestedTokensPhase3({},{fromBlock: "2400000", toBlock: 'latest'});
-      
-  vestTokens3.watch( (err, result) => {
-     console.log(result,"phase3"); 
-     PrivelegeUser.findAll({
-     include:[
-         {
-           model:User,
-           attributes: ['id','ethWalletAddress'],
-           group: ['user_id']
-         }
-        ]
-      })
-     .then(data => {
-        if(data.length) {
-          data.map(data1 => {
-
-         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
-
-         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
-         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
-       
-         PrivelegeUser.update({
-             VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens,
-             RemainingTokens
-          },{
-              where: { user_id: data1.User.id }
-            })
-          .then(stat1 => {
-              console.log("Pr User updated");
-            })
-            .catch(err => {
-              console.log(err);
-            })
-           }
-          });
-            
-        }
-        return true;
-     })
-     .catch(err => {
-      console.log(err);
-    })
-  });
-}, 180000);
-}
-function phase4vesting(){
-   var timesRun = 0;
-   var interval = setInterval(function(){
-      timesRun += 1;
-      if(timesRun === 1){
-          clearInterval(interval);
-      }
-  var vestTokens4 = vest_contract.VestedTokensPhase4({},{fromBlock: "2400000", toBlock: 'latest'});
-      
-  vestTokens4.watch( (err, result) => {
-     console.log(result,"phase4"); 
-    PrivelegeUser.findAll({
-     include:[
-         {
-           model:User,
-           attributes: ['id','ethWalletAddress'],
-           group: ['user_id']
-         }
-        ]
-      })
-     .then(data => {
-        if(data.length) {
-          data.map(data1 => {
-
-         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
-
-         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
-         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
-       
-         PrivelegeUser.update({
-             VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens,
-             RemainingTokens
-          },{
-              where: { user_id: data1.User.id }
-            })
-          .then(stat1 => {
-              console.log("Pr User updated");
-            })
-            .catch(err => {
-              console.log(err);
-            })
-           }
-          });
-            
-        }
-        return true;
-     })
-     .catch(err => {
-      console.log(err);
-    })
-  });
- }, 180000);
-}
-function phase5vesting(){
-   var timesRun = 0;
-   var interval = setInterval(function(){
-      timesRun += 1;
-      if(timesRun === 1){
-          clearInterval(interval);
-      }
-  var vestTokens5 = vest_contract.VestedTokensPhase5({},{fromBlock: "2400000", toBlock: 'latest'});
-      
-  vestTokens5.watch( (err, result) => {
-     console.log(result,"phase5"); 
-    PrivelegeUser.findAll({
-     include:[
-         {
-           model:User,
-           attributes: ['id','ethWalletAddress'],
-           group: ['user_id']
-         }
-        ]
-      })
-     .then(data => {
-        if(data.length) {
-          data.map(data1 => {
-
-         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
-
-         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
-         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
-       
-         PrivelegeUser.update({
-             VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens,
-             RemainingTokens
-          },{
-              where: { user_id: data1.User.id }
-            })
-          .then(stat1 => {
-              console.log("Pr User updated");
-            })
-            .catch(err => {
-              console.log(err);
-            })
-           }
-          });
-            
-        }
-        return true;
-     })
-     .catch(err => {
-      console.log(err);
-    })
-  });
- }, 180000);
-}
-function phase6vesting(){
-   var timesRun = 0;
-   var interval = setInterval(function(){
-      timesRun += 1;
-      if(timesRun === 1){
-          clearInterval(interval);
-      }
-  var vestTokens6 = vest_contract.VestedTokensPhase6({},{fromBlock: "2400000", toBlock: 'latest'});
-      
-  vestTokens6.watch( (err, result) => {
-     console.log(result,"phase6"); 
-    PrivelegeUser.findAll({
-     include:[
-         {
-           model:User,
-           attributes: ['id','ethWalletAddress'],
-           group: ['user_id']
-         }
-        ]
-      })
-     .then(data => {
-        if(data.length) {
-          data.map(data1 => {
-
-         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
-
-         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
-         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
-       
-         PrivelegeUser.update({
-             VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens,
-             RemainingTokens
-          },{
-              where: { user_id: data1.User.id }
-            })
-          .then(stat1 => {
-              console.log("Pr User updated");
-            })
-            .catch(err => {
-              console.log(err);
-            })
-           }
-          });
-            
-        }
-        return true;
-     })
-     .catch(err => {
-      console.log(err);
-    })
-  });
- }, 180000);
-}
-function phase7vesting(){
-   var timesRun = 0;
-   var interval = setInterval(function(){
-      timesRun += 1;
-      if(timesRun === 1){
-          clearInterval(interval);
-      }
-  var vestTokens7 = vest_contract.VestedTokensPhase7({},{fromBlock: "2400000", toBlock: 'latest'});
-      
-  vestTokens7.watch( (err, result) => {
-     console.log(result,"phase7"); 
-    PrivelegeUser.findAll({
-     include:[
-         {
-           model:User,
-           attributes: ['id','ethWalletAddress'],
-           group: ['user_id']
-         }
-        ]
-      })
-     .then(data => {
-        if(data.length) {
-          data.map(data1 => {
-
-         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
-
-         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
-         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
-       
-         PrivelegeUser.update({
-             VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens,
-             RemainingTokens
-          },{
-              where: { user_id: data1.User.id }
-            })
-          .then(stat1 => {
-              console.log("Pr User updated");
-            })
-            .catch(err => {
-              console.log(err);
-            })
-           }
-          });
-            
-        }
-        return true;
-     })
-     .catch(err => {
-      console.log(err);
-    })
-  });
- }, 180000);
-}
-function phase8vesting(){
-   var timesRun = 0;
-   var interval = setInterval(function(){
-      timesRun += 1;
-      if(timesRun === 1){
-          clearInterval(interval);
-      }
-  var vestTokens8 = vest_contract.VestedTokensPhase8({},{fromBlock: "2400000", toBlock: 'latest'});
-      
-  vestTokens8.watch( (err, result) => {
-     console.log(result,"phase8"); 
-    PrivelegeUser.findAll({
-     include:[
-         {
-           model:User,
-           attributes: ['id','ethWalletAddress'],
-           group: ['user_id']
-         }
-        ]
-      })
-     .then(data => {
-        if(data.length) {
-          data.map(data1 => {
-
-         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
-
-         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
-         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
-       
-         PrivelegeUser.update({
-             VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens,
-             RemainingTokens
-          },{
-              where: { user_id: data1.User.id }
-            })
-          .then(stat1 => {
-              console.log("Pr User updated");
-            })
-            .catch(err => {
-              console.log(err);
-            })
-           }
-          });
-            
-        }
-        return true;
-     })
-     .catch(err => {
-      console.log(err);
-    })
-  });
- }, 180000);
-}
