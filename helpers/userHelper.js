@@ -420,7 +420,9 @@ exports.releaseBonusTokens = function() {
                   } 
               });
            });
-          }
+          }  else {
+            reject(new Error("Token already sent For these users"))
+        }
      })
     .catch(err => {
       reject(err)
