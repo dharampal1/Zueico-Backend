@@ -895,116 +895,134 @@ order: [['createdAt', 'DESC']]
 
    addVestingDate(req, res, next) {
 
-    if(req.body.vesting_period_date){
+    if (req.body.vesting_period_date) {
 
-	 var vesting_period_date = moment().format('LLLL'),
-	     cliff= moment(vesting_period_date).unix() ,
-	     startTime =  moment(vesting_period_date).unix(),
-         vestingDuration = 8, // 8 months 
-         interval= '420';// 420sec = 7 min 2592000 seconds = 30 days
-     
-     PrivelegeUser.update({
-    		vesting_period_date:vesting_period_date
-    	},{
-    		where:{}
-    	})
-      .then(data => {
+      var vesting_period_date = moment().format('LLLL'),
+        cliff = moment(vesting_period_date).unix(),
+        startTime = moment(vesting_period_date).unix(),
+        vestingDuration = 8, // 8 months 
+        interval = '420'; // 420sec = 7 min 2592000 seconds = 30 days
 
-      if(data){
-        	User.update({
-      		vestingStartDate:vesting_period_date
-      	},{
-      		where:{ previlege:'1' }
-      	})
-      	.then(updat => {
-         if(updat) {
-         	
-         	var newvest = new VestingTimes({
-         		startTime,
-				cliff,
-				vestingDuration,
-				interval,
-         	})
+      PrivelegeUser.update({
+          vesting_period_date: vesting_period_date
+        }, {
+          where: {}
+        })
+        .then(data => {
+          console.log(data);
+          if (data) {
+            User.update({
+                vestingStartDate: vesting_period_date
+              }, {
+                where: {
+                  previlege: '1'
+                }
+              })
+              .then(updat => {
+                console.log(updat);
+                if (updat) {
 
-         	VestingTimes.find({})
-         	.then(vestt => {
-         		if(!vestt) {
-         			newvest.save();
-         		}
-         	})
-         	.catch(err => {
- 					res.status(500).json({
-		  			status:false,
-			  		message:err.message
-		  		})
- 			});
+                  var newvest = new VestingTimes({
+                    startTime,
+                    cliff,
+                    vestingDuration,
+                    interval,
+                  })
 
-		 VestingTimes.update({
-			 	startTime,
-				cliff,
-				vestingDuration,
-				interval,
-			 },{
-	    		where:{}
-	    	})
-		   .then(data1 => {
-			 if(data1){
+                  VestingTimes.find({})
+                    .then(vestt => {
+                      if (!vestt) {
+                        newvest.save()
+                          .then(vetTime => {
 
-	  	    let duration = setVestigDuration(cliff,startTime,vestingDuration,interval);
-	  	   
-	  	   	res.status(200).json({
-	  			status:true,
-  	  		    message:'vesting Duration Initiated'
-	  		 });
+                            setVestigDuration(cliff, startTime, vestingDuration, interval);
 
-	  	   } else {
-	  		res.status(404).json({
-	  			status:false,
-  	  		    message:'No data found'
-	  		 })
-		  	}
-		  	return null
-		  })
-	     .catch(err => {
-	    	res.status(500).json({
-	  			status:false,
-		  		message:err.message
-	  		})
-	     })	
-	  } else {
-	  	res.status(404).json({
-	  			status:false,
-  	  		    message:'No data found'
-	  		 })
-	  }
-	  return null
-	  })
-     .catch(err => {
-    	res.status(500).json({
-  			status:false,
-	  		message:err.message
-  		})
-     })	
-      } else {
-      	res.status(404).json({
-  			status:false,
-	  		    message:'No data found'
-  		 })
-	  }
-	  return null
-	  })
-     .catch(err => {
-    	res.status(500).json({
-  			status:false,
-	  		message:err.message
-  		})
-     })	
-   } else {
-   	res.status(422).json({
-  	  		status:false,
-  	  		message:'vesting_period_date is required'
-  	  })
-   }
+                            return res.status(200).json({
+                              status: true,
+                              message: 'vesting Duration Initiated'
+                            });
+                          })
+                          .catch(err => {
+                            res.status(500).json({
+                              status: false,
+                              message: err.message
+                            })
+                          });
+                      } else {
+                        VestingTimes.update({
+                            startTime,
+                            cliff,
+                            vestingDuration,
+                            interval,
+                          }, {
+                            where: {}
+                          })
+                          .then(data1 => {
+                            if (data1) {
+
+                              setVestigDuration(cliff, startTime, vestingDuration, interval);
+
+                              return res.status(200).json({
+                                status: true,
+                                message: 'vesting Duration Initiated'
+                              });
+                            } else {
+                              res.status(404).json({
+                                status: false,
+                                message: 'No data found'
+                              })
+                            }
+                          })
+                          .catch(err => {
+                            res.status(500).json({
+                              status: false,
+                              message: err.message
+                            })
+                          });
+                      }
+                    })
+                    .catch(err => {
+                      res.status(500).json({
+                        status: false,
+                        message: err.message
+                      })
+                    });
+
+
+                } else {
+                  res.status(404).json({
+                    status: false,
+                    message: 'No data found'
+                  })
+                }
+                return null
+              })
+              .catch(err => {
+                res.status(500).json({
+                  status: false,
+                  message: err.message
+                })
+              })
+          } else {
+            res.status(404).json({
+              status: false,
+              message: 'No data found'
+            })
+          }
+          return null
+        })
+        .catch(err => {
+          res.status(500).json({
+            status: false,
+            message: err.message
+          })
+        })
+    } else {
+      res.status(422).json({
+        status: false,
+        message: 'vesting_period_date is required'
+      })
+    }
   },
   
    usdtContribution(req, res, next) {
