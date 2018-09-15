@@ -20,6 +20,9 @@ router.post('/addReferralBonus', adminAuthenticate, adminController.AddReferralB
 // get bonus users
 router.post('/bonusUsers', adminAuthenticate, adminController.getBonusUsers);
 
+// send bonus to users
+router.post('/sendBonus', adminAuthenticate, adminController.sendBonusUsers);
+
 // upload bonus users
 router.post('/upload/bonusUsers', adminAuthenticate, adminController.uploadBonus);
 

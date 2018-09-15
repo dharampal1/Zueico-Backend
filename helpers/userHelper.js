@@ -426,4 +426,4 @@ exports.releaseBonusTokens = function() {
       reject(err)
     });
  }));
-}
+};

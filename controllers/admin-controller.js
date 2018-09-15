@@ -19,6 +19,25 @@ import multer from 'multer';
 
 module.exports = { 
 
+
+sendBonusUsers(req, res, next) {
+	releaseBonusTokens()
+      .then(valid => {
+      	 if(valid.isValid === true) {
+      	 	 return res.status(200).json({
+                status: true,
+                message: 'Bonus is sent Successfully',
+             });
+      	 }
+      })
+      .catch(err => {
+      	  res.status(500).json({
+          status: false,
+          message: err.message
+          });
+      });
+},
+
   AddReferralBonus(req, res, next) { 
 
      var refeWalletAddress= req.body.refeWalletAddress,
@@ -160,22 +179,10 @@ getReferralBonus(req, res, next) {
                         new_user.save()
                           .then(user => {
                             if (i + 1 === jsonObj.length) {
-
-                             releaseBonusTokens()
-						          .then(valid => {
-						          	 if(valid.isValid === true) {
-						          	 	 return res.status(200).json({
-			                                status: true,
-			                                message: 'Bonus Users added Successfully',
-			                             });
-						          	 }
-						          })
-						          .catch(err => {
-						          	  res.status(500).json({
-							          status: false,
-							          message: err.message
-							          });
-						          });
+                              return res.status(200).json({
+                                status: true,
+                                message: 'Bonus Users added Successfully',
+                              });
                             }
                           })
                           .catch(err => {
