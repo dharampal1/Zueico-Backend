@@ -134,55 +134,6 @@ module.exports = {
 	});
   },
 
- releaseBonusTokens() {
- cron.schedule('*/2 * * * *', function(){
-	     console.log("running releaseBonusTokens");
-      Bonus.findAll({
-          where: { BonusTokenSent : 0 }
-        })
-        .then(data => {
-            if (data.length) {
-            data.map(data1 => {
-              var bonusUserAddress = data1.BonusEthAddress,
-                  value = data1.BonusTokens;
-              const body = {
-                bonusUserAddress,
-                value
-              };
-              request.post({
-                  url: `${api_url}/releaseBonusTokens`,
-                  form: body
-                }, function(err, httpResponse, body) {
-                  if (err) {
-                   reject(err)
-                  } else {
-                    let result = JSON.parse(body);
-
-                    Referral_Bonus.update({
-                        BonusHash: result.data,
-                        BonusTokenSent:1
-                      }, {
-                        where: {
-                          id: data1.id
-                        }
-                      })
-                      .then(stat => {
-                         console.log("bonus Released");
-                      })
-                      .catch(err => {
-                      console.log(err,"bonus release");
-                    });
-                  } 
-              });
-           });
-          }
-     })
-    .catch(err => {
-      console.log(err,"bonus release");
-    })
-  });
-},
-
 	updateTotalPurchase(){
 
 		cron.schedule('*/30 * * * *', function(){

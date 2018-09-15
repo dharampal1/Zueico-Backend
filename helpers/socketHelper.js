@@ -61,11 +61,11 @@ var vest_contract = web3.eth.contract(vest_abi).at(veting_ContractAddress);
 }
 
 
-exports.setVestigDuration = function(startTime, vestTime1, vestTime2, vestTime3, endTime) {
+exports.setVestigDuration = function(cliff, startTime, vestingDuration, interval) {
 
   console.log("hit duration");
 
-  let body = { startTime, vestTime1, vestTime2, vestTime3, endTime};
+  let body = { cliff, startTime, vestingDuration, interval};
       console.log(body,"body for add vest Duration");
 
        request.post({url:`${url}/setTokensVestingDuration`,form:body},function(err,httpResponse,body ){
@@ -190,14 +190,13 @@ function vestingTokenAddress() {
 
              if(i + 1 === users.length){
 
-                  var vesting_period_date = moment().format('LLLL'),
-                     startTime   =  moment(vesting_period_date).add(5, 'm').unix(),
-                     vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
-                     vestTime2   = moment(vesting_period_date).add(15, 'm').unix(),
-                     vestTime3   = moment(vesting_period_date).add(20, 'm').unix(),
-                     endTime = moment(vesting_period_date).add(25, 'm').unix();
+                   var vesting_period_date = moment().format('LLLL'),
+                   cliff= moment(vesting_period_date).unix() ,
+                   startTime =  moment(vesting_period_date).unix(),
+                    vestingDuration = 8, // 8 months 
+                    interval= 420;// 420sec = 7 min 2592000 seconds = 30 days
 
-                     setVestigDuration(startTime, vestTime1, vestTime2, vestTime3, endTime);
+                    setVestigDuration(cliff, startTime, vestingDuration, interval);
                  }
                }
             }
@@ -214,7 +213,7 @@ function vestingTokenAddress() {
      return false;
   });  
 
-}, 150000);
+}, 180000); //180000ms = 3 min
      
 }
 
@@ -301,7 +300,7 @@ function vestingReleaseToken(){
       console.log(err);
      });  
 
-    time = time + 360000; 
+    time = time + 60000; 
 
    }, time);
   }
@@ -360,7 +359,7 @@ function phase1vesting(){
       console.log(err);
     })
   });
- }, 150000);
+ }, 180000); //180000ms = 3 min
 
 }
 
@@ -417,7 +416,7 @@ function phase2vesting(){
       console.log(err);
     })
   });
-}, 150000);
+}, 180000);
 }
 
 function phase3vesting(){
@@ -473,7 +472,7 @@ function phase3vesting(){
       console.log(err);
     })
   });
-}, 150000);
+}, 180000);
 }
 function phase4vesting(){
    var timesRun = 0;
@@ -527,7 +526,7 @@ function phase4vesting(){
       console.log(err);
     })
   });
- }, 150000);
+ }, 180000);
 }
 function phase5vesting(){
    var timesRun = 0;
@@ -581,7 +580,7 @@ function phase5vesting(){
       console.log(err);
     })
   });
- }, 150000);
+ }, 180000);
 }
 function phase6vesting(){
    var timesRun = 0;
@@ -635,7 +634,7 @@ function phase6vesting(){
       console.log(err);
     })
   });
- }, 150000);
+ }, 180000);
 }
 function phase7vesting(){
    var timesRun = 0;
@@ -689,7 +688,7 @@ function phase7vesting(){
       console.log(err);
     })
   });
- }, 150000);
+ }, 180000);
 }
 function phase8vesting(){
    var timesRun = 0;
@@ -743,5 +742,5 @@ function phase8vesting(){
       console.log(err);
     })
   });
- }, 150000);
+ }, 180000);
 }

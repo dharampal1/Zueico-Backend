@@ -11,6 +11,15 @@ module.exports = {
       startTime:{
         type: Sequelize.STRING
       },
+      cliff: {
+        type: Sequelize.STRING
+      },
+      vestingDuration: {
+        type: Sequelize.INTEGER
+      },
+      interval: {
+        type: Sequelize.STRING
+      },
       vestTime1: {
         type: Sequelize.STRING
       },

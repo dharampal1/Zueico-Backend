@@ -4,7 +4,7 @@ import { Referral_Bonus,Bonus,User, Admin, Setting, BuyToken,
 	     TokenTransfer, PrivelegeUser ,VestingTimes,Refund, Usd_transaction} from '../models';
 import jwt from 'jsonwebtoken';
 import { checkBlank } from '../helpers/requestHelper';
-import { releaseReferralBonusTokens, sendEmail, verifyPassword, sendAirdropEmail, airdropUsersTokens } from '../helpers/userHelper';
+import { releaseBonusTokens, releaseReferralBonusTokens, sendEmail, verifyPassword, sendAirdropEmail, airdropUsersTokens } from '../helpers/userHelper';
 import { setVestigDuration } from '../helpers/socketHelper';
 import config from './../config/environment';
 import { storage, csvFileFilter } from '../helpers/fileUpload';
@@ -42,6 +42,12 @@ module.exports = {
 		        });
           	 }
           })
+          .catch(err => {
+          	  res.status(500).json({
+	          status: false,
+	          message: err.message
+	          });
+          });
         }
       })
       .catch(err => {
@@ -154,10 +160,22 @@ getReferralBonus(req, res, next) {
                         new_user.save()
                           .then(user => {
                             if (i + 1 === jsonObj.length) {
-                              return res.status(200).json({
-                                status: true,
-                                message: 'Bonus Users added Successfully',
-                              });
+
+                             releaseBonusTokens()
+						          .then(valid => {
+						          	 if(valid.isValid === true) {
+						          	 	 return res.status(200).json({
+			                                status: true,
+			                                message: 'Bonus Users added Successfully',
+			                             });
+						          	 }
+						          })
+						          .catch(err => {
+						          	  res.status(500).json({
+							          status: false,
+							          message: err.message
+							          });
+						          });
                             }
                           })
                           .catch(err => {
@@ -873,13 +891,10 @@ order: [['createdAt', 'DESC']]
     if(req.body.vesting_period_date){
 
 	 var vesting_period_date = moment().format('LLLL'),
-	     startTime =  moment(vesting_period_date).add(5, 'm').unix(),
-  	     vestTime1   =  moment(vesting_period_date).add(10, 'm').unix(),
-         vestTime2   = moment(vesting_period_date).add(15, 'm').unix(),
-  	     vestTime3   = moment(vesting_period_date).add(20, 'm').unix(),
-         endTime = moment(vesting_period_date).add(25, 'm').unix(),
-         vestingUserAddress = '',
-         tokenValue = '';  
+	     cliff= moment(vesting_period_date).unix() ,
+	     startTime =  moment(vesting_period_date).unix(),
+         vestingDuration = 8, // 8 months 
+         interval= '420';// 420sec = 7 min 2592000 seconds = 30 days
      
      PrivelegeUser.update({
     		vesting_period_date:vesting_period_date
@@ -899,10 +914,9 @@ order: [['createdAt', 'DESC']]
          	
          	var newvest = new VestingTimes({
          		startTime,
-				vestTime1,
-				vestTime2,
-				vestTime3,
-				endTime
+				cliff,
+				vestingDuration,
+				interval,
          	})
 
          	VestingTimes.find({})
@@ -920,17 +934,16 @@ order: [['createdAt', 'DESC']]
 
 		 VestingTimes.update({
 			 	startTime,
-				vestTime1,
-				vestTime2,
-				vestTime3,
-				endTime
+				cliff,
+				vestingDuration,
+				interval,
 			 },{
 	    		where:{}
 	    	})
 		   .then(data1 => {
 			 if(data1){
 
-	  	    let duration = setVestigDuration(startTime,vestTime1,vestTime2,vestTime3,endTime);
+	  	    let duration = setVestigDuration(cliff,startTime,vestingDuration,interval);
 	  	   
 	  	   	res.status(200).json({
 	  			status:true,
@@ -943,6 +956,7 @@ order: [['createdAt', 'DESC']]
   	  		    message:'No data found'
 	  		 })
 		  	}
+		  	return null
 		  })
 	     .catch(err => {
 	    	res.status(500).json({

@@ -376,3 +376,54 @@ exports.sendEmail = function(username,email,password) {
     })
   }));
 }
+
+exports.releaseBonusTokens = function() {
+ console.log("running releaseBonusTokens");
+  return new Promise(((resolve, reject) => {
+      Bonus.findAll({
+          where: { BonusTokenSent : 0 }
+        })
+        .then(data => {
+            if (data.length) {
+            data.map(data1 => {
+              var bonusUserAddress = data1.BonusEthAddress,
+                  value = data1.BonusTokens;
+              const body = {
+                bonusUserAddress,
+                value
+              };
+              request.post({
+                  url: `${url}/releaseBonusTokens`,
+                  form: body
+                }, function(err, httpResponse, body) {
+                  if (err) {
+                   reject(err)
+                  } else {
+                    let result = JSON.parse(body);
+
+                    Bonus.update({
+                        BonusHash: result.data,
+                        BonusTokenSent:1
+                      }, {
+                        where: {
+                          id: data1.id
+                        }
+                      })
+                      .then(stat => {
+                         resolve({
+                           isValid: true
+                         });
+                      })
+                      .catch(err => {
+                      reject(err)
+                    });
+                  } 
+              });
+           });
+          }
+     })
+    .catch(err => {
+      reject(err)
+    });
+ }));
+}
