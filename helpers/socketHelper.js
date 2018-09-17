@@ -342,7 +342,7 @@ function phasevesting(){
              VestedTokens,
              RemainingTokens
           },{
-              where: { user_id: data1.User.id }
+              where: { [Op.and]: [{ user_id: data1.User.id },{ VestingPeriod: { [Op.gt]: 0 }}] }
             })
           .then(stat1 => {
               console.log("Pr User updated");
