@@ -258,26 +258,8 @@ function vestingReleaseToken(){
 
                   if(i + 1 === users.length ) {
 
-                    if(timesRun === 1){
                       phasevesting();
-                    } else if(timesRun === 2) {
-                      phasevesting();
-                    } else if(timesRun === 3) {
-                      phasevesting();
-                    } else if(timesRun === 4) {
-                      phasevesting();
-                    } else if(timesRun === 5) {
-                      phasevesting();
-                    } else if(timesRun === 6) {
-                      phasevesting();
-                    } else if(timesRun === 7) {
-                      phasevesting();
-                    } else if(timesRun === 8) {
-                      phasevesting();
-                    } else {
-                      return null;
-                    }
-                }
+                 }
               
                 })
                 .catch(err => {
