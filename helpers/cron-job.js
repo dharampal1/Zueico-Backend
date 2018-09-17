@@ -30,6 +30,7 @@ web3.setProvider(new web3.providers.HttpProvider(config.http_provider));
 var sale_contract = web3.eth.contract(sale_abi).at(config.sale_ContractAddress);
 var refund_contract = web3.eth.contract(refund_abi).at(config.refund_ContractAddress);
 var airdrop_contract = web3.eth.contract(airdrop_abi).at(config.airdrop_ContractAddress);
+var vest_contract = web3.eth.contract(vest_abi).at(config.veting_ContractAddress);
 
 module.exports = {
 

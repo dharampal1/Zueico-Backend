@@ -248,7 +248,7 @@ function vestingReleaseToken(){
               } else {
                 let result = JSON.parse(body);
                 if(result.status === true) { 
-
+                  
                 PrivelegeUser.update({
                   relHash:result.data
                 },{
@@ -290,13 +290,8 @@ function vestingReleaseToken(){
 
 function phasevesting(){
 
-   var timesRun = 0;
-   var interval = setInterval(function(){
-      timesRun += 1;
-      if(timesRun === 1){
-          clearInterval(interval);
-      }
-
+  setTimeout(function(){
+  
   var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
       
   vestTokens1.watch( (err, result) => {
@@ -316,9 +311,9 @@ function phasevesting(){
 
         if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
 
-         let RemainingTokens = data1.RemainingTokens - result.args.value.toNumber() / 10**18; 
-         let VestedTokens = parseInt(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
-       
+         let RemainingTokens =  parseFloat(data1.RemainingTokens) - result.args.value.toNumber() / 10**18; 
+         let VestedTokens =  parseFloat(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
+
          PrivelegeUser.update({
              VestingPeriod:data1.VestingPeriod - 1,
              VestedTokens,
