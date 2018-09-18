@@ -172,6 +172,7 @@ getReferralBonus(req, res, next) {
                           Name: data.Name,
                           Email: data.Email,
                           Phone: data.Phone,
+                          Country:data.Country,
                           BonusTokens: data.BonusTokens,
                           BonusEthAddress: data.EthAddress
                         });
