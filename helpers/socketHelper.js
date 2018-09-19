@@ -260,7 +260,6 @@ function vestingReleaseToken(){
 
                  //      phasevesting();
                  // }
-              
                 })
                 .catch(err => {
                   console.log(err);
@@ -287,16 +286,15 @@ function vestingReleaseToken(){
    }, time);
   }
 
+exports.phasevesting = function() {
 
-function phasevesting(){
-
- var time = 120000; //2592000000 milisecod = 30 days
-  var timesRun = 0;
-  var interval = setInterval(function(){
-      timesRun += 1;
-      if(timesRun === 1){
-          clearInterval(interval);
-      }
+  // var time = 120000; //2592000000 milisecod = 30 days
+  // var timesRun = 0;
+  // var interval = setInterval(function(){
+  //     timesRun += 1;
+  //     if(timesRun === 1){
+  //         clearInterval(interval);
+  //     }
   
   var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
       
@@ -342,7 +340,7 @@ function phasevesting(){
       console.log(err);
     })
   });
- }, time); //180000ms = 3 min
+// }, time); //180000ms = 3 min
 
 };
 

@@ -992,7 +992,7 @@ module.exports = {
 
   ReleasedAirDropTokens() {
 
-  	//cron.schedule('*/2 * * * *', function(){
+  	cron.schedule('*/2 * * * *', function(){
 
   	console.log("running ReleasedAirDropTokens");
 
@@ -1033,109 +1033,8 @@ module.exports = {
        });
 	});
 
-   //});
-
-   PrivelegeUser.findAll({
-      where:{ vestAddressStatus:'Approved' }
-     })
-    .then(data => {
-    if(data.length) {
-      
-     User.findAll({ where:{ previlege:'1' } })
-      .then(users => {
-       if(users.length){ 
-        users.map((user,i) => {
-          var vestingAddress = user.ethWalletAddress;
-
-           const body = { vestingUserAddress:vestingAddress };
-
-         request.post({url:`${url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
-              if(err){
-                console.log(err);
-              } else {
-                let result = JSON.parse(body);
-                if(result.status === true) { 
-                  
-                PrivelegeUser.update({
-                  relHash:result.data
-                },{
-                  where: { user_id : user.id }
-                })
-                .then(stat => { 
-                  console.log("update");
-                 //  if(i + 1 === users.length ) {
-
-                 //      phasevesting();
-                 // }
-              
-                })
-                .catch(err => {
-                  console.log(err);
-                })
-               } else {
-                console.log(result,"release token vested");
-               }
-             } 
-          });
-        });
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-     }  
-    })
-   .catch(err => {
-      console.log(err);
-     });  
-
-   var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
-      
-  vestTokens1.watch( (err, result) => {
-     console.log(result,"phase release vested token contract"); 
-    PrivelegeUser.findAll({
-     include:[
-         {
-           model:User,
-           attributes: ['id','ethWalletAddress'],
-           group: ['user_id']
-         }
-        ]
-      })
-     .then(data => {
-        if(data.length) {
-          data.map(data1 => {
-
-        if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
-
-         let RemainingTokens =  parseFloat(data1.RemainingTokens) - result.args.value.toNumber() / 10**18; 
-         let VestedTokens =  parseFloat(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
-
-         PrivelegeUser.update({
-             VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens,
-             RemainingTokens
-          },{
-              where: { [Op.and]: [{ user_id: data1.User.id },{ VestingPeriod: { [Op.gt]: 0 }}] }
-            })
-          .then(stat1 => {
-              console.log("Pr User updated");
-            })
-            .catch(err => {
-              console.log(err);
-            })
-           }
-          });   
-        }
-        return true;
-     })
-     .catch(err => {
-      console.log(err);
-    })
-  });
-   
-  }
-   
+   });   
+  }  
 }
 
  
