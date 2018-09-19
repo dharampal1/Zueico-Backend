@@ -992,7 +992,7 @@ module.exports = {
 
   ReleasedAirDropTokens() {
 
-  	cron.schedule('*/2 * * * *', function(){
+  	//cron.schedule('*/2 * * * *', function(){
 
   	console.log("running ReleasedAirDropTokens");
 
@@ -1033,7 +1033,52 @@ module.exports = {
        });
 	});
 
-   });
+   //});
+
+   var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
+      
+  vestTokens1.watch( (err, result) => {
+     console.log(result,"phase release vested token contract"); 
+    PrivelegeUser.findAll({
+     include:[
+         {
+           model:User,
+           attributes: ['id','ethWalletAddress'],
+           group: ['user_id']
+         }
+        ]
+      })
+     .then(data => {
+        if(data.length) {
+          data.map(data1 => {
+
+        if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
+
+         let RemainingTokens =  parseFloat(data1.RemainingTokens) - result.args.value.toNumber() / 10**18; 
+         let VestedTokens =  parseFloat(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
+
+         PrivelegeUser.update({
+             VestingPeriod:data1.VestingPeriod - 1,
+             VestedTokens,
+             RemainingTokens
+          },{
+              where: { [Op.and]: [{ user_id: data1.User.id },{ VestingPeriod: { [Op.gt]: 0 }}] }
+            })
+          .then(stat1 => {
+              console.log("Pr User updated");
+            })
+            .catch(err => {
+              console.log(err);
+            })
+           }
+          });   
+        }
+        return true;
+     })
+     .catch(err => {
+      console.log(err);
+    })
+  });
    
   }
    
