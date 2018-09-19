@@ -17,7 +17,7 @@ module.exports = {
     refund_ContractAddress :'0xba0619b9c8e99b1748a3462f4cb05b6b243db3a2',
     sale_ContractAddress: '0x3164afeadb754210c077b723fb2c32106cf0df65',
     token_ContractAddress :'0x6806a1fb780173323ad41902539e12214ed3d994',
-    veting_ContractAddress: '0xb67064cc815fb61a6bedbeb89d19da3f455afbf4',
+    veting_ContractAddress: '0x6d49edd8add6d1c5b83bfd0b24f7b72a9a8b8cca',
     airdrop_ContractAddress :'0x9c0a941196c7795cc9c42ce1b3fab5d1df4b6abd',
     http_provider:"https://zuenchain.net:8899"
 };
