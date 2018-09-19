@@ -1000,7 +1000,7 @@ module.exports = {
 	    
 	airdrop.watch( (err, result) => {
 
-    console.log(result,"ReleasedAirDropTokens"); 
+    //console.log(result,"ReleasedAirDropTokens"); 
 
   	 User.findAll({
         where: { [Op.and]: [{ previlege : '2' }, { airdrop_token_sent : 1 }]  }
@@ -1034,6 +1034,60 @@ module.exports = {
 	});
 
    //});
+
+   PrivelegeUser.findAll({
+      where:{ vestAddressStatus:'Approved' }
+     })
+    .then(data => {
+    if(data.length) {
+      
+     User.findAll({ where:{ previlege:'1' } })
+      .then(users => {
+       if(users.length){ 
+        users.map((user,i) => {
+          var vestingAddress = user.ethWalletAddress;
+
+           const body = { vestingUserAddress:vestingAddress };
+
+         request.post({url:`${url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+              if(err){
+                console.log(err);
+              } else {
+                let result = JSON.parse(body);
+                if(result.status === true) { 
+                  
+                PrivelegeUser.update({
+                  relHash:result.data
+                },{
+                  where: { user_id : user.id }
+                })
+                .then(stat => { 
+                  console.log("update");
+                 //  if(i + 1 === users.length ) {
+
+                 //      phasevesting();
+                 // }
+              
+                })
+                .catch(err => {
+                  console.log(err);
+                })
+               } else {
+                console.log(result,"release token vested");
+               }
+             } 
+          });
+        });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+     }  
+    })
+   .catch(err => {
+      console.log(err);
+     });  
 
    var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
       

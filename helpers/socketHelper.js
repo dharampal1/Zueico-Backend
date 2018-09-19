@@ -255,11 +255,11 @@ function vestingReleaseToken(){
                   where: { user_id : user.id }
                 })
                 .then(stat => { 
+                  console.log("update");
+                 //  if(i + 1 === users.length ) {
 
-                  if(i + 1 === users.length ) {
-
-                      phasevesting();
-                 }
+                 //      phasevesting();
+                 // }
               
                 })
                 .catch(err => {
