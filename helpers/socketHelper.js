@@ -287,7 +287,7 @@ function vestingReleaseToken(){
   }
 
 exports.phasevesting = function() {
-
+  console.log("called pahse vesting");
   // var time = 120000; //2592000000 milisecod = 30 days
   // var timesRun = 0;
   // var interval = setInterval(function(){
@@ -299,7 +299,11 @@ exports.phasevesting = function() {
   var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
       
   vestTokens1.watch( (err, result) => {
-     console.log(result,"phase release vested token contract"); 
+    if(err) {
+     console.log(err,"phase release vested error"); 
+    }
+    console.log(result,"phase release vested token contract"); 
+
     PrivelegeUser.findAll({
      include:[
          {
