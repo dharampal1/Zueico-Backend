@@ -298,7 +298,12 @@ exports.phasevesting = function() {
   
   var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
 
-  console.log(vestTokens1,"phase release vested token contract"); 
+  //console.log(vestTokens1,"phase release vested token contract"); 
+
+  var event = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'}, function(error, result) {
+    if (!error)
+        console.log(result,"bsbadk");
+  });
       
   vestTokens1.watch( (err, result) => {
     if(err) {
