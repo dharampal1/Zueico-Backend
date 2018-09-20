@@ -286,7 +286,7 @@ function vestingReleaseToken(){
    }, time);
   }
 
-exports.phasevesting = function() {
+function phasevesting() {
 
   console.log("called pahse vesting");
 
