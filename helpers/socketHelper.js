@@ -288,7 +288,7 @@ function vestingReleaseToken(){
 
 function phasevesting() {
 
-  console.log("called pahse vesting");
+  console.log("called phase vesting");
 
   var time = 120000; //2592000000 milisecod = 30 days
   var timesRun = 0;
@@ -298,24 +298,13 @@ function phasevesting() {
           clearInterval(interval);
       }
   
-  //var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
-
-  //console.log(vestTokens1,"phase release vested token contract"); 
-
-  var event = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'}, function(error, result) {
-    
-     if(error) {
-       console.log(err,"phase release vested error"); 
-     }
-        console.log("inside the event pahse vesting");
-
-        console.log(result,"event");
+  var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
       
-  // vestTokens1.watch( (err, result) => {
-  //   if(err) {
-  //    console.log(err,"phase release vested error"); 
-  //   }
-    //console.log(result,"phase release vested token contract"); 
+  vestTokens1.watch( (err, result) => {
+    if(err) {
+     console.log(err,"phase release vested error"); 
+    }
+    console.log(result,"phase release vested token contract"); 
 
   PrivelegeUser.findAll({
    include:[
