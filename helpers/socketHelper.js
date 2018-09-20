@@ -309,7 +309,7 @@ function phasevesting() {
      }
         console.log("inside the event pahse vesting");
 
-        console.log(result,"bsbadk");
+        console.log(result,"event");
       
   // vestTokens1.watch( (err, result) => {
   //   if(err) {
@@ -339,7 +339,7 @@ function phasevesting() {
            VestingPeriod:data1.VestingPeriod - 1,
            VestedTokens,
            RemainingTokens,
-           relHash:""
+           relHash:null
         },{
             where: { [Op.and]: [{ user_id: data1.User.id },{ VestingPeriod: { [Op.gt]: 0 }}] }
           })
