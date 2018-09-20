@@ -303,13 +303,14 @@ exports.phasevesting = function() {
   var event = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'}, function(error, result) {
     if (!error)
         console.log(result,"bsbadk");
+      console.log(result.args.value.toNumber() / 10**18,"token");
   });
       
   vestTokens1.watch( (err, result) => {
     if(err) {
      console.log(err,"phase release vested error"); 
     }
-    console.log(result,"phase release vested token contract"); 
+    //console.log(result,"phase release vested token contract"); 
 
     PrivelegeUser.findAll({
      include:[
