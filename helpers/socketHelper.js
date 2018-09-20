@@ -256,10 +256,10 @@ function vestingReleaseToken(){
                 })
                 .then(stat => { 
                   console.log("update");
-                 //  if(i + 1 === users.length ) {
+                  if(i + 1 === users.length ) {
 
-                 //      phasevesting();
-                 // }
+                      phasevesting();
+                 }
                 })
                 .catch(err => {
                   console.log(err);
@@ -287,72 +287,78 @@ function vestingReleaseToken(){
   }
 
 exports.phasevesting = function() {
+
   console.log("called pahse vesting");
-  // var time = 120000; //2592000000 milisecod = 30 days
-  // var timesRun = 0;
-  // var interval = setInterval(function(){
-  //     timesRun += 1;
-  //     if(timesRun === 1){
-  //         clearInterval(interval);
-  //     }
+
+  var time = 120000; //2592000000 milisecod = 30 days
+  var timesRun = 0;
+  var interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+          clearInterval(interval);
+      }
   
-  var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
+  //var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
 
   //console.log(vestTokens1,"phase release vested token contract"); 
 
   var event = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'}, function(error, result) {
-    if (!error)
+    
+     if(error) {
+       console.log(err,"phase release vested error"); 
+     }
+        console.log("inside the event pahse vesting");
+
         console.log(result,"bsbadk");
-      console.log(result.args.value.toNumber() / 10**18,"token");
-  });
       
-  vestTokens1.watch( (err, result) => {
-    if(err) {
-     console.log(err,"phase release vested error"); 
-    }
+  // vestTokens1.watch( (err, result) => {
+  //   if(err) {
+  //    console.log(err,"phase release vested error"); 
+  //   }
     //console.log(result,"phase release vested token contract"); 
 
-    PrivelegeUser.findAll({
-     include:[
-         {
-           model:User,
-           attributes: ['id','ethWalletAddress'],
-           group: ['user_id']
-         }
-        ]
-      })
-     .then(data => {
-        if(data.length) {
-          data.map(data1 => {
-
-        if(result.args.vestedTokensAddress === data1.User.ethWalletAddress) {
-
-         let RemainingTokens =  parseFloat(data1.RemainingTokens) - result.args.value.toNumber() / 10**18; 
-         let VestedTokens =  parseFloat(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
-
-         PrivelegeUser.update({
-             VestingPeriod:data1.VestingPeriod - 1,
-             VestedTokens,
-             RemainingTokens
-          },{
-              where: { [Op.and]: [{ user_id: data1.User.id },{ VestingPeriod: { [Op.gt]: 0 }}] }
-            })
-          .then(stat1 => {
-              console.log("Pr User updated");
-            })
-            .catch(err => {
-              console.log(err);
-            })
-           }
-          });   
-        }
-        return true;
-     })
-     .catch(err => {
-      console.log(err);
+  PrivelegeUser.findAll({
+   include:[
+       {
+         model:User,
+         attributes: ['id','ethWalletAddress'],
+         group: ['user_id']
+       }
+      ]
     })
-  });
-// }, time); //180000ms = 3 min
+   .then(data => {
+      if(data.length) {
+        data.map(data1 => {
+
+      if(result.args.vestedTokensAddress === data1.User.ethWalletAddress && result.transactionHash === data1.relHash) {
+
+       let RemainingTokens =  parseFloat(data1.RemainingTokens) - result.args.value.toNumber() / 10**18; 
+       let VestedTokens =  parseFloat(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
+
+       PrivelegeUser.update({
+           VestingPeriod:data1.VestingPeriod - 1,
+           VestedTokens,
+           RemainingTokens,
+           relHash:""
+        },{
+            where: { [Op.and]: [{ user_id: data1.User.id },{ VestingPeriod: { [Op.gt]: 0 }}] }
+          })
+        .then(stat1 => {
+            console.log("Pr User updated");
+          })
+          .catch(err => {
+            console.log(err);
+          })
+         }
+        });   
+      }
+      return true;
+   })
+   .catch(err => {
+    console.log(err);
+  })
+});
+}, time); //180000ms = 3 min
 
 };
 

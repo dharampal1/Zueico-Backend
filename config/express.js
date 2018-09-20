@@ -27,9 +27,9 @@ import {
   checkTxHashBonus
 } from '../helpers/cron-job';
 
-import {
-  phasevesting
-} from '../helpers/socketHelper';
+// import {
+//   phasevesting
+// } from '../helpers/socketHelper';
 
 
 const initApp = function () {
@@ -67,7 +67,6 @@ const initApp = function () {
     ReleasedAirDropTokens();
     checkTxHashReferralBonus();
     checkTxHashBonus();
-    phasevesting();
   
   // Setup routes
   routes(app);
