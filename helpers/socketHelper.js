@@ -168,6 +168,7 @@ function vestingTokenAddress() {
                     if(i + 1 === users.length){
 
                       vestingReleaseToken();
+                      addVestingAddress();
                     }
                       return true;
                     } else {
@@ -262,7 +263,7 @@ function vestingReleaseToken(){
                   if(i + 1 === users.length ) {
 
                       phasevesting();
-                      addVestingAddress();
+                      
                  }
                 })
                 .catch(err => {
@@ -352,7 +353,7 @@ function phasevesting() {
 
 
 function addVestingAddress() {
-  cron.schedule('*/1 * * * *', function(){
+ cron.schedule('*/1 * * * *', function(){
  console.log("running vestaddress");
  PrivelegeUser.findAll({
     include:[
@@ -426,6 +427,7 @@ function addVestingAddress() {
       });
     });
     } else {
+     
       return false;
     }
     return null;
