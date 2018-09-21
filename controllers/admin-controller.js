@@ -308,9 +308,10 @@ getReferralBonus(req, res, next) {
 		    })
 		    .then(puser => {
 		     if(puser){
-		     	if( i + 1 === jsonObj.length){
-		          return res.send("ok")
-		      }
+		     	// if( i + 1 === jsonObj.length){
+		      //     return res.send("ok")
+		      // }
+		      return null;
 		     } else {
 		     	
 		     	hashPassword(data.Password)
