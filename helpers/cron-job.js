@@ -61,7 +61,7 @@ module.exports = {
               } else {
                 let result = JSON.parse(body);
 
-                console.log(result,"khvfjh");
+                console.log(result.data,"khvfjh");
 
              if(user.User.ethWalletAddress && result.data === 'Success'){
 
