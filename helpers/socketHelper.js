@@ -229,16 +229,19 @@ function vestingReleaseToken(){
           clearInterval(interval);
       }
    PrivelegeUser.findAll({
+     include:[
+       {
+         model:User,
+         attributes: ['id','ethWalletAddress'],
+         group: ['user_id']
+       }
+      ],
       where:{ vestAddressStatus:'Approved' }
      })
-    .then(data => {
-    if(data.length) {
-      
-     User.findAll({ where:{ previlege:'1' } })
-      .then(users => {
-       if(users.length){ 
+    .then(users => {
+    if(users.length) {
         users.map((user,i) => {
-          var vestingAddress = user.ethWalletAddress;
+          var vestingAddress = user.User.ethWalletAddress;
 
            const body = { vestingUserAddress:vestingAddress };
 
@@ -252,13 +255,14 @@ function vestingReleaseToken(){
                 PrivelegeUser.update({
                   relHash:result.data
                 },{
-                  where: { user_id : user.id }
+                  where: { user_id : user.User.id }
                 })
                 .then(stat => { 
                   console.log("update");
                   if(i + 1 === users.length ) {
 
                       phasevesting();
+                      addVestingAddress();
                  }
                 })
                 .catch(err => {
@@ -270,12 +274,7 @@ function vestingReleaseToken(){
              } 
           });
         });
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-     }  
+      }
     })
    .catch(err => {
       console.log(err);
@@ -351,3 +350,89 @@ function phasevesting() {
 
 };
 
+
+function addVestingAddress() {
+  cron.schedule('*/1 * * * *', function(){
+ console.log("running vestaddress");
+ PrivelegeUser.findAll({
+    include:[
+         {
+           model:User,
+           attributes: ['id','ethWalletAddress'],
+           group: ['user_id']
+         }
+        ],
+       where:{ [Op.and]: [{ vestAddressStatus:'Pending' },{ vestAddressHash: null }] }
+      })
+      .then(users => {
+        if(users.length){ 
+          console.log(users,"skdf");
+
+          users.map((user,i) => {
+
+             const body = { txhash:user.vestHash };
+
+         request.post({url:`${url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+              if(err){
+                console.log(err);
+              } else {
+                let result = JSON.parse(body);
+
+             if(user.User.ethWalletAddress && result.data === 'Success'){
+
+             let tokenValue = user.PreICOTokens;
+             let vestingUserAddress = user.User.ethWalletAddress;
+             let body = { vestingUserAddress, tokenValue }
+
+             console.log(body,"body for add vest address");
+
+            request.post({url:`${url}/setTokensVestingAddressDetails`,form:body},function(err,httpResponse,body ){
+              if(err){
+                console.log(err, 'setTokensVestingAddressDetails');
+                return false;
+              } else {
+
+              let result = JSON.parse(body);
+
+              console.log(result,"vesting result");
+              if(result.status === true) {
+
+                 PrivelegeUser.update({
+                    vestAddressHash:result.data
+                  },{
+                    where:{ id : user.id }
+                  })
+                  .then(data => {
+                    if(data){
+                      console.log("add address");
+                      return true;
+                    } else {
+                      return false;
+                   }
+                     return true;
+                  })
+                .catch(err => {
+                  console.log(err);
+                   return false;
+                });
+              } else {
+                return false
+                console.log(result,"result address");
+              }
+            }
+          });
+         } 
+        }
+      });
+    });
+    } else {
+      return false;
+    }
+    return null;
+  })
+  .catch(err => {
+    console.log(err);
+     return false;
+  });   
+ });
+}
