@@ -56,7 +56,7 @@ module.exports = {
              const body = { txhash:user.vestHash };
              console.log(body,"khefjh");
 
-         request.post({url:`${url}/checkTxHash`, form:body },function(err,httpResponse,body ){
+         request.post({url:`${api_url}/checkTxHash`, form:body },function(err,httpResponse,body ){
               if(err){
                 console.log(err);
               } else {
@@ -72,7 +72,7 @@ module.exports = {
 
              console.log(body,"body for add vest address");
 
-            request.post({url:`${url}/setTokensVestingAddressDetails`,form:body},function(err,httpResponse,body ){
+            request.post({url:`${api_url}/setTokensVestingAddressDetails`,form:body},function(err,httpResponse,body ){
               if(err){
                 console.log(err, 'setTokensVestingAddressDetails');
                 return false;
