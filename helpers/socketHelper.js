@@ -290,13 +290,36 @@ function phasevesting() {
 
   console.log("called phase vesting");
 
-  var time = 120000; //2592000000 milisecod = 30 days
+  var time = 80000; 
   var timesRun = 0;
   var interval = setInterval(function(){
       timesRun += 1;
       if(timesRun === 1){
           clearInterval(interval);
       }
+
+    PrivelegeUser.findAll({})
+      .then(data => {
+        if (data.length) {
+          data.map(data1 => {
+
+            PrivelegeUser.update({
+                VestingPeriod: data1.VestingPeriod - 1,
+              }, {
+                where: { [Op.and]: [{ id: data1.id },{ VestingPeriod: { [Op.gt]: 0 }}] }
+              })
+              .then(stat1 => {
+                console.log("VestingPeriod updated");
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err, "update vesting");
+    });
   
   var vestTokens1 = vest_contract.VestedTokens({},{fromBlock: "2400000", toBlock: 'latest'});
       
@@ -304,7 +327,7 @@ function phasevesting() {
     if(err) {
      console.log(err,"phase release vested error"); 
     }
-    console.log(result,"phase release vested token contract"); 
+    //console.log(result,"phase release vested token contract"); 
 
   PrivelegeUser.findAll({
    include:[
@@ -325,11 +348,10 @@ function phasevesting() {
        let VestedTokens =  parseFloat(data1.VestedTokens) + result.args.value.toNumber() / 10**18;
 
        PrivelegeUser.update({
-           VestingPeriod:data1.VestingPeriod - 1,
            VestedTokens,
            RemainingTokens,
            relHash:null
-        },{
+         },{
             where: { [Op.and]: [{ user_id: data1.User.id },{ VestingPeriod: { [Op.gt]: 0 }}] }
           })
         .then(stat1 => {
