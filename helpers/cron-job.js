@@ -54,6 +54,7 @@ module.exports = {
           users.map((user,i) => {
 
              const body = { txhash:user.vestHash };
+             console.log(body,"khefjh");
 
          request.post({url:`${url}/checkTxHash`, form:body },function(err,httpResponse,body ){
               if(err){
