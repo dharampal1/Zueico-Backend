@@ -35,8 +35,9 @@ var vest_contract = web3.eth.contract(vest_abi).at(config.veting_ContractAddress
 module.exports = {
 
 	testFunction(){
-
+	var time = 1 ;
 	var task = cron.schedule('*/30 * * * * *', function(){
+		  time = time + 1;
 		  PrivelegeUser.findAll({
      include:[
        {
@@ -82,17 +83,15 @@ module.exports = {
              } 
           });
         });
-      } else {
-      	console.log("stopping");
-      	task.stop();
-      }
+      } 
     })
    .catch(err => {
       console.log(err);
      });  
 	});
-	console.log("starind");
-	task.start();
+	 if(time === 8) {
+	 	task.stop()
+	 }
 	},
 	
    checkTxHashReferralBonus(){
