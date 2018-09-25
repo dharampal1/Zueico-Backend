@@ -56,7 +56,7 @@ module.exports = {
 
              console.log(body,"body for add vest address");
 
-            request.post({url:`${url}/setTokensVestingAddressDetails`,form:body},function(err,httpResponse,body ){
+            request.post({url:`${get_url}/setTokensVestingAddressDetails`,form:body},function(err,httpResponse,body ){
               if(err){
                   return res.status(500).json({
                     status:false,
@@ -369,7 +369,7 @@ module.exports = {
 
            const body = { vestingUserAddress:vestingAddress };
 
-         request.post({url:`${url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+         request.post({url:`${get_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
               if(err){
                 console.log(err);
               } else {
