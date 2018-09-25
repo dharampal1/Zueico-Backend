@@ -33,17 +33,6 @@ var airdrop_contract = web3.eth.contract(airdrop_abi).at(config.airdrop_Contract
 var vest_contract = web3.eth.contract(vest_abi).at(config.veting_ContractAddress);
 
 module.exports = {
-
-	testFunction(){
-	var time = 1 ;
-	var task = cron.schedule('*/30 * * * * *', function(){
-		  time = time + 1;
-		 console.log("running test", time);
-	});
-	 if(time === 8) {
-	 	task.stop()
-	 }
-	},
 	
    checkTxHashReferralBonus(){
 	cron.schedule('*/1 * * * *', function(){

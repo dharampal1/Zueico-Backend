@@ -10,7 +10,7 @@ import cron from 'node-cron';
 import request from 'request';
 
 import { getCurrentIco } from './helpers/socketHelper';
-import { getRefund } from './helpers/cron-job'
+//import { getRefund } from './helpers/cron-job'
 
 // Create server
 const app = express();
@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
 
   getCurrentStats(socket);
   getCurrentIco(socket);
-  getRefund(socket);
+  // getRefund(socket);
   
   socket.on("disconnect", () => {
     console.log("Client disconnected");
