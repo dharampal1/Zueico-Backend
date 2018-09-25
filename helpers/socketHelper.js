@@ -281,7 +281,7 @@ function vestingReleaseToken(){
       console.log(err);
      });  
 
-    time = time + 60000; 
+    time = time + 120000; 
 
    }, time);
   }
@@ -375,8 +375,11 @@ function phasevesting() {
 
 
 function addVestingAddress() {
- cron.schedule('*/1 * * * *', function(){
+
+ cron.schedule('*/30 * * * * *', function(){
+
  console.log("running vestaddress");
+
  PrivelegeUser.findAll({
     include:[
          {
@@ -393,15 +396,7 @@ function addVestingAddress() {
 
           users.map((user,i) => {
 
-             const body = { txhash:user.vestHash };
-
-         request.post({url:`${url}/checkTxHash`, form:body },function(err,httpResponse,body ){
-              if(err){
-                console.log(err);
-              } else {
-                let result = JSON.parse(body);
-
-             if(user.User.ethWalletAddress && result.data === 'Success'){
+            if(user.User.ethWalletAddress && user.vestStatus === 'Approved'){
 
              let tokenValue = user.PreICOTokens;
              let vestingUserAddress = user.User.ethWalletAddress;
@@ -445,8 +440,6 @@ function addVestingAddress() {
             }
           });
          } 
-        }
-      });
     });
     } else {
      
