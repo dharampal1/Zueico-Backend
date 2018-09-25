@@ -38,56 +38,7 @@ module.exports = {
 	var time = 1 ;
 	var task = cron.schedule('*/30 * * * * *', function(){
 		  time = time + 1;
-		  PrivelegeUser.findAll({
-     include:[
-       {
-         model:User,
-         attributes: ['id','ethWalletAddress'],
-         group: ['user_id']
-       }
-      ],
-      where:{ vestAddressStatus:'Approved' }
-     })
-    .then(users => {
-    if(users.length) {
-        users.map((user,i) => {
-          var vestingAddress = user.User.ethWalletAddress;
-
-           const body = { vestingUserAddress:vestingAddress };
-
-         request.post({url:`${url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
-              if(err){
-                console.log(err);
-              } else {
-                let result = JSON.parse(body);
-                if(result.status === true) { 
-                  
-                PrivelegeUser.update({
-                  relHash:result.data
-                },{
-                  where: { user_id : user.User.id }
-                })
-                .then(stat => { 
-                  console.log("update");
-                  if(i + 1 === users.length ) {
-
-                      console.log("svhdfj");                      
-                 }
-                })
-                .catch(err => {
-                  console.log(err);
-                })
-               } else {
-                console.log(result,"release token vested");
-               }
-             } 
-          });
-        });
-      } 
-    })
-   .catch(err => {
-      console.log(err);
-     });  
+		 console.log("running test", time);
 	});
 	 if(time === 8) {
 	 	task.stop()
