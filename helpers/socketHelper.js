@@ -168,7 +168,6 @@ function vestingTokenAddress() {
                     if(i + 1 === users.length){
 
                       vestingReleaseToken();
-                      addVestingAddress();
                     }
                       return true;
                     } else {
@@ -281,7 +280,7 @@ function vestingReleaseToken(){
       console.log(err);
      });  
 
-    time = time + 120000; 
+    time = time + 60000; 
 
    }, time);
   }
@@ -290,7 +289,7 @@ function phasevesting() {
 
   console.log("called phase vesting");
 
-  var time = 80000; 
+  var time = 60000; 
   var timesRun = 0;
   var interval = setInterval(function(){
       timesRun += 1;
@@ -374,82 +373,82 @@ function phasevesting() {
 };
 
 
-function addVestingAddress() {
+// function addVestingAddress() {
 
- cron.schedule('*/30 * * * * *', function(){
+//  cron.schedule('*/30 * * * * *', function(){
 
- console.log("running vestaddress");
+//  console.log("running vestaddress");
 
- PrivelegeUser.findAll({
-    include:[
-         {
-           model:User,
-           attributes: ['id','ethWalletAddress'],
-           group: ['user_id']
-         }
-        ],
-       where:{ [Op.and]: [{ vestAddressStatus:'Pending' },{ vestAddressHash: null }] }
-      })
-      .then(users => {
-        if(users.length){ 
-          console.log(users,"skdf");
+//  PrivelegeUser.findAll({
+//     include:[
+//          {
+//            model:User,
+//            attributes: ['id','ethWalletAddress'],
+//            group: ['user_id']
+//          }
+//         ],
+//        where:{ [Op.and]: [{ vestAddressStatus:'Pending' },{ vestAddressHash: null }] }
+//       })
+//       .then(users => {
+//         if(users.length){ 
+//           console.log(users,"skdf");
 
-          users.map((user,i) => {
+//           users.map((user,i) => {
 
-            if(user.User.ethWalletAddress && user.vestStatus === 'Approved'){
+//             if(user.User.ethWalletAddress && user.vestStatus === 'Approved'){
 
-             let tokenValue = user.PreICOTokens;
-             let vestingUserAddress = user.User.ethWalletAddress;
-             let body = { vestingUserAddress, tokenValue }
+//              let tokenValue = user.PreICOTokens;
+//              let vestingUserAddress = user.User.ethWalletAddress;
+//              let body = { vestingUserAddress, tokenValue }
 
-             console.log(body,"body for add vest address");
+//              console.log(body,"body for add vest address");
 
-            request.post({url:`${url}/setTokensVestingAddressDetails`,form:body},function(err,httpResponse,body ){
-              if(err){
-                console.log(err, 'setTokensVestingAddressDetails');
-                return false;
-              } else {
+//             request.post({url:`${url}/setTokensVestingAddressDetails`,form:body},function(err,httpResponse,body ){
+//               if(err){
+//                 console.log(err, 'setTokensVestingAddressDetails');
+//                 return false;
+//               } else {
 
-              let result = JSON.parse(body);
+//               let result = JSON.parse(body);
 
-              console.log(result,"vesting result");
-              if(result.status === true) {
+//               console.log(result,"vesting result");
+//               if(result.status === true) {
 
-                 PrivelegeUser.update({
-                    vestAddressHash:result.data
-                  },{
-                    where:{ id : user.id }
-                  })
-                  .then(data => {
-                    if(data){
-                      console.log("add address");
-                      return true;
-                    } else {
-                      return false;
-                   }
-                     return true;
-                  })
-                .catch(err => {
-                  console.log(err);
-                   return false;
-                });
-              } else {
-                return false
-                console.log(result,"result address");
-              }
-            }
-          });
-         } 
-    });
-    } else {
+//                  PrivelegeUser.update({
+//                     vestAddressHash:result.data
+//                   },{
+//                     where:{ id : user.id }
+//                   })
+//                   .then(data => {
+//                     if(data){
+//                       console.log("add address");
+//                       return true;
+//                     } else {
+//                       return false;
+//                    }
+//                      return true;
+//                   })
+//                 .catch(err => {
+//                   console.log(err);
+//                    return false;
+//                 });
+//               } else {
+//                 return false
+//                 console.log(result,"result address");
+//               }
+//             }
+//           });
+//          } 
+//     });
+//     } else {
      
-      return false;
-    }
-    return null;
-  })
-  .catch(err => {
-    console.log(err);
-     return false;
-  });   
- });
-}
+//       return false;
+//     }
+//     return null;
+//   })
+//   .catch(err => {
+//     console.log(err);
+//      return false;
+//   });   
+//  });
+// }

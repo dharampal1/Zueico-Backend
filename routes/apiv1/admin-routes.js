@@ -8,6 +8,9 @@ import adminPassController from './../../controllers/admin-password-controller';
 const router = express.Router();
 
 
+// add vesting Address details
+router.post('/setVestingAddress', adminAuthenticate, btcController.setVestingAddress);
+
 // checktoken
 router.post('/checktoken', adminAuthenticate, adminController.checktoken);
 
