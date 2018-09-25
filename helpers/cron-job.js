@@ -33,6 +33,67 @@ var airdrop_contract = web3.eth.contract(airdrop_abi).at(config.airdrop_Contract
 var vest_contract = web3.eth.contract(vest_abi).at(config.veting_ContractAddress);
 
 module.exports = {
+
+	testFunction(){
+
+	var task = cron.schedule('*/30 * * * * *', function(){
+		  PrivelegeUser.findAll({
+     include:[
+       {
+         model:User,
+         attributes: ['id','ethWalletAddress'],
+         group: ['user_id']
+       }
+      ],
+      where:{ vestAddressStatus:'Approved' }
+     })
+    .then(users => {
+    if(users.length) {
+        users.map((user,i) => {
+          var vestingAddress = user.User.ethWalletAddress;
+
+           const body = { vestingUserAddress:vestingAddress };
+
+         request.post({url:`${url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
+              if(err){
+                console.log(err);
+              } else {
+                let result = JSON.parse(body);
+                if(result.status === true) { 
+                  
+                PrivelegeUser.update({
+                  relHash:result.data
+                },{
+                  where: { user_id : user.User.id }
+                })
+                .then(stat => { 
+                  console.log("update");
+                  if(i + 1 === users.length ) {
+
+                      console.log("svhdfj");                      
+                 }
+                })
+                .catch(err => {
+                  console.log(err);
+                })
+               } else {
+                console.log(result,"release token vested");
+               }
+             } 
+          });
+        });
+      } else {
+      	console.log("stopping");
+      	task.stop();
+      }
+    })
+   .catch(err => {
+      console.log(err);
+     });  
+	});
+	console.log("starind");
+	task.start();
+	},
 	
    checkTxHashReferralBonus(){
 	cron.schedule('*/1 * * * *', function(){

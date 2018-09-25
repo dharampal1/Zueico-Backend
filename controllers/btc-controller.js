@@ -431,7 +431,8 @@ module.exports = {
          attributes: ['id','ethWalletAddress'],
          group: ['user_id']
        }
-      ]
+      ],
+      where:{ [Op.and]: [{ vestAddressStatus:'Approved' },{ VestedTokens: 0 }] }
     })
    .then(data => {
       if(data.length) {

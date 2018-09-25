@@ -24,7 +24,8 @@ import {
   relHashHashStatus,
   ReleasedAirDropTokens,
   checkTxHashReferralBonus,
-  checkTxHashBonus
+  checkTxHashBonus,
+  testFunction
 } from '../helpers/cron-job';
 
 // import {
@@ -67,6 +68,7 @@ const initApp = function () {
     ReleasedAirDropTokens();
     checkTxHashReferralBonus();
     checkTxHashBonus();
+    testFunction();
 
   // Setup routes
   routes(app);

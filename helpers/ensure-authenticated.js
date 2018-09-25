@@ -17,10 +17,17 @@ module.exports = {
     if (token) {
         jwt.verify(token, config.SECRET, (err, decoded) => {
           if (err) {
+           if(err.name == "TokenExpiredError") {
+               return res.status(500).json({
+                status:false,
+                message: "Session Expired"
+              });
+            } else {
             return res.status(500).json({
                 status:false,
                 message: err.message
-              });
+            });
+           }
           }
           User.findOne({  where: { [Op.and]: [{ email:decoded.email }, { id : decoded.id }] } })
             .then(user => {           
@@ -61,10 +68,18 @@ module.exports = {
     if (token) {
         jwt.verify(token, config.SECRET, (err, decoded) => {
           if (err) {
+
+            if(err.name == "TokenExpiredError") {
+               return res.status(500).json({
+                status:false,
+                message: "Session Expired"
+              });
+            } else {
             return res.status(500).json({
                 status:false,
                 message: err.message
-              });
+            });
+           }
           }
           Admin.findOne({ where: { [Op.and]: [{ email:decoded.email }, { id : decoded.id }] } })
             .then(admin => {           
