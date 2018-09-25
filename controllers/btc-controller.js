@@ -11,7 +11,6 @@ import {
 } from '../helpers/requestHelper';
 import config from './../config/environment';
 
-import vest_abi from './../config/vest_abi.json'
 
 var veting_ContractAddress = config.veting_ContractAddress;
 var Web3 = require("web3");
