@@ -10,7 +10,9 @@ import {
   checkBlank
 } from '../helpers/requestHelper';
 import config from './../config/environment';
+import Sequelize from 'sequelize';
 
+const Op = Sequelize.Op;
 
 var veting_ContractAddress = config.veting_ContractAddress;
 var Web3 = require("web3");
