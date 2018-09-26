@@ -164,9 +164,7 @@ function vestingTokenAddress() {
                   })
                   .then(data => {
                     if(data){
-
                     if(i + 1 === users.length){
-
                       vestingReleaseToken();
                       addVestingAddress();
                     }
@@ -259,12 +257,10 @@ function vestingReleaseToken(){
                   where: { user_id : user.User.id }
                 })
                 .then(stat => { 
-                  console.log("update");
                   if(i + 1 === users.length ) {
-
+                      console.log("update");
                       phasevesting();
-                      
-                 }
+                  }
                 })
                 .catch(err => {
                   console.log(err);
