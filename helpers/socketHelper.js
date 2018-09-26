@@ -375,8 +375,11 @@ function phasevesting() {
 
 
 function addVestingAddress() {
+
  cron.schedule('*/1 * * * *', function(){
+
  console.log("running vestaddress");
+
  PrivelegeUser.findAll({
     include:[
          {
@@ -415,7 +418,7 @@ function addVestingAddress() {
 
               let result = JSON.parse(body);
 
-              console.log(result,"vesting result");
+              console.log(result,"vesting result cron");
               if(result.status === true) {
 
                  PrivelegeUser.update({

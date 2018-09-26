@@ -808,7 +808,7 @@ module.exports = {
 
   getRefund(socket) {
 	  cron.schedule('*/2 * * * *', function(){
-	     console.log("running refund");
+	     console.log("running refund not run");
 
 	 var refund = refund_contract.RefundsEnabled({}, {fromBlock: "2400000", toBlock: 'latest'});
 	 var receivedTokensEvent = refund_contract.Refunded({},{fromBlock: "2400000", toBlock: 'latest'});
@@ -1040,7 +1040,7 @@ module.exports = {
 function refundCron(){
 
 	cron.schedule('*/2 * * * *', function(){
-	     console.log("running refund");
+	     console.log("running refund cron");
 
 	   Refund.findAll({
 	     	where:{ refStatus:'Pending' }
