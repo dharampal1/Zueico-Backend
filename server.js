@@ -60,9 +60,11 @@ function  getCurrentStats(socket) {
         if(err){
            console.log(err);
         } else {
-
             var pasedCoin=JSON.parse(body);
+            console.log(typeof pasedCoin.ETH , typeof pasedCoin );
 
+            if(typeof pasedCoin !== "undefined"){
+          
             var btc = pasedCoin.ETH.BTC,
                 usd = pasedCoin.ETH.USD,
 
@@ -75,6 +77,7 @@ function  getCurrentStats(socket) {
                   usdvalue:usdvalue.toString()
                 };
                socket.emit("currentPrice", data); // Emitting a new stats.
+             }
            }   
       });
    });
