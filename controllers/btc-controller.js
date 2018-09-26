@@ -372,7 +372,7 @@ module.exports = {
            RemainingTokens,
            relHash:null
          },{
-            where: { [Op.and]: [{ user_id: data1.User.id },{ VestingPeriod: { [Op.gt]: 0 }}] }
+            where: { [Op.and]: [{ user_id: data1.User.id }] }
           })
         .then(stat1 => {
             console.log("Pr User updated");
