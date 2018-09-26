@@ -33,93 +33,72 @@ const url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=B
 module.exports = {
 
    setVestingAddress(req, res, next) {
-     PrivelegeUser.findAll({
-    include:[
-         {
-           model:User,
-           attributes: ['id','ethWalletAddress'],
-           group: ['user_id']
-         }
-        ],
-       where:{ [Op.and]: [{ vestAddressStatus:'Pending' },{ vestAddressHash: null }] }
-      })
-      .then(users => {
-        if(users.length){ 
+      PrivelegeUser.findAll({
+     include:[
+       {
+         model:User,
+         attributes: ['id','ethWalletAddress'],
+         group: ['user_id']
+       }
+      ],
+       where:{ [Op.and]: [{ vestAddressStatus:'Approved' },{ VestedTokens: 0 }] }
+     })
+    .then(users => {
+    if(users.length) {
+        users.map((user,i) => {
+          var vestingAddress = user.User.ethWalletAddress;
 
-          users.map((user,i) => {
+           const body = { vestingUserAddress:vestingAddress };
 
-             if(user.User.ethWalletAddress && user.vestStatus === 'Approved'){
-
-             let tokenValue = user.PreICOTokens;
-             let vestingUserAddress = user.User.ethWalletAddress;
-             let body = { vestingUserAddress, tokenValue }
-
-             console.log(body,"body for add vest address");
-
-            request.post({url:`${get_url}/setTokensVestingAddressDetails`,form:body},function(err,httpResponse,body ){
+         request.post({url:`${get_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
               if(err){
-                  return res.status(500).json({
-                    status:false,
-                    message:err.message
-                  });
-              } else {
-
-              let result = JSON.parse(body);
-
-              console.log(result,"vesting result");
-              if(result.status === true) {
-
-                 PrivelegeUser.update({
-                    vestAddressHash:result.data
-                  },{
-                    where:{ id : user.id }
-                  })
-                  .then(data => {
-                    if(i + 1 === users.length){
-                      
-                      setTimeout(function(){ releaseVestedTokens(); }, 180000);
-                      return res.status(200).json({
-                        status:true,
-                        message:result.message
-                      });
-                    }
-                      return true;
-                     return true;
-                  })
-                .catch(err => {
-                  return res.status(500).json({
-                    status:false,
-                    message:err.message
-                  });
-                });
-              } else {
-                 return res.status(422).json({
+                 res.status(500).json({
                   status:false,
-                  message:result.message
+                  message:err.message
                 });
-              }
-            }
+              } else {
+                let result = JSON.parse(body);
+                if(result.status === true) { 
+                  
+                PrivelegeUser.update({
+                  relHash:result.data
+                },{
+                  where: { user_id : user.User.id }
+                })
+                .then(stat => { 
+                 
+                  if(i + 1 === users.length ) {
+
+                    res.status(200).json({
+                     status:true,
+                     message:"vested token Released "
+                    });
+                      console.log("update rel hash");
+                      phasevesting();
+                 }
+                })
+                .catch(err => {
+                    res.status(500).json({
+                    status:false,
+                    message:err.message
+                  })
+                })
+               } else {
+                  res.status(500).json({
+                    status:false,
+                    message:result.message
+                  });
+               }
+             } 
           });
-        } else {
-          return res.status(422).json({
-            status:false,
-            message:"ethWalletAddress or txhash is bot success"
-          });
-        }
-    });
-    } else {
-        return res.status(404).json({
-            status:false,
-            message:"NO data found"
-          });
-    }
-    return null;
-  })
-  .catch(err => {
-    return res.status(500).json({
-        status:false,
-        message:err.message
-      });
+        });
+      }
+    })
+   .catch(err => {
+       res.status(500).json({
+          status:false,
+          message:err.message
+        })
      });  
    },
 
@@ -350,66 +329,11 @@ module.exports = {
  }
 }
 
-// release Tokens 
- function releaseVestedTokens() {
-    PrivelegeUser.findAll({
-     include:[
-       {
-         model:User,
-         attributes: ['id','ethWalletAddress'],
-         group: ['user_id']
-       }
-      ],
-       where:{ [Op.and]: [{ vestAddressStatus:'Approved' },{ VestedTokens: 0 }] }
-     })
-    .then(users => {
-    if(users.length) {
-        users.map((user,i) => {
-          var vestingAddress = user.User.ethWalletAddress;
-
-           const body = { vestingUserAddress:vestingAddress };
-
-         request.post({url:`${get_url}/releaseVestedTokens`, form:body },function(err,httpResponse,body ){
-              if(err){
-                console.log(err);
-              } else {
-                let result = JSON.parse(body);
-                if(result.status === true) { 
-                  
-                PrivelegeUser.update({
-                  relHash:result.data
-                },{
-                  where: { user_id : user.User.id }
-                })
-                .then(stat => { 
-                 
-                  if(i + 1 === users.length ) {
-
-                      console.log("update rel hash");
-                      phasevesting();
-                 }
-                })
-                .catch(err => {
-                  console.log(err);
-                })
-               } else {
-                console.log(result,"release token vested");
-               }
-             } 
-          });
-        });
-      }
-    })
-   .catch(err => {
-      console.log(err);
-     });  
-  }
-
   function phasevesting() {
 
   console.log("called phase vesting");
 
-  var time = 120000; 
+  var time = 60000; 
   var timesRun = 0;
   var interval = setInterval(function(){
       timesRun += 1;
