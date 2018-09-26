@@ -61,9 +61,8 @@ function  getCurrentStats(socket) {
            console.log(err);
         } else {
             var pasedCoin=JSON.parse(body);
-            console.log(typeof pasedCoin.ETH , typeof pasedCoin );
 
-            if(typeof pasedCoin !== "undefined"){
+            if(typeof pasedCoin !== undefined){
           
             var btc = pasedCoin.ETH.BTC,
                 usd = pasedCoin.ETH.USD,
