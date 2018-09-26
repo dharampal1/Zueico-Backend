@@ -654,7 +654,7 @@ module.exports = {
   },
 
   vestingAddrressStatus(){
-  	cron.schedule('*/1 * * * *', function(){
+  	cron.schedule('*/30 * * * * *', function(){
 	     console.log("running vestingAddrressStatus");
 
 	   PrivelegeUser.findAll({
