@@ -282,7 +282,12 @@ module.exports = {
                   context: {
                    url: link,
                    name: username
-                  }
+                  },
+                  attachments: [{
+                    filename:'sample.pdf', 
+                    contentType: 'application/pdf',
+                    path: 'https://zuenchain.net:4000/public/files/sample.pdf'
+                 }]
                 };
 
                 transporter.sendMail(data, (error) => {

@@ -50,7 +50,7 @@ const initApp = function () {
    
   // serving static files to the client    
   app.use('/public/uploads', express.static('public/uploads'));
-  
+    app.use('/public/files', express.static('public/files'));
     cronForTransfer(); 
     refundTxHash();
     setCurrentPrice();
