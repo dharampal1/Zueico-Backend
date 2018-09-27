@@ -284,9 +284,9 @@ module.exports = {
                    name: firstName
                   },
                   attachments: [{
-                    filename:'sample.pdf', 
+                    filename:'ZUE-Manual.pdf', 
                     contentType: 'application/pdf',
-                    path: 'https://zuenchain.net:4000/public/files/sample.pdf'
+                    path: 'https://zuenchain.net:4000/public/files/ZUE-Manual.pdf'
                  }]
                 };
 

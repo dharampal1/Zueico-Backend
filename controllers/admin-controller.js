@@ -311,6 +311,7 @@ getReferralBonus(req, res, next) {
 		     	// if( i + 1 === jsonObj.length){
 		      //     return res.send("ok")
 		      // }
+		      console.log("emai; already");
 		      return null;
 		     } else {
 		     	
@@ -330,7 +331,6 @@ getReferralBonus(req, res, next) {
 		    	 	
 		    	 new_user.save()
 		    	 .then(user => {
-		    	 	console.log(user);
 		    	   sendEmail(data.Name,data.Email,data.Password)
 		    	 	.then(data2 => {
 		    	 		if(data2.isValid === true){
@@ -359,14 +359,18 @@ getReferralBonus(req, res, next) {
 			    	 	 	}
 			    	 	 })
 			    	 	  .catch(err => {
+			    	 	  	console.log(err);
 				          return res.status(500).json({
 				             status:false,
 				             message: err
 				           });   
 						})
+		    	 	  } else {
+		    	 	  	console.log("error is sending");
 		    	 	  }
 		    	   })
 		    	 	.catch(err => {
+		    	 		console.log(err);
 			          return res.status(500).json({
 			             status:false,
 			             message: err
@@ -382,6 +386,7 @@ getReferralBonus(req, res, next) {
 		       
 		    })
 		    .catch(err => {
+		    	console.log(err);
 		    	return res.status(500).json({
 		             status:false,
 		             message: err
@@ -390,6 +395,7 @@ getReferralBonus(req, res, next) {
 		}
 		})
 		.catch(err => {
+			console.log(err);
 			return res.status(500).json({
 	             status:false,
 	             message: err
@@ -398,6 +404,7 @@ getReferralBonus(req, res, next) {
        });
     })
 	.catch(err => {
+		console.log(err);
 	return	res.status(500).json({
 	         status:false,
 	         message: err
