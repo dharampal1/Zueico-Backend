@@ -308,10 +308,9 @@ getReferralBonus(req, res, next) {
 		    })
 		    .then(puser => {
 		     if(puser){
-		     	// if( i + 1 === jsonObj.length){
-		      //     return res.send("ok")
-		      // }
-		      return null;
+		     	if( i + 1 === jsonObj.length){
+		          return res.send("some eamils already taken")
+		      }
 		     } else {
 		     	
 		     	hashPassword(data.Password)
@@ -360,6 +359,7 @@ getReferralBonus(req, res, next) {
 			    	 	 	} else {
 				    	 	  	console.log("error is sending");
 				    	 	 }
+				    	 	 return true;
 			    	 	 })
 			    	 	  .catch(err => {
 			    	 	  	console.log(err);
@@ -368,7 +368,7 @@ getReferralBonus(req, res, next) {
 				             message: err
 				           });   
 						})
-		    	 	  
+		    	 	  return true;
 		    	   })
 		    	 	.catch(err => {
 		    	 		console.log(err);
@@ -377,6 +377,7 @@ getReferralBonus(req, res, next) {
 			             message: err
 			           });   
 					});
+					return true;
 		    	 })
 		    	 .catch(err => {
 		           return res.status(500).json({
@@ -384,7 +385,7 @@ getReferralBonus(req, res, next) {
 		             message: err
 		           });   
 				})
-		       
+		       return true;
 		    })
 		    .catch(err => {
 		    	console.log(err);
@@ -394,6 +395,7 @@ getReferralBonus(req, res, next) {
 		          }); 
 		      });
 		}
+		return true;
 		})
 		.catch(err => {
 			console.log(err);
@@ -403,6 +405,7 @@ getReferralBonus(req, res, next) {
 	          });   
 		   })		
        });
+      return true;
     })
 	.catch(err => {
 		console.log(err);
