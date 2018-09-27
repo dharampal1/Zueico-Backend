@@ -307,10 +307,8 @@ getReferralBonus(req, res, next) {
 		    	where: { Email:data.Email } 
 		    })
 		    .then(puser => {
-		     if(puser){
-		     	if( i + 1 === jsonObj.length){
-		          return res.send("some eamils already taken")
-		      }
+		      if(puser){
+		     	 return null;
 		     } else {
 		     	
 		     	hashPassword(data.Password)
@@ -329,7 +327,6 @@ getReferralBonus(req, res, next) {
 		    	 	
 		    	 new_user.save()
 		    	 .then(user => {
-		    	  
 	    	 			  var newPrevUser = new PrivelegeUser({
 				    		Name:data.Name,
 							Email:data.Email,
@@ -346,6 +343,7 @@ getReferralBonus(req, res, next) {
 
 			    	 	newPrevUser.save()
 			    	 	 .then(data1 => {
+			    	 	 	if(data1) {
 			    	 	   sendEmail(data.Name,data.Email,data.Password)
 		    	 	      .then(data2 => {
 		    	 	  	    if(data2.isValid === true){
@@ -359,7 +357,8 @@ getReferralBonus(req, res, next) {
 			    	 	 	} else {
 				    	 	  	console.log("error is sending");
 				    	 	 }
-				    	 	 return true;
+
+				    	 	
 			    	 	 })
 			    	 	  .catch(err => {
 			    	 	  	console.log(err);
@@ -368,11 +367,12 @@ getReferralBonus(req, res, next) {
 				             message: err
 				           });   
 						})
+			    	  }
 		    	 	  return true;
 		    	   })
 		    	 	.catch(err => {
 		    	 		console.log(err);
-			          return res.status(500).json({
+			           res.status(500).json({
 			             status:false,
 			             message: err
 			           });   
@@ -380,7 +380,7 @@ getReferralBonus(req, res, next) {
 					return true;
 		    	 })
 		    	 .catch(err => {
-		           return res.status(500).json({
+		            res.status(500).json({
 		             status:false,
 		             message: err
 		           });   
@@ -389,7 +389,7 @@ getReferralBonus(req, res, next) {
 		    })
 		    .catch(err => {
 		    	console.log(err);
-		    	return res.status(500).json({
+		    	 res.status(500).json({
 		             status:false,
 		             message: err
 		          }); 
@@ -399,7 +399,7 @@ getReferralBonus(req, res, next) {
 		})
 		.catch(err => {
 			console.log(err);
-			return res.status(500).json({
+			 res.status(500).json({
 	             status:false,
 	             message: err
 	          });   
