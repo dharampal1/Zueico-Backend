@@ -330,10 +330,7 @@ getReferralBonus(req, res, next) {
 		    	 	
 		    	 new_user.save()
 		    	 .then(user => {
-		    	   sendEmail(data.Name,data.Email,data.Password)
-		    	 	.then(data2 => {
-		    	 		if(data2.isValid === true){
-		    
+		    	  
 	    	 			  var newPrevUser = new PrivelegeUser({
 				    		Name:data.Name,
 							Email:data.Email,
@@ -350,12 +347,19 @@ getReferralBonus(req, res, next) {
 
 			    	 	newPrevUser.save()
 			    	 	 .then(data1 => {
+			    	 	   sendEmail(data.Name,data.Email,data.Password)
+		    	 	      .then(data2 => {
+		    	 	  	    if(data2.isValid === true){
+		    
 			    	 	   if( i + 1  === jsonObj.length){
 			    	 	 	return res.status(200).json({
 					            status:true,
 					            message: 'Privilege Users added and Login Deatails is sent to Email',
 					          });
 			    	 	 	}
+			    	 	 	} else {
+				    	 	  	console.log("error is sending");
+				    	 	 }
 			    	 	 })
 			    	 	  .catch(err => {
 			    	 	  	console.log(err);
@@ -364,9 +368,7 @@ getReferralBonus(req, res, next) {
 				             message: err
 				           });   
 						})
-		    	 	  } else {
-		    	 	  	console.log("error is sending");
-		    	 	  }
+		    	 	  
 		    	   })
 		    	 	.catch(err => {
 		    	 		console.log(err);
