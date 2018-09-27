@@ -308,6 +308,7 @@ getReferralBonus(req, res, next) {
 		    })
 		    .then(puser => {
 		      if(puser){
+		      	console.log(puser.email,"email");
 		     	 return null;
 		     } else {
 		     	
