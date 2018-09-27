@@ -311,7 +311,6 @@ getReferralBonus(req, res, next) {
 		     	// if( i + 1 === jsonObj.length){
 		      //     return res.send("ok")
 		      // }
-		      console.log("emai; already");
 		      return null;
 		     } else {
 		     	

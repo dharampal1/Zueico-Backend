@@ -9,9 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       ICOTokens: {
+        allowNull: false,
+        defaultValue:'0',
         type:Sequelize.STRING
       },
       PreICOTokens: {
+        allowNull: false,
+        defaultValue:'0',
         type:Sequelize.STRING
       },
       Name: {
@@ -27,18 +31,26 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       TotalPurchase: { 
+        allowNull: false,
+        defaultValue:'0',
         type:Sequelize.STRING
       },
       VestingPeriod:{
+        allowNull: false,
+        defaultValue:'0',
         type:Sequelize.INTEGER
       },
       Country:{
         type:Sequelize.STRING
       },
       VestedTokens:{
+        allowNull: false,
+        defaultValue:'0',
         type:Sequelize.STRING
       },
       RemainingTokens:{
+        allowNull: false,
+        defaultValue:'0',
         type:Sequelize.STRING
       },
       vestHash: {
@@ -66,6 +78,8 @@ module.exports = {
          type:Sequelize.ENUM('Pending','Approved','Failed')
       },
       vesting_period_date:{
+        allowNull: false,
+        defaultValue:'',
         type:Sequelize.STRING
       },
       createdAt: {
