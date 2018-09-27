@@ -141,7 +141,7 @@ exports.sendEmail = function(username,email,password) {
 
  return new Promise(((resolve, reject) => {
        
-     let link = "https://zuenchain.io/user/login";
+     let link = "https://zuenchain.com";
       var transporter = nodemailer.createTransport(config.smtpConfig);
       var handlebarsOptions = {
           viewEngine: 'handlebars',
@@ -156,7 +156,7 @@ exports.sendEmail = function(username,email,password) {
         from: `${config.smtpConfig.auth.user}`,
         to: `${email}`,
         template: 'privelege-user',
-        subject: 'Account Details Email',
+        subject: ' Welcome to Zuenchain!',
         context: {
          email: email,
          name: username,
@@ -201,14 +201,14 @@ exports.sendEmail = function(username,email,password) {
 
                 let name = user.username,
                     email = user.email,
-                    link = "https://zuenchain.io/user/login",
+                    link = "https://zuenchain.com",
                     password = "test@123";
 
                 var data1 = {
                   from: `${config.smtpConfig.auth.user}`,
                   to: `${email}`,
                   template: 'airdrop-register',
-                  subject: 'Account Details Email',
+                  subject: ' Welcome to Zuenchain!',
                   context: {
                    url: link,
                    name,

@@ -7,8 +7,8 @@ module.exports = {
     // host: 'smtp.gmail.com', port: 465, secure: true, // use SSL
     service: 'gmail',
     auth: {
-      user: 'test@shamlatech.com',
-      pass: 'technical@123'
+      user: 'info@zuenchain.io',
+      pass: 'r>e5hgZu'
     }
   },
   gapi_url: 'https://zuenchain.net:5000',
