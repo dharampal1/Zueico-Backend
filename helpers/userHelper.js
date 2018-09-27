@@ -173,7 +173,7 @@ exports.sendEmail = function(username,email,password) {
       transporter.sendMail(data, (error) => {
 
         if (error) {
-         reject(err);
+         reject(error);
         } else {
          resolve({
             isValid: true,
