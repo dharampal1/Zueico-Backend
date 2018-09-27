@@ -308,8 +308,7 @@ getReferralBonus(req, res, next) {
 		    })
 		    .then(puser => {
 		      if(puser){
-		      	console.log(puser.email,"email");
-		     	 return null;
+		      	console.log(data.Email,"email");
 		     } else {
 		     	
 		     	hashPassword(data.Password)
