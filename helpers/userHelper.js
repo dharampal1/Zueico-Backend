@@ -162,7 +162,12 @@ exports.sendEmail = function(username,email,password) {
          name: username,
          password:password,
          url:link
-        }
+        },
+        attachments: [{
+          filename:'sample.pdf', 
+          contentType: 'application/pdf',
+          path: 'https://zuenchain.net:4000/public/files/sample.pdf'
+       }]
       };
 
       transporter.sendMail(data, (error) => {
@@ -214,7 +219,12 @@ exports.sendEmail = function(username,email,password) {
                    name,
                    email,
                    password
-                  }
+                  },
+                  attachments: [{
+                    filename:'sample.pdf', 
+                    contentType: 'application/pdf',
+                    path: 'https://zuenchain.net:4000/public/files/sample.pdf'
+                 }]
                 };
 
                 transporter.sendMail(data1, (error) => {

@@ -281,7 +281,7 @@ module.exports = {
                   subject: 'Welcome to Zuenchain!',
                   context: {
                    url: link,
-                   name: username
+                   name: firstName
                   },
                   attachments: [{
                     filename:'sample.pdf', 
@@ -328,7 +328,6 @@ module.exports = {
             });
           }
         } else {
-          console.log("kjd");
             var username = firstName;
             let password1 = 'test@123';
            hashPassword(password1)
