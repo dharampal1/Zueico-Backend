@@ -34,6 +34,11 @@ module.exports = {
         unique:true,
         type: Sequelize.STRING
       },
+      emailSent: {
+         allowNull: false,
+         type: Sequelize.BOOLEAN,
+         defaultValue:false
+      },
       security_session: { 
         allowNull: false,
         defaultValue:'',

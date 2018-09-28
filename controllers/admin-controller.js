@@ -312,7 +312,10 @@ getReferralBonus(req, res, next) {
 		     } else {
 		     	
 		     	hashPassword(data.Password)
-		    	 	 .then(pass => {
+		    	 .then(pass => {
+    	 	 	 sendEmail(data.Name,data.Email,data.Password)
+    	 	      .then(data2 => {
+    	 	  	    if(data2.isValid === true){
 
 		    	 	var new_user = new User({
 		    	 		username:data.Name,
@@ -321,6 +324,7 @@ getReferralBonus(req, res, next) {
 						password:pass,
 						country:data.Country,
 						emailVerified:true,
+						emailSent:true,
 						vestingToken:data.VestedTokens,
 						previlege:'1'
 		    	 	});
@@ -344,9 +348,7 @@ getReferralBonus(req, res, next) {
 			    	 	newPrevUser.save()
 			    	 	 .then(data1 => {
 			    	 	 	if(data1) {
-			    	 	   sendEmail(data.Name,data.Email,data.Password)
-		    	 	      .then(data2 => {
-		    	 	  	    if(data2.isValid === true){
+			    	 	 
 		    
 			    	 	   if( i + 1  === jsonObj.length){
 			    	 	 	return res.status(200).json({
@@ -354,19 +356,7 @@ getReferralBonus(req, res, next) {
 					            message: 'Privilege Users added and Login Deatails is sent to Email',
 					          });
 			    	 	 	}
-			    	 	 	} else {
-				    	 	  	console.log("error is sending");
-				    	 	 }
-
-				    	 	
-			    	 	 })
-			    	 	  .catch(err => {
-			    	 	  	console.log(err);
-				          return res.status(500).json({
-				             status:false,
-				             message: err
-				           });   
-						})
+			    	 
 			    	  }
 		    	 	  return true;
 		    	   })
@@ -385,6 +375,17 @@ getReferralBonus(req, res, next) {
 		             message: err
 		           });   
 				})
+	 	 	  } else {
+	    	 	  	console.log("error is sending");
+	    	 	 }
+    	 	 })
+    	 	  .catch(err => {
+    	 	  	console.log(err);
+	          return res.status(500).json({
+	             status:false,
+	             message: err
+	           });   
+			});
 		       return true;
 		    })
 		    .catch(err => {
